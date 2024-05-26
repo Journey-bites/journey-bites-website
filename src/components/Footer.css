@@ -1,0 +1,91 @@
+:root {
+  /* 不寫死height, 改用padding去撐 */
+  --footer-padding-vertical: 48px;
+  --footer-background-color: #F8FAFC;
+
+  --footer-curve-line-margin-top: 20px;
+  --footer-text-margin-top: 36px;
+  --footer-copyright-margin-top: 12px;
+  
+  --footer-title-width: 305px;
+  --footer-title-height: 40px;
+
+  --footer-curve-line-width: 115px;
+  --footer-curve-line-height: 30px;
+
+  --footer-text-font-size: 20px;
+  --footer-text-font-weight: 700;
+  --footer-text-item-gap: 16px;
+
+  --footer-copyright-font-size: 16px;
+}
+ 
+footer {
+  /* footer上面空間騰出來 */
+  /* (在頁面中的位置, 靠最下方) */
+  margin-top: 80px;
+  
+  /* 內距 */
+  padding-top: var(--footer-padding-vertical);
+  padding-bottom: var(--footer-padding-vertical);
+  
+  /* flex排列內部元件 */
+  display: flex;
+  flex-direction: column;  
+  justify-content: center;
+  align-items: center;
+  
+  /* Sizes */
+  width: 100%;
+  height: var(--footer-height);
+
+  /* Appearance */
+  background-color: var(--footer-background-color);
+}
+
+footer .footer-title {
+  width: var(--footer-title-width);
+  height: var(--footer-title-height);
+  
+  /* 彩色標題文字(svg圖) */
+  background-image: url('../images/logo-lg.svg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 曲線圖案 */
+footer .footer-curve-line {
+  background-image: url("../images/footer-curve-line.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  
+  width: var(--footer-curve-line-width);
+  height: var(--footer-curve-line-height);
+  margin-top: var(--footer-curve-line-margin-top);
+}
+
+/* 直線分隔文字ul */
+footer .footer-text {
+  display: flex;
+  margin-top: var(--footer-text-margin-top);
+}
+
+footer .footer-text li {
+  margin-left: var(--footer-text-item-gap);
+  margin-right: var(--footer-text-item-gap);
+  font-size: var(--footer-text-font-size);
+  font-weight: var(--footer-text-font-weight);
+}
+
+footer .footer-text li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 版權宣告 */
+footer .footer-copyright {
+  font-size: var(--footer-copyright-font-size);
+  margin-top: var(--footer-copyright-margin-top);
+}

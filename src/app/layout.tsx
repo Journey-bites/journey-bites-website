@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Noto_Sans as NotoSans } from 'next/font/google';
 import { UserStoreProvider } from '@/providers/userProvider';
 import { Toaster } from '@/components/ui/toaster';
-
+import { Footer } from '@/components/Footer';
 import './globals.css';
 
 const inter = NotoSans({ subsets: ['latin'] });
@@ -24,6 +24,7 @@ export default function RootLayout({
         <UserStoreProvider>
           <Toaster />
           {children}
+          <Footer />
         </UserStoreProvider>
       </body>
     </html>
