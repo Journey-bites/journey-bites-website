@@ -1,6 +1,6 @@
 import './Footer.css';
 
-export async function Footer() {
+export function Footer() {
   return (
     <footer className=''>
       <div className='footer-title'></div>
