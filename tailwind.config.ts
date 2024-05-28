@@ -28,6 +28,10 @@ const config = {
       10: '40px',
       11: '44px',
       12: '48px',
+      14:	'56px',	
+      16:	'64px',	
+      20:	'80px',
+      21:	'96px'
     },
     extend: {
       borderWidth: {
