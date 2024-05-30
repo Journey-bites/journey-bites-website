@@ -15,7 +15,7 @@ export function Footer() {
   };
 
   return (
-    <footer className='mt-21 py-12 pb-13 gap-5 bg-grey flex flex-col justify-center items-center'>
+    <footer className='mt-18 py-13 pb-14 gap-5 bg-grey flex flex-col justify-center items-center'>
       <div className='footer-title text-4xl' onContextMenu={onContextMenuHandler}>
         <Image src={Logo} alt='Journey Bites' priority />
       </div>
