@@ -6,7 +6,7 @@ export default function Loading() {
     <main className='m-auto my-20 w-full'>
       <h1 className='mb-2 text-2xl font-semibold'>Loading...</h1>
       <div className='grid grid-cols-2 gap-8'>
-        {Array.from({ length: 10 }, (_, i) => i).map((item) => {
+        {Array.from({ length: 6 }, (_, i) => i).map((item) => {
           return (
             <Card key={item}>
               <CardContent>

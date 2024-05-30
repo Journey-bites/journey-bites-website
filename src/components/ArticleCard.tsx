@@ -15,7 +15,13 @@ import SocialLink from './custom/SocialLink';
 type ArticleCardTitleProps = {
   title: '熱門文章' | '推薦文章';
   color: 'primary-100' | 'secondary-100';
-} & ComponentProps<'div'>;
+  post?: {
+    userId: number;
+    id: number;
+    title: string;
+    body: string;
+  }[] | undefined;
+} & ComponentProps<'div'>
 
 async function getRecipes() {
   const resp = await fetch('https://jsonplaceholder.typicode.com/users');
@@ -54,14 +60,14 @@ export default async function ArticleCardTemplate({
             </a>
           </div>
         </>
-      : <h1 className='flex w-[200px] justify-center gap-3 border-b-10 border-r-10 border-white bg-primary p-4 text-2xl text-white'>
+      : (<h1 className='flex w-[200px] justify-center gap-3 border-b-10 border-r-10 border-white bg-primary p-4 text-2xl text-white'>
           <ThumbsUp />
           {title}
         </h1>
-      }
+      )}
       <div className='grid gap-x-4 gap-y-9 p-9 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2'>
-        {'1234567890'.split('').map((item, index) => (
-          <Card key={item}>
+        {'1234'.split('').map((item, index) => (
+          <Card key={item} >
             <div className='grid grid-cols-12'>
               <div className='sm:col-span-10 md:col-span-10 lg:col-span-9 xl:col-span-7 2xl:col-span-8 xs:col-span-7'>
                 <CardHeader>
