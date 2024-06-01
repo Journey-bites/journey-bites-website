@@ -1,4 +1,5 @@
 'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { MouseEvent, MouseEventHandler } from 'react';
@@ -10,8 +11,6 @@ export function Footer() {
   const onContextMenuHandler:MouseEventHandler = (e: MouseEvent) => {
     if(e.preventDefault != undefined)
       e.preventDefault();
-    if(e.stopPropagation != undefined)
-      e.stopPropagation();
   };
 
   return (
