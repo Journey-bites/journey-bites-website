@@ -1,18 +1,17 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import MouseEvent from 'react';
+import { MouseEvent, MouseEventHandler } from 'react';
 import Logo from '@/images/logo-lg.svg';
 import CurveLine from '@/images/footer-curve-line.svg';
 
 export function Footer() {
 
-  const onContextMenuHandler = (e: MouseEvent) => {
+  const onContextMenuHandler:MouseEventHandler = (e: MouseEvent) => {
     if(e.preventDefault != undefined)
       e.preventDefault();
     if(e.stopPropagation != undefined)
       e.stopPropagation();
-    return false;
   };
 
   return (
