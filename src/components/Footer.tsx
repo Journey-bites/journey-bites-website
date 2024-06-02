@@ -9,7 +9,6 @@ import CurveLine from '@/images/footer-curve-line.svg';
 export function Footer() {
 
   const onContextMenuHandler:MouseEventHandler<HTMLImageElement> = (e: MouseEvent) => {
-    if(e.preventDefault != undefined)
       e.preventDefault();
   };
 
