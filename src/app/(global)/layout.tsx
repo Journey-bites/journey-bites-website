@@ -52,7 +52,7 @@ export default function GlobalLayout({
       <ReactQueryProvider>
         <Header />
         {children}
-        <ReactQueryDevtools initialIsOpen={false} />
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       </ReactQueryProvider>
       <Footer />
     </>

@@ -39,7 +39,7 @@ export default async function ArticleCardTemplate({
     'secondary-100': 'bg-secondary-100',
   };
 
-  const containerClass = `md:max-w-1024 lg:max-w-1024 xl:max-w-1024 2xl:max-w-1280 relative rounded-lg ${colorVariants[color]}`;
+  const containerClass = `relative rounded-lg ${colorVariants[color]}`;
 
   const datas = await getRecipes();
 

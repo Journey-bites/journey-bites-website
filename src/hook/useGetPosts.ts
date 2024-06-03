@@ -2,12 +2,12 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import type { Article } from '@/types/article';
-import getPosts from '@/lib/actions';
+import getArticles from '@/lib/actions';
 
 export default function useGetPosts(initialData: Article[]) {
   return useInfiniteQuery<Article[], Error>({
-    queryKey: ['posts'],
-    queryFn: getPosts,
+    queryKey: ['recommendArticles'],
+    queryFn: getArticles,
     initialData: { pages: [initialData], pageParams: [1] },
     initialPageParam: 1,
     getNextPageParam(lastPage, allPages) {

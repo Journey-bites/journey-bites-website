@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import type { Article } from '@/types/article';
-import Card from './Card';
+import ArticleContent from './ArticleContent';
 import useGetPosts from '@/hook/useGetPosts';
 import { ThumbsUp } from 'lucide-react';
 import Loading from '@/components/loading';
@@ -22,10 +22,10 @@ const PostsWrapper = ({ posts }: Props) => {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
-
+  console.log(data);
   return (
   <>
-    <div className='md:max-w-1024 lg:max-w-1024 xl:max-w-1024 2xl:max-w-1280 relative rounded-lg bg-primary-100'>
+    <div className='relative rounded-lg bg-primary-100 mt-9'>
       <h1 className='flex justify-center border-b-10 border-r-10 w-[200px] border-white text-2xl text-white gap-3 p-4 bg-primary'>
           <ThumbsUp />
           推薦文章
@@ -34,7 +34,7 @@ const PostsWrapper = ({ posts }: Props) => {
         {data?.pages.map((item, i) => (
           <React.Fragment key={i}>
             {item?.map((post) => (
-              <Card post={post} key={post.id} />
+              <ArticleContent post={post} key={post.id} />
             ))}
           </React.Fragment>
         ))}
