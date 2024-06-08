@@ -32,7 +32,7 @@ export const createUserStore = (
       }
     },
     removeAuth: () => {
-      set({ isLogin: false }, true);
+      set((state) => ({ ...state, isLogin: false, auth: null }));
       jsCookie.remove(JOURNEY_BITES_COOKIE);
     },
   }));
