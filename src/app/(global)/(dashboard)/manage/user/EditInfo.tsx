@@ -25,7 +25,7 @@ export default function EditInfo() {
             {
               value: 'links',
               label: '連結設定',
-              content: <LinksForm />
+              content: <LinksForm socialLinks={auth.profile.socialLinks} />
             }]
           }
         />
