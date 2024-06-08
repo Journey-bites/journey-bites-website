@@ -1,38 +1,23 @@
 import { JOURNEY_BITES_COOKIE } from '@/constants';
+import { UserInfo } from '@/types';
 import jsCookie from 'js-cookie';
 import { createStore } from 'zustand/vanilla';
 
 export type UserState = {
   isLogin: boolean | null,
-  id: string,
-  displayName: string,
-  avatarImageUrl: string,
-  bio: string,
-  social: {
-    websiteParams: string,
-    instagram: string,
-    facebook: string
-  }
-}
+  auth: UserInfo | null
+};
 
 export type UserActions = {
-  removeToken: () => void,
-  setToken: () => void
+  removeAuth: () => void,
+  setAuth: (userInfo: UserInfo) => void,
 }
 
 export type UserStore = UserState & UserActions
 
 export const defaultInitState: UserState = {
   isLogin: null,
-  id: '',
-  displayName: '',
-  avatarImageUrl: '',
-  bio: '',
-  social: {
-    websiteParams: '',
-    instagram: '',
-    facebook: ''
-  }
+  auth: null
 };
 
 export const createUserStore = (
@@ -40,15 +25,15 @@ export const createUserStore = (
 ) => {
   return createStore<UserStore>()((set) => ({
     ...initState,
-    setToken: () => {
+    setAuth: (userInfo: UserInfo) => {
       const userCookie = jsCookie.get(JOURNEY_BITES_COOKIE);
       if (userCookie) {
-        set({ isLogin: true });
+        set((state) => ({ ...state, auth: userInfo, isLogin: true }), true);
       }
     },
-    removeToken: () => {
-      set({ isLogin: false });
+    removeAuth: () => {
+      set({ isLogin: false }, true);
       jsCookie.remove(JOURNEY_BITES_COOKIE);
-    }
+    },
   }));
 };

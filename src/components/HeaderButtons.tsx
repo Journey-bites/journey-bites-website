@@ -9,14 +9,14 @@ import { DropdownMenuItem } from './ui/dropdown-menu';
 import { logout } from '@/lib/authApi';
 
 export default function HeaderButtons() {
-  const { isLogin, removeToken } = useUserStore((state) => state);
+  const { isLogin, removeAuth } = useUserStore((state) => state);
 
   async function handleLogout() {
     try {
       await logout();
-      removeToken();
+      removeAuth();
     } catch (error) {
-      removeToken();
+      removeAuth();
     }
   }
 
