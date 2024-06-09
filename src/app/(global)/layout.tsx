@@ -6,9 +6,10 @@ import { useUserStore } from '@/providers/userProvider';
 import jsCookie from 'js-cookie';
 import Header from '@/components/Header';
 import { getUser } from '@/lib/authApi';
+import { handleApiError } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
 import { toast } from '@/components/ui/use-toast';
-import { handleApiError } from '@/lib/utils';
+import Footer from '@/components/Footer';
 
 export default function GlobalLayout({
   children,
@@ -48,6 +49,7 @@ export default function GlobalLayout({
     <>
       <Header />
       {children}
+      <Footer />
     </>
   );
 }
