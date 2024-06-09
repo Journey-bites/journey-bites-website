@@ -17,7 +17,7 @@ export default function Header() {
 
   return (
     <header className='sticky top-0 z-40 border border-b-gray-200 bg-white'>
-      <div className='mx-auto flex w-[67.5%] max-w-[1296px] items-center justify-between py-5'>
+      <div className='mx-auto flex w-[67.5%] items-center justify-between py-5 xl:max-w-[1296px] xs:mx-4 xs:w-full'>
         <div className='flex items-center gap-12'>
           <Link href='/'>
             <Image className='sm:hidden xs:hidden' src={Logo} alt='Journey Bites' priority />
