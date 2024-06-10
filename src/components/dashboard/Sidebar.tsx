@@ -45,7 +45,7 @@ export default function Sidebar() {
   const [previewAvatarImgSrc, setPreviewAvatarImgSrc] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const auth = useUserStore((state) => state.auth);
-  const { mutate: updateUserProfileMutation } = useMutation({ mutationFn: updateUserProfile });
+  const { mutate: updateUserProfileMutate } = useMutation({ mutationFn: updateUserProfile });
   const isFirstRender = useRef(true);
 
   function onClosePreviewDialog() {
@@ -68,7 +68,7 @@ export default function Sidebar() {
       try {
         const avatarImageUrl = await uploadImgToFirebase(avatarImgFile, auth.email);
         setPreviewAvatarImgSrc(URL.createObjectURL(avatarImgFile));
-        updateUserProfileMutation({ avatarImageUrl }, {
+        updateUserProfileMutate({ avatarImageUrl }, {
           onSuccess: () => {
             toast({ title: '更新頭像成功', variant: 'success' });
           },

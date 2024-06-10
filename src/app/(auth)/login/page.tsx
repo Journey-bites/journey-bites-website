@@ -51,9 +51,13 @@ export default function Login() {
       // Replace to /manage/user temporarily, will be changed to ?return_url from query string
       router.replace('/manage/user');
     } catch (error) {
+      const loginErrorToast = () => toast({ title: '登入失敗', description: '請確認您的帳號或密碼是否正確', variant: 'error' });
       const errorHandlingConfig = {
         [StatusCode.USER_NOT_FOUND]: () => {
-          toast({ title: '登入失敗', description: '請確認您的帳號或密碼是否正確', variant: 'error' });
+          loginErrorToast();
+        },
+        [StatusCode.USER_PASSWORD_NOT_MATCH]: () => {
+          loginErrorToast();
         }
       };
       handleApiError(error, errorHandlingConfig, '登入');
