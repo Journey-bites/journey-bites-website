@@ -2,8 +2,6 @@
 
 import type { PropsWithChildren } from 'react';
 import { useRouter } from 'next/navigation';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useUserStore } from '@/providers/userProvider';
 import { useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
@@ -20,7 +18,6 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 // TODO: handle different error by statusCode globally, ex: show toast
-const queryClient = new QueryClient();
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const { isLogin } = useUserStore((state) => state);
@@ -34,9 +31,8 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   }, [isLogin, router]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+    <>
       {children}
-    </QueryClientProvider>
+    </>
   );
 }

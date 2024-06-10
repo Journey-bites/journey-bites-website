@@ -41,9 +41,7 @@ const PostsWrapper = ({ posts }: Props) => {
       </div>
     </div>
     {isFetchingNextPage && hasNextPage ? (
-      <>
         <Loading />
-      </>
     ) : (
       <div className='h-10' ref={ref} />
     )}
