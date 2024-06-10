@@ -1,0 +1,7 @@
+.tiptap h1 {
+  font-size: 24px;
+}
+
+.tiptap .ProseMirror-selectednode {
+  outline: 3px solid #68cef8;
+}
