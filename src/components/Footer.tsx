@@ -8,7 +8,7 @@ import CurveImg from '@/images/curve.svg';
 
 export default function Footer() {
   return (
-    <footer className='mt-auto flex flex-col items-center bg-grey py-12 leading-7 text-grey-500'>
+    <footer className='sticky top-[100vh] mt-[100px] flex flex-col items-center bg-grey py-12 leading-7 text-grey-500'>
       <Link href='/'>
         <Image className='mb-5 xs:hidden' src={LogoImg} alt='Journey Bites' />
         <Image className='mb-4 hidden xs:block' src={LogoSmImg} alt='Journey Bites' />
