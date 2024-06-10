@@ -92,8 +92,12 @@ export default function HeaderButtons() {
                 </SheetClose>
               ): (
                 <div className='flex gap-6'>
-                  <Button variant='outline' className='w-full bg-transparent'>登入</Button>
-                  <Button className='w-full'>註冊</Button>
+                    <Button variant='outline' className='w-full bg-transparent' asChild>
+                      <Link href='/login'>登入</Link>
+                    </Button>
+                    <Button className='w-full'>
+                      <Link href='/register'>註冊</Link>
+                    </Button>
                 </div>
               )}
             </SheetFooter>
