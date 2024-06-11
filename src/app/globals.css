@@ -97,6 +97,7 @@
 
 body {
   letter-spacing: 0.05px;
+  min-height: 100vh;
 }
 
 p {
