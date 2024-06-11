@@ -25,12 +25,12 @@ const PostsWrapper = ({ posts }: Props) => {
   console.log(data);
   return (
   <>
-    <div className='relative rounded-lg bg-primary-100 mt-9'>
-      <h1 className='flex justify-center border-b-10 border-r-10 w-[200px] border-white text-2xl text-white gap-3 p-4 bg-primary'>
+    <div className='relative mt-9 rounded-lg bg-primary-100'>
+      <h1 className='flex w-[200px] justify-center gap-3 border-b-10 border-r-10 border-white bg-primary p-4 text-2xl text-white'>
           <ThumbsUp />
           推薦文章
         </h1>
-      <div className='grid p-9 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-x-4 gap-y-9'>
+      <div className='grid gap-x-4 gap-y-9 p-9 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2'>
         {data?.pages.map((item, i) => (
           <React.Fragment key={i}>
             {item?.map((post) => (
