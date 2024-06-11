@@ -35,7 +35,7 @@ const passwordFormSchema = z.object({
 type ProfileFormProps = {
   displayName: string;
   email: string;
-  bio: string | null;
+  bio: string;
 }
 
 export default function ProfileForm({ displayName, email, bio }: ProfileFormProps) {

@@ -16,6 +16,7 @@ import { login } from '@/lib/api';
 import { PASSWORD_VALIDATION } from '@/constants';
 import StatusCode from '@/types/StatusCode';
 import { handleApiError } from '@/lib/utils';
+import { getUser } from '@/lib/authApi';
 
 const formSchema = z.object({
   email: z.string().email({ message: '非 Email 格式，請重新輸入' }),
@@ -24,7 +25,7 @@ const formSchema = z.object({
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
-  const { setToken } = useUserStore(
+  const { setAuth } = useUserStore(
     (state) => state,
   );
   const { toast } = useToast();
@@ -43,13 +44,20 @@ export default function Login() {
     setIsLoading(true);
     try {
       await login({ email, password });
-      setToken();
+      const res = await getUser();
+      if (res) {
+        setAuth(res);
+      }
       // Replace to /manage/user temporarily, will be changed to ?return_url from query string
       router.replace('/manage/user');
     } catch (error) {
+      const loginErrorToast = () => toast({ title: '登入失敗', description: '請確認您的帳號或密碼是否正確', variant: 'error' });
       const errorHandlingConfig = {
         [StatusCode.USER_NOT_FOUND]: () => {
-          toast({ title: '登入失敗', description: '請確認您的帳號或密碼是否正確', variant: 'error' });
+          loginErrorToast();
+        },
+        [StatusCode.USER_PASSWORD_NOT_MATCH]: () => {
+          loginErrorToast();
         }
       };
       handleApiError(error, errorHandlingConfig, '登入');
