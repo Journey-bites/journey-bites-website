@@ -5,6 +5,13 @@ import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { useUserStore } from '@/providers/userProvider';
 import jsCookie from 'js-cookie';
 import Header from '@/components/Header';
+import { getUser } from '@/lib/authApi';
+import { handleApiError } from '@/lib/utils';
+import StatusCode from '@/types/StatusCode';
+import { toast } from '@/components/ui/use-toast';
+import Footer from '@/components/Footer';
+import ReactQueryProvider from '@/providers/ReactQuery';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function GlobalLayout({
   children,
@@ -12,25 +19,42 @@ export default function GlobalLayout({
   children: ReactNode;
 }>) {
 
-  const { setToken, removeToken } = useUserStore((state) => state);
+  const { setAuth, removeAuth } = useUserStore((state) => state);
   const isCheckLogin = useRef(false);
 
   useEffect(() => {
     if (!isCheckLogin.current) {
       const userCookie = jsCookie.get(JOURNEY_BITES_COOKIE);
       if (userCookie) {
-        setToken();
+        getUser()
+          .then((res) => {
+            if (res) {
+              setAuth(res);
+            }
+          })
+          .catch((error) => {
+            handleApiError(error, {
+              [StatusCode.USER_NOT_FOUND]: () => {
+                toast({ title: '找不到您的帳號資料', description: '請重新登入', variant: 'error' });
+              }
+            }, '查詢使用者資料');
+            removeAuth();
+          });
       } else {
-        removeToken();
+        removeAuth();
       }
       isCheckLogin.current = true;
     }
-  }, [setToken, removeToken]);
+  }, [setAuth, removeAuth]);
 
   return (
     <>
-      <Header />
-      {children}
+      <ReactQueryProvider>
+        <Header />
+        {children}
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      </ReactQueryProvider>
+      <Footer />
     </>
   );
 }

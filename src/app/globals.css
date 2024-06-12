@@ -27,6 +27,7 @@
     --warning: #FFB649;
     --danger: #D65F5F;
 
+    --grey-100: #E5E7EB;
     --grey-200: #E2E8F0;
     --grey-300: #94A3B8;
     --grey-400: #475569;
@@ -97,6 +98,7 @@
 
 body {
   letter-spacing: 0.05px;
+  min-height: 100vh;
 }
 
 p {
