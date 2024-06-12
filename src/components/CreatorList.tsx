@@ -7,11 +7,16 @@ import Image from 'next/image';
 
 export default function CreatorList() {
   return (
-    <div className='rounded-lg border-2 p-7'>
-      <h3 className='text-3xl'>創作者列表</h3>
+    <div className='relative rounded-lg border-2 p-7'>
+      <div className='mb-10'>
+        <h3 className='text-3xl'>創作者列表</h3>
+        <div className='absolute right-9 top-7 border-2 border-solid border-blue-600'>
+          <a href='' className='block px-4 py-3 text-blue-500'>查看更多</a>
+        </div>
+      </div>
       {Array.from({ length: 5 }, (_, i) => i).map((item) => {
         return (
-          <div key={item} className='after:block after:border-b-2 after:border-dotted after:border-indigo-500/100 after:content-[""] after:last-of-type:border-b-0'>
+          <div key={item} className='after:block after:border-b-2 after:border-dotted after:border-grey-100 after:content-[""] after:last-of-type:border-b-0'>
             <div className='flex py-4'>
               <Avatar>
                 <AvatarImage asChild src='https://picsum.photos/id//100/100'>

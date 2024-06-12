@@ -10,6 +10,8 @@ import { handleApiError } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
 import { toast } from '@/components/ui/use-toast';
 import Footer from '@/components/Footer';
+import ReactQueryProvider from '@/providers/ReactQuery';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function GlobalLayout({
   children,
@@ -47,8 +49,11 @@ export default function GlobalLayout({
 
   return (
     <>
-      <Header />
-      {children}
+      <ReactQueryProvider>
+        <Header />
+        {children}
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      </ReactQueryProvider>
       <Footer />
     </>
   );

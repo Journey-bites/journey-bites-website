@@ -56,6 +56,7 @@ const config = {
         },
         grey: {
           DEFAULT: '#F8FAFC',
+          100: 'var(--grey-100)',
           200: 'var(--grey-200)',
           300: 'var(--grey-300)',
           400: 'var(--grey-400)',
@@ -122,8 +123,7 @@ const config = {
         '2xl': { min: '1535px' },
       },
       maxWidth: {
-        '1024': '1024px',
-        '1280': '1280px',
+        '1320': '1320px',
       },
       boxShadow: {
         tabs: '0px 2px 8px 0px rgba(39, 41, 55, 0.08)',
