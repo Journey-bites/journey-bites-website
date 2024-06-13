@@ -9,6 +9,7 @@ import UserMenuList from './UserMenuList';
 import { Input } from '../ui/input';
 import { Sheet, SheetTrigger, SheetContent, SheetFooter, SheetClose } from '../ui/sheet';
 import { cn } from '@/lib/utils';
+import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
 
 export default function HeaderButtons() {
   const { isLogin } = useUserStore((state) => state);
@@ -20,7 +21,7 @@ export default function HeaderButtons() {
           !isLogin ? (
             <>
               <Button asChild variant='outline' size='sm'>
-                <Link href='/login'>登入</Link>
+                <LoginLinkWithStorePathname />
               </Button>
               <Button asChild size='sm'>
                 <Link href='/register'>註冊</Link>
@@ -91,9 +92,9 @@ export default function HeaderButtons() {
                   </Button>
                 </SheetClose>
               ): (
-                <div className='flex gap-6'>
+                  <div className='flex gap-6'>
                     <Button variant='outline' className='w-full bg-transparent' asChild>
-                      <Link href='/login'>登入</Link>
+                      <LoginLinkWithStorePathname />
                     </Button>
                     <Button className='w-full'>
                       <Link href='/register'>註冊</Link>
