@@ -1,14 +1,8 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
-import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { useUserStore } from '@/providers/userProvider';
-import jsCookie from 'js-cookie';
 import Header from '@/components/Header';
-import { getUser } from '@/lib/authApi';
-import { handleApiError } from '@/lib/utils';
-import StatusCode from '@/types/StatusCode';
-import { toast } from '@/components/ui/use-toast';
 import Footer from '@/components/Footer';
 import ReactQueryProvider from '@/providers/ReactQuery';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
