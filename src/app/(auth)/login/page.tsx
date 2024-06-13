@@ -14,10 +14,9 @@ import { useToast } from '@/components/ui/use-toast';
 import InputField from '@/components/custom/InputField';
 import PasswordInput from '@/components/custom/PasswordInput';
 import { login } from '@/lib/api';
-import { GOOGLE_LOGIN_URL, JOURNEY_BITES_COOKIE, PASSWORD_VALIDATION } from '@/constants';
+import { GOOGLE_LOGIN_URL, JOURNEY_BITES_COOKIE, PASSWORD_VALIDATION, LOCAL_STORAGE_KEY } from '@/constants';
 import StatusCode from '@/types/StatusCode';
 import { handleApiError } from '@/lib/utils';
-import { LocalStorageKey } from '@/types';
 
 const formSchema = z.object({
   email: z.string().email({ message: '非 Email 格式，請重新輸入' }),
@@ -43,7 +42,7 @@ export default function Login() {
   const buttonDisabled = Boolean(isLoading || !isValid);
 
   const redirectToPreviousPage = useCallback(() => {
-    const redirectUrl = localStorage.getItem(LocalStorageKey.REDIRECT_URL);
+    const redirectUrl = localStorage.getItem(LOCAL_STORAGE_KEY.redirectUrl);
     if (redirectUrl) {
       router.replace(redirectUrl);
     } else {
