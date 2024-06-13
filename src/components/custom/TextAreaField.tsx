@@ -1,18 +1,19 @@
 'use client';
 
-import { Control, FieldValues } from 'react-hook-form';
+import { Control, FieldValues, Path } from 'react-hook-form';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Textarea } from '../ui/textarea';
 
-type TextAreaFieldProps = {
-  control: Control<FieldValues>;
-  name: string;
+type TextAreaFieldProps<T extends FieldValues> = {
+  className?: string;
+  control: Control<T>;
+  name: Path<T>;
   label: string;
   placeholder?: string;
   formDescription?: string;
 }
 
-export default function TextAreaField({ control, name, label, placeholder, formDescription }: TextAreaFieldProps) {
+export default function TextAreaField<T extends FieldValues>({ className, control, name, label, placeholder, formDescription }: TextAreaFieldProps<T>) {
   return (
     <FormField
       control={control}
@@ -22,6 +23,7 @@ export default function TextAreaField({ control, name, label, placeholder, formD
           <FormLabel>{label}</FormLabel>
           <FormControl>
               <Textarea
+                className={className}
                 placeholder={placeholder || ''}
                 {...field}
               />

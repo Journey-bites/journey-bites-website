@@ -2,14 +2,14 @@
 
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import type { Article } from '@/types/article';
+import type { RecommendArticle } from '@/types/article';
 import ArticleContent from './ArticleContent';
 import useGetPosts from '@/hook/useGetPosts';
 import { ThumbsUp } from 'lucide-react';
 import Loading from '@/components/loading';
 
 type Props = {
-  posts: Article[];
+  posts: RecommendArticle[];
 };
 
 const PostsWrapper = ({ posts }: Props) => {
@@ -22,7 +22,7 @@ const PostsWrapper = ({ posts }: Props) => {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
-  console.log(data);
+
   return (
   <>
     <div className='relative mt-9 rounded-lg bg-primary-100'>

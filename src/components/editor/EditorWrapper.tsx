@@ -1,18 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
+import { useEditor } from '@/lib/useEditor';
 
 const EditorWrapper= () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const [content, setContent] = useState<string>('');
+  const { editorProps } = useEditor();
   const handleContentChange = (reason: string) => {
     setContent(reason);
     console.log(reason);
   };
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    router.push('/article/publish');
     setContent('');
+    console.log(editorProps);
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: { preventDefault: () => void; returnValue: string; }) => {
+      if (!isSubmitting) {
+        e.preventDefault();
+        e.returnValue = '您即將離開檔案未儲存';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isSubmitting]);
+
   return (
     <form
       onSubmit={handleSubmit}

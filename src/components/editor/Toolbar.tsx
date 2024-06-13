@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { DialogComponent } from './EditorDialog';
 import { useDialog } from '@/lib/useDialog';
+import { useEditor } from '@/lib/useEditor';
 import { limit, commonActiveClassName, commonClassName } from './settings';
 import { Button } from '@/components/ui/button';
 
@@ -31,10 +32,13 @@ type Props = {
 
 const Toolbar = ({ editor }: Props) => {
   const { onOpen, setData } = useDialog();
+  const { setEditorProps } = useEditor();
 
   if (!editor) {
     return null;
   }
+
+  const characterCount = editor.storage.characterCount.characters();
 
   const setLink = () => {
     const previousUrl = editor.getAttributes('link').href;
@@ -63,9 +67,10 @@ const Toolbar = ({ editor }: Props) => {
   };
 
   const handleSubmit = () => {
-    console.log(editor.getText());
+    // console.log(editor.getText().replace(/\s+/g, ' ').trim().length);
+    const wordsCount = editor.getText().replace(/\s+/g, ' ').trim().length;
     console.log(editor.getHTML());
-    console.log(editor.getJSON());
+    setEditorProps({ content: editor.getHTML(), wordsCount });
   };
 
   return (
@@ -246,13 +251,13 @@ const Toolbar = ({ editor }: Props) => {
         <DialogComponent dialog={handleDialog} />
       </div>
       <div>
-      {editor.storage.characterCount.characters() >= limit ? (
+      {characterCount >= limit ? (
         <div className='text-red-500'>
-          {editor.storage.characterCount.characters()}/{limit} characters
+          {characterCount}/{limit} characters
         </div>
       ) : (
         <div>
-          {editor.storage.characterCount.characters()}/{limit} characters
+          {characterCount}/{limit} characters
         </div>
       )}
     </div>
