@@ -3,6 +3,10 @@ export enum InputType {
   PASSWORD = 'password',
 }
 
+export enum LocalStorageKey {
+  REDIRECT_URL = 'redirect_url',
+}
+
 export type Tab = {
   value: string;
   label: string;

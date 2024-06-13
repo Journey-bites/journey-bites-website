@@ -19,33 +19,15 @@ export default function GlobalLayout({
   children: ReactNode;
 }>) {
 
-  const { setAuth, removeAuth } = useUserStore((state) => state);
-  const isCheckLogin = useRef(false);
+  const { setAuth } = useUserStore((state) => state);
+  const isInitRender = useRef(false);
 
   useEffect(() => {
-    if (!isCheckLogin.current) {
-      const userCookie = jsCookie.get(JOURNEY_BITES_COOKIE);
-      if (userCookie) {
-        getUser()
-          .then((res) => {
-            if (res) {
-              setAuth(res);
-            }
-          })
-          .catch((error) => {
-            handleApiError(error, {
-              [StatusCode.USER_NOT_FOUND]: () => {
-                toast({ title: '找不到您的帳號資料', description: '請重新登入', variant: 'error' });
-              }
-            }, '查詢使用者資料');
-            removeAuth();
-          });
-      } else {
-        removeAuth();
-      }
-      isCheckLogin.current = true;
+    if (!isInitRender.current) {
+      setAuth();
+      isInitRender.current = true;
     }
-  }, [setAuth, removeAuth]);
+  }, [setAuth]);
 
   return (
     <>
