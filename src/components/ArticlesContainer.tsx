@@ -15,9 +15,10 @@ import { cn } from '@/lib/utils';
 
 import DefaultUserImg from '@/images/default-user.webp';
 
-type ArticleCardTitleProps = {
+type ArticlesContainerProps = {
   type: 'hot' | 'recommend';
   color: 'primary' | 'secondary';
+  showBtn: boolean,
   post?: {
     userId: number;
     id: number;
@@ -33,10 +34,11 @@ async function getRecipes() {
   return resp.json();
 }
 
-export default async function ArticleCardTemplate({
+export default async function ArticlesContainer({
   type,
   color,
-}: ArticleCardTitleProps) {
+  showBtn
+}: ArticlesContainerProps) {
   const isHotType = type === 'hot';
   const datas = await getRecipes();
 
@@ -47,17 +49,19 @@ export default async function ArticleCardTemplate({
         <h1 className='text-xl md:text-2xl'>{isHotType ? '熱門文章' : '推薦文章'}</h1>
       </div>
       <div className='flex justify-end'>
-        {isHotType && (
-          <Button variant='outline' className='rounded-lg px-4 py-2 md:px-5 md:py-3'>
+        <Button variant='outline' className={cn('rounded-lg px-4 py-2 md:px-5 md:py-3', {
+            ['md:hidden']: !showBtn,
+          })}>
             查看更多
-          </Button>
-        )}
+        </Button>
       </div>
-      <div className='mt-7 grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2'>
+      <div className={cn('mt-7 grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2', {
+        ['md:mt-[116px]']: !showBtn,
+      })}>
         {'1234'.split('').map((item, index) => (
           <Card key={item}>
             <div className='flex flex-col-reverse gap-3 lg:flex-row'>
-              <div className='lg:max-w-[232px]'>
+              <div className='max-w-[232px] lg:max-w-[73.5%]'>
                 <CardHeader>
                   <CardTitle className='truncate text-xl font-bold'>
                     探索京都的古老魅力：千年古都的神秘之旅探索京都的古老魅力：千年古都的神秘之旅

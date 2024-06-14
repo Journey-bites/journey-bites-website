@@ -1,14 +1,18 @@
-import { getArticles } from '@/lib/nextApi';
-import ArticleCard from '@/components/ArticleCard';
-import ArticleWrapper from '@/components/ArticleWrapper';
+// import { getArticles } from '@/lib/nextApi';
+import ArticlesContainer from '@/components/ArticlesContainer';
+// import ArticleWrapper from '@/components/ArticleWrapper';
 
 export default async function Content() {
-  const posts = await getArticles({ pageParam: 1 });
+  // const posts = await getArticles({ pageParam: 1 });
 
   return (
     <>
-      <ArticleCard color='secondary' type='hot' />
-      <ArticleWrapper posts={posts} />
+      <div className='mb-9'>
+        <ArticlesContainer showBtn color='secondary' type='hot' />
+      </div>
+      <ArticlesContainer showBtn={false} color='primary' type='recommend' />
+      {/* TODO: Wait for random articles API to be ready and will planning refactor this Component */}
+      {/* <ArticleWrapper posts={posts} /> */}
     </>
   );
 }
