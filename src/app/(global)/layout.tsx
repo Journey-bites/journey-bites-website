@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
-import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { useUserStore } from '@/providers/userProvider';
-import jsCookie from 'js-cookie';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ReactQueryProvider from '@/providers/ReactQuery';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function GlobalLayout({
   children,
@@ -12,25 +13,24 @@ export default function GlobalLayout({
   children: ReactNode;
 }>) {
 
-  const { setToken, removeToken } = useUserStore((state) => state);
-  const isCheckLogin = useRef(false);
+  const { setAuth } = useUserStore((state) => state);
+  const isInitRender = useRef(false);
 
   useEffect(() => {
-    if (!isCheckLogin.current) {
-      const userCookie = jsCookie.get(JOURNEY_BITES_COOKIE);
-      if (userCookie) {
-        setToken();
-      } else {
-        removeToken();
-      }
-      isCheckLogin.current = true;
+    if (!isInitRender.current) {
+      setAuth();
+      isInitRender.current = true;
     }
-  }, [setToken, removeToken]);
+  }, [setAuth]);
 
   return (
     <>
-      <Header />
-      {children}
+      <ReactQueryProvider>
+        <Header />
+        {children}
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      </ReactQueryProvider>
+      <Footer />
     </>
   );
 }

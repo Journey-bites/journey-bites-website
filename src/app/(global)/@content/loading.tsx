@@ -1,12 +1,16 @@
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Loading() {
   return (
     <main className='m-auto my-20 w-full'>
-      <h1 className='mb-2 text-2xl font-semibold'>Loading...</h1>
+      <h1 className='mb-2 text-center text-2xl font-semibold'>Loading...</h1>
       <div className='grid grid-cols-2 gap-8'>
-        {Array.from({ length: 6 }, (_, i) => i).map((item) => {
+        {Array.from({ length: 4 }, (_, i) => i).map((item) => {
           return (
             <Card key={item}>
               <CardContent>

@@ -1,4 +1,5 @@
-import { ApiSuccessResponse, Category } from '@/types/apiResponse';
+import { ApiSuccessResponse } from '@/types/apiResponse';
+import { Category } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
 
 const API_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api/v1' : process.env.NEXT_PUBLIC_API_BASE_URL;
