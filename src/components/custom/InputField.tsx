@@ -18,7 +18,7 @@ type InputFieldProps<T extends FieldValues> = {
   onBlur?: () => void;
 }
 
-export default function InputField ({ className, control, name, label, inputType, placeholder, formDescription, startIcon, endIcon, iconAction, onBlur }: InputFieldProps) {
+export default function InputField<T extends FieldValues>({ className, control, name, label, inputType, placeholder, formDescription, startIcon, endIcon, iconAction, onBlur }: InputFieldProps<T>) {
   return (
     <FormField
       control={control}

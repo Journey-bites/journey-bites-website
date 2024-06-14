@@ -14,7 +14,7 @@ const EditorWrapper= () => {
     setContent(reason);
     console.log(reason);
   };
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     router.push('/article/publish');

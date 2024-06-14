@@ -40,7 +40,8 @@ const Toolbar = ({ editor }: Props) => {
 
   const characterCount = editor.storage.characterCount.characters();
 
-  const setLink = () => {
+  const setLink = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
     const previousUrl = editor.getAttributes('link').href;
     const url = window.prompt('URL', previousUrl);
 
@@ -209,12 +210,18 @@ const Toolbar = ({ editor }: Props) => {
           <Link2 className='size-5' />
         </button>
         <button
-          onClick={() => editor.chain().focus().unsetLink().run()}
+          onClick={(e) => {
+            e.preventDefault();
+            editor.chain().focus().unsetLink().run();
+          }}
           disabled={!editor.isActive('link')}
         >
           <Unlink2 className='size-5' />
         </button>
-        <button onClick={() => handleDialog()}
+        <button onClick={(e) => {
+            e.preventDefault();
+            handleDialog();
+          }}
           className={
             editor.isActive('image')
               ? commonActiveClassName

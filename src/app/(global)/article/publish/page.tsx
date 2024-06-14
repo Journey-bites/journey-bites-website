@@ -10,29 +10,79 @@ import { useEditor } from '@/lib/useEditor';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import SelectField from '@/components/custom/SelectField';
+import { useUserStore } from '@/providers/userProvider';
+import { useEffect } from 'react';
+
+const categoryOptions: { label: string; value: string; }[]= [
+  { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
+  { label: '步道旅行', value: '步道旅行' },
+  { label: '健行日記', value: '健行日記' },
+  { label: '創作者列表', value: '創作者列表' },
+  { label: '旅遊食記', value: '旅遊食記' },
+  { label: '台灣百岳', value: '台灣百岳' },
+];
+
+const needsPayOptions: { label: string; value: string; }[]= [
+  { label: '免費', value: 'false' },
+  { label: '付費', value: 'true' }
+];
+
+const tagOptions: { label: string; value: string; }[]= [
+  { label: '台灣', value: 'Taiwan' },
+  { label: '日本', value: 'Japan' },
+  { label: '中國', value: 'China' },
+  { label: '泰國', value: 'Thailand' },
+  { label: '丹麥', value: 'Denmark' },
+  { label: '冰島', value: 'Iceland' },
+  { label: '克羅埃西亞', value: 'Croatia' },
+  { label: '西班牙', value: '西班牙' },
+  { label: '南非', value: 'South Africa' },
+];
+
+function generateValidationValues(options: { value: string; }[]): [string, string] {
+  const values = options.map(option => option.value) as [string, string];
+  return values;
+}
 
 const formSchema = z.object({
   title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
   abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
   thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
+  category: z.enum(generateValidationValues(categoryOptions), {
+    message: '選項為必填',
+  }),
+  needsPay: z.enum(generateValidationValues(needsPayOptions), {
+    message: '選項為必填',
+  })
 });
 
 export default function PublishArticle() {
+  const providers = useUserStore((state) => state);
+  console.log(providers);
   const { editorProps } = useEditor();
-  // const form = useForm<FieldValues>({
-  //   resolver: zodResolver(formSchema),
-  //   mode: 'onBlur',
-  //   defaultValues: {
-  //     displayName: '',
-  //     email: '',
-  //   },
-  // });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(editorProps);
-    console.log(values);
+    const needsPay = Boolean(values.needsPay);
+    const rawData = { ...values, needsPay, ...editorProps, creator: '666b4090cf615869b955ca83' };
+    console.log({ ...rawData, ...editorProps });
+
+    const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+      myHeaders.append('Authorization', 'Bearer 414555b8312b882d0d3d83a4fbe6357aeb1c2b7608c901e8');
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(rawData),
+        redirect: 'follow'
+      };
+
+    fetch('http://localhost:3005/api/v1/article/', requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,11 +92,10 @@ export default function PublishArticle() {
       title: '',
       abstract: '',
       thumbnailUrl: '',
-      // needsPay: false
+      category: '',
+      needsPay: 'false'
     },
   });
-
-  const { control } = form;
 
   return (
     <main className='mx-auto mb-10 grid size-full place-items-center'>
@@ -54,27 +103,43 @@ export default function PublishArticle() {
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
         <InputField
           className='w-[270px]'
-          control={control}
+          control={form.control}
           name='title'
           label='標題'
           placeholder='請輸入標題'
         />
         <TextAreaField
           className='w-[270px] resize-none'
-          control={control}
+          control={form.control}
           name='abstract'
           label='摘要'
           placeholder='請輸入摘要'
         />
         <InputField
           className='w-[270px]'
-          control={control}
+          control={form.control}
           name='thumbnailUrl'
           label='縮圖'
           placeholder='請輸入縮圖網址 https://'
           formDescription='無縮圖時將由系統自動帶入預設圖片'
         />
-        <Button type='submit'>發布文章</Button>
+        <SelectField
+          className='w-[270px]'
+          control={form.control}
+          name='category'
+          label='文章分類'
+          placeholder='設定文章分類'
+          options={categoryOptions}
+        />
+        <SelectField
+          className='w-[270px]'
+          control={form.control}
+          name='needsPay'
+          label='內容收費'
+          placeholder='設定文章是否收費'
+          options={needsPayOptions}
+        />
+        <Button type='submit' disabled={!form.formState.isValid}>發布文章</Button>
       </form>
     </Form>
     </main>

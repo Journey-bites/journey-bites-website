@@ -22,7 +22,7 @@ export type Articles = {
     subscriptions: number,
   },
   tags: string[],
-  category: string, // ref Categories
+  category: string,
   createdAt: Date,
   updatedAt: Date,
 }
