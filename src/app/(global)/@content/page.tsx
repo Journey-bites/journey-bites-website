@@ -11,8 +11,6 @@
 //   );
 // }
 import ArticleWrapper from '@/components/ArticleWrapper';
-import { Suspense } from 'react';
-import Loading from './loading';
 import getPosts from '@/lib/actions';
 import ArticleCard from '@/components/ArticleCard';
 
@@ -21,9 +19,7 @@ export default async function Content() {
 
   return (
     <>
-      <Suspense fallback={<Loading />}>
-        <ArticleCard title='熱門文章' color='secondary-100' />
-      </Suspense>
+      <ArticleCard color='secondary' type='hot' />
       <ArticleWrapper posts={posts} />
     </>
   );

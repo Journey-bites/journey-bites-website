@@ -4,15 +4,19 @@ import {
   AvatarImage,
 } from '@/components/ui/avatar';
 import Image from 'next/image';
+import { Button } from './ui/button';
+
+import CurveImg from '@/images/long-curve.svg';
 
 export default function CreatorList() {
   return (
-    <div className='relative rounded-lg border-2 p-7'>
-      <div className='mb-10'>
-        <h3 className='text-3xl'>創作者列表</h3>
-        <div className='absolute right-9 top-7 border-2 border-solid border-blue-600'>
-          <a href='' className='block px-4 py-3 text-blue-500'>查看更多</a>
+    <div className='mb-9 rounded-lg border-2 p-9 shadow-outlineCard'>
+      <div className='mb-7 flex justify-between'>
+        <div>
+          <h3 className='mb-3 text-3xl font-medium'>創作者列表</h3>
+          <Image src={CurveImg} alt='creator list' />
         </div>
+        <Button variant='outline' className='self-start'>查看更多</Button>
       </div>
       {Array.from({ length: 5 }, (_, i) => i).map((item) => {
         return (
@@ -24,9 +28,9 @@ export default function CreatorList() {
                 </AvatarImage>
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <div className='flex flex-col pl-4'>
-                <h4 className='text-xl font-bold'>馬亞弗朗西斯</h4>
-                <p className='line-clamp-2 font-normal'>瑪雅是一位對冒險充滿熱情的旅行者。她喜歡挑戰自己,瑪雅是一位對冒險充滿熱情的旅行者。她喜歡挑戰自己,探索世...</p>
+              <div className='pl-4'>
+                <h4 className='mb-1 text-xl font-bold'>馬亞弗朗西斯</h4>
+                <p className='line-clamp-2 text-grey-400'>瑪雅是一位對冒險充滿熱情的旅行者。她喜歡挑戰自己,瑪雅是一位對冒險充滿熱情的旅行者。她喜歡挑戰自己,探索世...</p>
               </div>
             </div>
           </div>

@@ -115,12 +115,11 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       screens: {
-        xs: { min: '0px', max: '639px' },
-        sm: { min: '640px', max: '767px' },
-        md: { min: '768px', max: '1023px' },
-        lg: { min: '1024px', max: '1279px' },
-        xl: { min: '1280px', max: '1534px' },
-        '2xl': { min: '1535px' },
+        xs: '0px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
       },
       maxWidth: {
         '1320': '1320px',
@@ -128,6 +127,7 @@ const config = {
       boxShadow: {
         tabs: '0px 2px 8px 0px rgba(39, 41, 55, 0.08)',
         base: '0 4px 6px 0px rgba(0, 0, 0, 0.09)',
+        outlineCard: '0px 2px 4px 0px rgba(174, 174, 174, 0.25)'
       },
     },
   },

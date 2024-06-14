@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { ComponentProps } from 'react';
 import {
   Card,
   CardContent,
@@ -11,17 +10,21 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PartyPopper, ThumbsUp } from 'lucide-react';
 import SocialLink from './custom/SocialLink';
+import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
+
+import DefaultUserImg from '@/images/default-user.webp';
 
 type ArticleCardTitleProps = {
-  title: '熱門文章' | '推薦文章';
-  color: 'primary-100' | 'secondary-100';
+  type: 'hot' | 'recommend';
+  color: 'primary' | 'secondary';
   post?: {
     userId: number;
     id: number;
     title: string;
     body: string;
   }[] | undefined;
-} & ComponentProps<'div'>
+}
 
 async function getRecipes() {
   const resp = await fetch('https://jsonplaceholder.typicode.com/users');
@@ -31,82 +34,65 @@ async function getRecipes() {
 }
 
 export default async function ArticleCardTemplate({
-  title,
+  type,
   color,
 }: ArticleCardTitleProps) {
-  const colorVariants: Record<'primary-100' | 'secondary-100', string> = {
-    'primary-100': 'bg-primary-100',
-    'secondary-100': 'bg-secondary-100',
-  };
-
-  const containerClass = `relative rounded-lg ${colorVariants[color]}`;
-
+  const isHotType = type === 'hot';
   const datas = await getRecipes();
 
   return (
-    <div className={containerClass}>
-      {title === '熱門文章' ?
-        <>
-          <h1 className='flex w-[200px] justify-center gap-3 border-b-10 border-r-10 border-white bg-secondary p-4 text-2xl text-white'>
-            <PartyPopper />
-            {title}
-          </h1>
-          <div className='absolute right-9 top-7 border-2 border-solid border-blue-600'>
-            <a
-              href=''
-              className='block px-4 py-3 text-blue-500'
-            >
-              查看更多
-            </a>
-          </div>
-        </>
-      : (<h1 className='flex w-[200px] justify-center gap-3 border-b-10 border-r-10 border-white bg-primary p-4 text-2xl text-white'>
-          <ThumbsUp />
-          {title}
-        </h1>
-      )}
-      <div className='grid gap-x-4 gap-y-9 p-9 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2'>
+    <div className={cn('relative rounded-lg md:p-9 py-2 px-3', color === 'primary' ? 'bg-primary-100' : 'bg-secondary-100')}>
+      <div className={cn('flex justify-center items-center gap-3 rounded-tl-lg md:border-b-10 md:border-r-10 md:border-white py-3 md:py-4 px-8 text-white absolute left-0 top-0', `bg-${color}`)}>
+        {isHotType ? <PartyPopper className='size-5 md:size-6' /> : <ThumbsUp />}
+        <h1 className='text-xl md:text-2xl'>{isHotType ? '熱門文章' : '推薦文章'}</h1>
+      </div>
+      <div className='flex justify-end'>
+        {isHotType && (
+          <Button variant='outline' className='rounded-lg px-4 py-2 md:px-5 md:py-3'>
+            查看更多
+          </Button>
+        )}
+      </div>
+      <div className='mt-7 grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2'>
         {'1234'.split('').map((item, index) => (
-          <Card key={item} >
-            <div className='grid grid-cols-12'>
-              <div className='sm:col-span-10 md:col-span-10 lg:col-span-9 xl:col-span-7 2xl:col-span-8 xs:col-span-7'>
+          <Card key={item}>
+            <div className='flex flex-col-reverse gap-3 lg:flex-row'>
+              <div className='lg:max-w-[232px]'>
                 <CardHeader>
                   <CardTitle className='truncate text-xl font-bold'>
                     探索京都的古老魅力：千年古都的神秘之旅探索京都的古老魅力：千年古都的神秘之旅
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className='line-clamp-2'>
+                  <p className='line-clamp-2 text-grey-500'>
                     京都是一個充滿歷史與文化的城市，擁有眾多古老的寺廟和神社。在這裡，您可以體驗到日本傳統的茶道、花道等文化活動。
                   </p>
                 </CardContent>
               </div>
-              <div className='relative flex size-[100px] justify-self-end sm:col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-5 2xl:col-span-4 xs:col-span-5'>
+              <div className='relative h-[140px] w-full lg:size-[100px]'>
                 <Image
-                  src={`https://picsum.photos/id/${index + 10}/100/100`}
-                  alt='jorney bites'
-                  sizes='100%'
+                  src={`https://picsum.photos/id/${index + 10}/200/200`}
                   placeholder='empty'
-                  priority={false}
-                  fill={true}
-                  className='rounded-lg'
+                  className='rounded-lg object-cover'
+                  sizes='(max-width: 768px) 33vw, (max-width: 1200px) 50vw, 100vw'
+                  fill
+                  alt='journey bites'
                 />
               </div>
             </div>
-            <CardFooter className='py-2'>
-              <Avatar>
-                <AvatarImage
-                  asChild
-                  src={`https://picsum.photos/id/${index + 20}/100/100`}
-                >
+            <CardFooter className='my-2'>
+              <Avatar className='size-6'>
+                <AvatarImage src={`https://picsum.photos/id/${index + 20}/100/100`} asChild>
                   <Image
                     src={`https://picsum.photos/id/${index + 20}/100/100`}
                     alt='logo'
-                    width={40}
-                    height={40}
+                    width={24}
+                    height={24}
                   />
                 </AvatarImage>
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>
+                  <Image src={DefaultUserImg} alt='user' />
+                </AvatarFallback>
               </Avatar>
               <p className='px-2'>{datas[item].name}</p>
             </CardFooter>
