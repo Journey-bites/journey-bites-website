@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import type { Article } from '@/types/article';
-import getArticles from '@/lib/actions';
+import { getArticles } from '@/lib/nextApi';
 
 export default function useGetPosts(initialData: Article[]) {
   return useInfiniteQuery<Article[], Error>({

@@ -1,21 +1,9 @@
-// import ArticleCard from '@/components/ArticleCard';
-// import { Suspense } from 'react';
-// import Loading from '@/components/loading';
-
-// export default async function RecommendArea() {
-
-//   return (
-//     <Suspense fallback={<Loading />}>
-//       <ArticleCard title='推薦文章' color='primary-100' />
-//     </Suspense>
-//   );
-// }
-import ArticleWrapper from '@/components/ArticleWrapper';
-import getPosts from '@/lib/actions';
+import { getArticles } from '@/lib/nextApi';
 import ArticleCard from '@/components/ArticleCard';
+import ArticleWrapper from '@/components/ArticleWrapper';
 
 export default async function Content() {
-  const posts = await getPosts({ pageParam: 1 });
+  const posts = await getArticles({ pageParam: 1 });
 
   return (
     <>

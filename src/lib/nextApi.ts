@@ -19,3 +19,14 @@ export async function getCategories() {
   const res = await nextFetch<Category[]>('/categories');
   return res;
 }
+
+export async function getArticles({
+  pageParam = 1,
+}: {
+  pageParam: unknown;
+}) {
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=6`
+  );
+  return res.json();
+}
