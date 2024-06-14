@@ -10,13 +10,13 @@ import CurveImg from '@/images/long-curve.svg';
 
 export default function CreatorList() {
   return (
-    <div className='mb-9 rounded-lg border-2 p-9 shadow-outlineCard'>
+    <div className='mb-9 rounded-lg border-2 p-5 shadow-outlineCard md:p-9'>
       <div className='mb-7 flex justify-between'>
         <div>
-          <h3 className='mb-3 text-3xl font-medium'>創作者列表</h3>
+          <h3 className='mb-2 text-2xl font-medium md:mb-3 md:text-3xl'>創作者列表</h3>
           <Image src={CurveImg} alt='creator list' />
         </div>
-        <Button variant='outline' className='self-start'>查看更多</Button>
+        <Button variant='outline' className='self-start rounded-md px-4 py-2 md:px-5 md:py-3'>查看更多</Button>
       </div>
       {Array.from({ length: 5 }, (_, i) => i).map((item) => {
         return (

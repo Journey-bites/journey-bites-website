@@ -120,6 +120,7 @@ const config = {
         md: '768px',
         lg: '1024px',
         xl: '1280px',
+        '2xl': '1920px'
       },
       maxWidth: {
         '1320': '1320px',
