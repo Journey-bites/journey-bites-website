@@ -29,7 +29,7 @@ export default function Home() {
         <div className='col-span-12 xl:col-span-4'>
           <CreatorList />
           <PopularAreas />
-        </div>
+          </div>
       </div>
     </main>
   );
