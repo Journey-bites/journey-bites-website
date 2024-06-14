@@ -8,7 +8,7 @@ import { Image as TiptapImage } from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import CharacterCount from '@tiptap/extension-character-count';
-import { LIMIT as limit, CONTENT_1 } from './settings';
+import { LIMIT as limit, CONTENT_1 } from '../../constants/editorSettings';
 import '@/components/editor/style.css';
 
 interface TiptapProps {

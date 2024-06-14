@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { DialogComponent } from './EditorDialog';
 import { useDialog } from '@/stores/useDialogStore';
-import { LIMIT, COMMON_ACTIVE_CLASS_NAME, COMMON_CLASS_NAME } from './settings';
+import { LIMIT, COMMON_ACTIVE_CLASS_NAME, COMMON_CLASS_NAME } from '../../constants/editorSettings';
 import { Button } from '@/components/ui/button';
 
 type Props = {
