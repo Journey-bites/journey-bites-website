@@ -56,6 +56,7 @@ const config = {
         },
         grey: {
           DEFAULT: '#F8FAFC',
+          100: 'var(--grey-100)',
           200: 'var(--grey-200)',
           300: 'var(--grey-300)',
           400: 'var(--grey-400)',
@@ -114,7 +115,7 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       screens: {
-        xs: { min: '375px', max: '639px' },
+        xs: { min: '0px', max: '639px' },
         sm: { min: '640px', max: '767px' },
         md: { min: '768px', max: '1023px' },
         lg: { min: '1024px', max: '1279px' },
@@ -122,8 +123,7 @@ const config = {
         '2xl': { min: '1535px' },
       },
       maxWidth: {
-        '1024': '1024px',
-        '1280': '1280px',
+        '1320': '1320px',
       },
       boxShadow: {
         tabs: '0px 2px 8px 0px rgba(39, 41, 55, 0.08)',

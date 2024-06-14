@@ -2,7 +2,8 @@ import jsCookie from 'js-cookie';
 import type { AxiosRequestConfig, Method } from 'axios';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
-import { ApiResponse, Profile, UserResponse } from '@/types/apiResponse';
+import { ApiResponse, UserResponse } from '@/types/apiResponse';
+import { Profile } from '@/types';
 
 const apiService = new ApiService();
 

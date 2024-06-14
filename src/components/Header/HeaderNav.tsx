@@ -12,7 +12,7 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { Separator } from '@/components/ui/separator';
-import { Category } from '@/types/apiResponse';
+import { Category } from '@/types';
 
 const components: Category[] = [
   {
