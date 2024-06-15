@@ -3,9 +3,9 @@ import Sidebar from '@/components/dashboard/Sidebar';
 
 export default function ManageLayout({ children }: PropsWithChildren) {
   return (
-    <div className='mx-auto mt-[60px] grid max-w-[1296px] grid-cols-12 gap-6 xs:mt-6 sm:mt-6'>
+    <div className='mx-auto mt-6 grid max-w-[1296px] grid-cols-12 gap-6 md:mt-[60px]'>
       <Sidebar />
-      <div className='col-span-9 px-10 xs:col-span-12 sm:col-span-12'>
+      <div className='col-span-12 px-10 md:col-span-9 '>
         {children}
       </div>
     </div>
