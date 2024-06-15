@@ -26,7 +26,7 @@ export default function CreatorList({ creatorList }: { creatorList: Creator[] })
           <Link href={`/creator/${item.userId}`} key={item.userId} className='block after:block after:border-b-2 after:border-dotted after:border-grey-100 after:content-[""] after:last-of-type:border-b-0'>
             <div className='flex py-4'>
               <Avatar>
-                <AvatarImage asChild src={item.avatarImageUrl || '/images/default-user.webp'}>
+                <AvatarImage asChild src={item.avatarImageUrl || undefined}>
                   <Image src={item.avatarImageUrl || DefaultUserImg} alt={item.displayName || 'creator'} width={40} height={40} priority />
                 </AvatarImage>
                 <AvatarFallback>
