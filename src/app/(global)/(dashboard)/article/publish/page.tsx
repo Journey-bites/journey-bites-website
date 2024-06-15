@@ -101,7 +101,10 @@ export default function PublishArticle() {
   return (
     <main className='mx-auto mb-10 grid size-full place-items-center'>
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 pt-10'>
+        <div className='mb-10 text-center text-3xl text-primary-300'>
+          發布設定
+        </div>
         <InputField
           className='w-[270px]'
           control={form.control}

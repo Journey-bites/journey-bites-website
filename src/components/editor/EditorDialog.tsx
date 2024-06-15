@@ -46,7 +46,8 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
 
     setData({ url: e.target.value });
   };
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     if(data && data.url) handleDialog(data.url);
     onClose();
   };
