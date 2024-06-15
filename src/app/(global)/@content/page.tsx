@@ -1,30 +1,18 @@
-// import ArticleCard from '@/components/ArticleCard';
-// import { Suspense } from 'react';
-// import Loading from '@/components/loading';
-
-// export default async function RecommendArea() {
-
-//   return (
-//     <Suspense fallback={<Loading />}>
-//       <ArticleCard title='推薦文章' color='primary-100' />
-//     </Suspense>
-//   );
-// }
-import ArticleWrapper from '@/components/ArticleWrapper';
-import { Suspense } from 'react';
-import Loading from './loading';
-import getPosts from '@/lib/actions';
-import ArticleCard from '@/components/ArticleCard';
+// import { getArticles } from '@/lib/nextApi';
+import ArticlesContainer from '@/components/ArticlesContainer';
+// import ArticleWrapper from '@/components/ArticleWrapper';
 
 export default async function Content() {
-  const posts = await getPosts({ pageParam: 1 });
+  // const posts = await getArticles({ pageParam: 1 });
 
   return (
     <>
-      <Suspense fallback={<Loading />}>
-        <ArticleCard title='熱門文章' color='secondary-100' />
-      </Suspense>
-      <ArticleWrapper posts={posts} />
+      <div className='mb-9'>
+        <ArticlesContainer showBtn color='secondary' type='hot' />
+      </div>
+      <ArticlesContainer showBtn={false} color='primary' type='recommend' />
+      {/* TODO: Wait for random articles API to be ready and will planning refactor this Component */}
+      {/* <ArticleWrapper posts={posts} /> */}
     </>
   );
 }

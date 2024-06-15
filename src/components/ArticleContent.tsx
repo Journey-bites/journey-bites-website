@@ -22,7 +22,7 @@ export default function ArticleContent({ post }: Props) {
   return (
     <Card>
       <div className='grid grid-cols-12'>
-        <div className='sm:col-span-10 md:col-span-10 lg:col-span-9 xl:col-span-7 2xl:col-span-8 xs:col-span-7'>
+        <div className='xs:col-span-7 sm:col-span-10 md:col-span-10 lg:col-span-9 xl:col-span-7 2xl:col-span-8'>
           <CardHeader>
             <CardTitle className='truncate text-xl font-bold'>{post.title}</CardTitle>
           </CardHeader>
@@ -30,7 +30,7 @@ export default function ArticleContent({ post }: Props) {
             <p className='line-clamp-2'>{post.body}</p>
           </CardContent>
         </div>
-        <div className='relative flex size-[100px] justify-self-end sm:col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-5 2xl:col-span-4 xs:col-span-5'>
+        <div className='relative flex size-[100px] justify-self-end xs:col-span-5 sm:col-span-2 md:col-span-2 lg:col-span-3 xl:col-span-5 2xl:col-span-4'>
           <Image src={`https://picsum.photos/id/${post.id}/100/100`} alt='jorney bites' sizes='100%' placeholder='empty' priority={false} fill={true} className='rounded-lg' />
         </div>
       </div>

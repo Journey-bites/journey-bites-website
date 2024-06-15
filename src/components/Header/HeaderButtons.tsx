@@ -16,7 +16,7 @@ export default function HeaderButtons() {
 
   return (
     <>
-      <div className='hidden gap-8 sm:flex md:flex lg:flex xl:flex 2xl:flex'>
+      <div className='hidden gap-8 md:flex'>
         {typeof isLogin === 'boolean' && (
           !isLogin ? (
             <>
@@ -45,10 +45,10 @@ export default function HeaderButtons() {
           )
         )}
       </div>
-      <div className='hidden xs:flex'>
+      <div className='md:hidden'>
         {isLogin && (
           <Sheet>
-            <SheetTrigger className='hidden size-11 cursor-pointer xs:block'>
+            <SheetTrigger className='size-11 cursor-pointer md:hidden'>
               <User2Icon />
             </SheetTrigger>
             <SheetContent>
@@ -57,7 +57,7 @@ export default function HeaderButtons() {
           </Sheet>
         )}
         <Sheet>
-          <SheetTrigger className='hidden size-11 cursor-pointer xs:block'>
+          <SheetTrigger className='size-11 cursor-pointer md:hidden'>
             <MenuIcon />
           </SheetTrigger>
           <SheetContent className='flex flex-col'>

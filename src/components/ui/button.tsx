@@ -20,7 +20,7 @@ const buttonVariants = cva(
           'bg-primary text-white hover:border-primary-300 hover:bg-primary-300 active:border-primary-400 active:bg-primary-400',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border-2 border-primary bg-white text-primary hover:border-primary-300 hover:bg-primary-300 hover:text-white active:border-primary-400 active:bg-primary-400',
+          'border-2 border-primary bg-transparent text-primary hover:border-primary-300 hover:bg-primary-300 hover:text-white active:border-primary-400 active:bg-primary-400',
         secondary: 'text-secondary-foreground hover:bg-secondary/80 bg-secondary',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         fullLink: 'mb-3 block w-full rounded-lg py-4 text-center text-grey-500',

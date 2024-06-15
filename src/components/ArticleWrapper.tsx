@@ -6,7 +6,7 @@ import type { Article } from '@/types/article';
 import ArticleContent from './ArticleContent';
 import useGetPosts from '@/hook/useGetPosts';
 import { ThumbsUp } from 'lucide-react';
-import Loading from '@/components/loading';
+import LoadingSkeleton from './LoadingSkeleton';
 
 type Props = {
   posts: Article[];
@@ -22,7 +22,7 @@ const PostsWrapper = ({ posts }: Props) => {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
-  console.log(data);
+
   return (
   <>
     <div className='relative mt-9 rounded-lg bg-primary-100'>
@@ -41,7 +41,7 @@ const PostsWrapper = ({ posts }: Props) => {
       </div>
     </div>
     {isFetchingNextPage && hasNextPage ? (
-        <Loading />
+        <LoadingSkeleton />
     ) : (
       <div className='h-10' ref={ref} />
     )}

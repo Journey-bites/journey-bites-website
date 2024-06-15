@@ -17,13 +17,13 @@ export default function Header() {
 
   return (
     <header className='sticky top-0 z-40 border border-b-gray-200 bg-white'>
-      <div className='mx-auto flex w-[67.5%] items-center justify-between py-5 xl:max-w-[1296px] xs:w-full xs:px-4'>
+      <div className='mx-auto flex w-[67.5%] items-center justify-between py-5 xs:w-full xs:px-4 xl:max-w-[1296px]'>
         <div className='flex items-center gap-12'>
           <Link href='/'>
-            <Image className='sm:hidden xs:hidden' src={Logo} alt='Journey Bites' priority />
-            <Image className='hidden sm:block xs:block' src={LogoSm} alt='Journey Bites' priority />
+            <Image className='hidden md:block' src={Logo} alt='Journey Bites' priority />
+            <Image className='md:hidden' src={LogoSm} alt='Journey Bites' priority />
           </Link>
-          <div className='hidden gap-8 md:flex lg:flex xl:flex 2xl:flex'>
+          <div className='hidden gap-8 md:flex'>
             <HeaderNav />
             <SearchBar />
           </div>
