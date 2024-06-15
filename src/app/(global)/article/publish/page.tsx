@@ -13,6 +13,9 @@ import { useForm } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
 import { useUserStore } from '@/providers/userProvider';
 import { useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { createArticle } from '@/lib/authApi';
+import { toast } from '@/components/ui/use-toast';
 
 const categoryOptions: { label: string; value: string; }[]= [
   { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
@@ -62,27 +65,25 @@ export default function PublishArticle() {
   console.log(providers);
   const { editorProps } = useEditor();
 
+  const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
+
+  useEffect(() => {
+
+  }, []);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(editorProps);
+    if (!editorProps) return;
     const needsPay = Boolean(values.needsPay);
-    const rawData = { ...values, needsPay, ...editorProps, creator: '666b4090cf615869b955ca83' };
-    console.log({ ...rawData, ...editorProps });
-
-    const myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
-      myHeaders.append('Authorization', 'Bearer 414555b8312b882d0d3d83a4fbe6357aeb1c2b7608c901e8');
-
-      const requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: JSON.stringify(rawData),
-        redirect: 'follow'
-      };
-
-    fetch('http://localhost:3005/api/v1/article/', requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.error(error));
+    const createArticleRequest = { ...values, needsPay, ...editorProps };
+    // console.log({ ...createArticleRequest, ...editorProps });
+    createArticleMutate(createArticleRequest, {
+      onSuccess: () => {
+        toast({ title: '成功送出', variant: 'success' });
+      },
+      onError: () => {
+        toast({ title: '送出失敗', variant: 'error' });
+      },
+    });
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -139,7 +140,7 @@ export default function PublishArticle() {
           placeholder='設定文章是否收費'
           options={needsPayOptions}
         />
-        <Button type='submit' disabled={!form.formState.isValid}>發布文章</Button>
+        <Button type='submit' disabled={!form.formState.isValid} isLoading={isUpdateCreateArticle}>發布文章</Button>
       </form>
     </Form>
     </main>

@@ -4,6 +4,7 @@ import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
 import { ApiResponse, UserResponse } from '@/types/apiResponse';
 import { Profile } from '@/types';
+import { CreateArticleRequest } from '@/types/article';
 
 const apiService = new ApiService();
 
@@ -33,5 +34,10 @@ export async function logout() {
 
 export async function updateUserProfile(profile: Profile) {
   const res = await fetchWithToken<ApiResponse>('patch', '/user', { data: profile });
+  return res;
+}
+
+export async function createArticle(createArticleRequest : CreateArticleRequest) {
+  const res = await fetchWithToken<ApiResponse>('post', '/article', { data: createArticleRequest });
   return res;
 }

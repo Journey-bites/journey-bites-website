@@ -5,7 +5,19 @@ export type RecommendArticle = {
   body: string;
 };
 
-export type Articles = {
+export type CreateArticleRequest = {
+  creator?: string,
+  title: string,
+  abstract?: string,
+  content: string,
+  thumbnailUrl?: string,
+  needsPay: boolean,
+  wordsCount: number,
+  tags?: string[],
+  category: string,
+}
+
+export type Article = {
   id: string,
   creator_id: string,
   creator: string,
