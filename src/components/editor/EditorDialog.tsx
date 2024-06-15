@@ -11,15 +11,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { useDialog } from '@/lib/useDialog';
+import { useDialog } from '@/stores/useDialogStore';
 
 interface DialogComponentProps {
-  dialog: (url: string) => void;
+  handleDialog: (url: string) => void;
 }
 
-const schema = z.string().refine(val => val.startsWith('https://'), { message: 'URL must start with https' });
+const schema = z.string().url({ message: '請填入正確的網址格式, ex: https://www.journeybites.com' }).refine(url => url.startsWith('https://'), {
+  message: 'URL must start with https://'
+});
 
-export function DialogComponent({ dialog }: DialogComponentProps ) {
+export function DialogComponent({ handleDialog }: DialogComponentProps ) {
   const { isOpen, onClose, onOpen, data, setData } = useDialog();
   const handleButtonClick = () => {
     if(isOpen) return onClose();
@@ -45,7 +47,7 @@ export function DialogComponent({ dialog }: DialogComponentProps ) {
     setData({ url: e.target.value });
   };
   const handleSubmit = () => {
-    if(data && data.url) dialog(data.url);
+    if(data && data.url) handleDialog(data.url);
     onClose();
   };
   return (
@@ -55,7 +57,7 @@ export function DialogComponent({ dialog }: DialogComponentProps ) {
           <DialogTitle>上傳圖片</DialogTitle>
         </DialogHeader>
         <form className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
+          <div className='items-center gap-4'>
             <Label htmlFor='url' className='text-right'>
               圖片 Url:
             </Label>

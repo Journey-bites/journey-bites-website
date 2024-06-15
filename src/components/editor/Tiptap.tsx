@@ -4,11 +4,11 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Toolbar from './Toolbar';
 import Underline from '@tiptap/extension-underline';
-import Image from '@tiptap/extension-image';
+import { Image as TiptapImage } from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
-import Link from '@tiptap/extension-link';
+import { Link as TiptapLink } from '@tiptap/extension-link';
 import CharacterCount from '@tiptap/extension-character-count';
-import { limit, content1 } from './settings';
+import { LIMIT as limit, CONTENT_1 } from '../../constants/editorSettings';
 import '@/components/editor/style.css';
 
 interface TiptapProps {
@@ -21,12 +21,12 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
     onChange(newContent);
   };
   const editor = useEditor({
-    content: content1,
+    content: CONTENT_1,
     editable: true,
     extensions: [
       StarterKit,
       Underline,
-      Image.configure({
+      TiptapImage.configure({
         HTMLAttributes: {
           class: 'object-contain',
         }
@@ -34,7 +34,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
-      Link.configure({
+      TiptapLink.configure({
         autolink: true,
         openOnClick: false,
         validate: (href: string) => /^https?:\/\//.test(href),

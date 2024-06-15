@@ -12,7 +12,7 @@ import {
   Underline,
   Undo,
   Redo,
-  Image as Img,
+  ImageIcon,
   AlignLeft,
   AlignCenter,
   AlignRight,
@@ -20,9 +20,9 @@ import {
   Unlink2,
 } from 'lucide-react';
 import { DialogComponent } from './EditorDialog';
-import { useDialog } from '@/lib/useDialog';
+import { useDialog } from '@/stores/useDialogStore';
 import { useEditor } from '@/lib/useEditor';
-import { limit, commonActiveClassName, commonClassName } from './settings';
+import { LIMIT, COMMON_ACTIVE_CLASS_NAME, COMMON_CLASS_NAME } from '../../constants/editorSettings';
 import { Button } from '@/components/ui/button';
 
 type Props = {
@@ -87,8 +87,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('bold')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Bold className='size-5' />
@@ -100,8 +100,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('italic')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Italic className='size-5' />
@@ -113,8 +113,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('underline')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Underline className='size-5' />
@@ -126,8 +126,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('strike')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Strikethrough className='size-5' />
@@ -139,8 +139,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive({ textAlign: 'left' })
-            ? commonActiveClassName
-            : commonClassName
+            ? COMMON_ACTIVE_CLASS_NAME
+            : COMMON_CLASS_NAME
           }
         >
           <AlignLeft className='size-5' />
@@ -151,8 +151,8 @@ const Toolbar = ({ editor }: Props) => {
             editor.chain().focus().setTextAlign('center').run();
           }}
           className={editor.isActive({ textAlign: 'center' })
-            ? commonActiveClassName
-            : commonClassName
+            ? COMMON_ACTIVE_CLASS_NAME
+            : COMMON_CLASS_NAME
         }
         >
           <AlignCenter className='size-5' />
@@ -160,8 +160,8 @@ const Toolbar = ({ editor }: Props) => {
         <button
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
           className={editor.isActive({ textAlign: 'right' })
-            ? commonActiveClassName
-            : commonClassName
+            ? COMMON_ACTIVE_CLASS_NAME
+            : COMMON_CLASS_NAME
         }
         >
           <AlignRight className='size-5' />
@@ -173,8 +173,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('heading', { level: 1 })
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Heading1 className='size-5' />
@@ -187,8 +187,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('bulletList')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <List className='size-5' />
@@ -200,8 +200,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('orderedList')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <ListOrdered className='size-5' />
@@ -224,10 +224,10 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('image')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }>
-          <Img className='size-5' />
+          <ImageIcon className='size-5' />
         </button>
         <button
           onClick={(e) => {
@@ -236,8 +236,8 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('undo')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Undo className='size-5' />
@@ -249,22 +249,22 @@ const Toolbar = ({ editor }: Props) => {
           }}
           className={
             editor.isActive('redo')
-              ? commonActiveClassName
-              : commonClassName
+              ? COMMON_ACTIVE_CLASS_NAME
+              : COMMON_CLASS_NAME
           }
         >
           <Redo className='size-5' />
         </button>
-        <DialogComponent dialog={handleDialog} />
+        <DialogComponent handleDialog={handleDialog} />
       </div>
       <div>
-      {characterCount >= limit ? (
+      {characterCount >= LIMIT ? (
         <div className='text-red-500'>
-          {characterCount}/{limit} characters
+          {characterCount}/{LIMIT} characters
         </div>
       ) : (
         <div>
-          {characterCount}/{limit} characters
+          {characterCount}/{LIMIT} characters
         </div>
       )}
     </div>

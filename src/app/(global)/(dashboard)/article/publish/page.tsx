@@ -74,7 +74,7 @@ export default function PublishArticle() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!editorProps) return;
     const needsPay = Boolean(values.needsPay);
-    const createArticleRequest = { ...values, needsPay, ...editorProps };
+    const createArticleRequest = { ...values, needsPay, ...editorProps, creator: '666b4090cf615869b955ca83' };
     // console.log({ ...createArticleRequest, ...editorProps });
     createArticleMutate(createArticleRequest, {
       onSuccess: () => {
