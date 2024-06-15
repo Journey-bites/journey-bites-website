@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {
   Avatar,
   AvatarFallback,
@@ -22,7 +23,7 @@ export default function CreatorList({ creatorList }: { creatorList: Creator[] })
       </div>
       {creatorList.map((item) => {
         return (
-          <div key={item.userId} className='after:block after:border-b-2 after:border-dotted after:border-grey-100 after:content-[""] after:last-of-type:border-b-0'>
+          <Link href={`/creator/${item.userId}`} key={item.userId} className='block after:block after:border-b-2 after:border-dotted after:border-grey-100 after:content-[""] after:last-of-type:border-b-0'>
             <div className='flex py-4'>
               <Avatar>
                 <AvatarImage asChild src={item.avatarImageUrl || '/images/default-user.webp'}>
@@ -37,7 +38,7 @@ export default function CreatorList({ creatorList }: { creatorList: Creator[] })
                 {item.bio && <p className='line-clamp-2 text-grey-400'>{item.bio}</p>}
               </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

@@ -45,6 +45,7 @@ export type SearchRequestQuery = {
 export interface Creator extends Profile {
   userId: string;
   email: string;
+  followersCount: number;
   followers: {
     followerId: string
   }[];

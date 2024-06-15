@@ -53,3 +53,8 @@ export async function getCreators({ page, pageSize, search, type }: SearchReques
   const res = await nextFetch<Creator[]>(url, { method: 'GET' });
   return res;
 }
+
+export async function getCreatorById(id: string) {
+  const res = await nextFetch<Creator>(`/creator/${id}`, { method: 'GET' });
+  return res;
+}
