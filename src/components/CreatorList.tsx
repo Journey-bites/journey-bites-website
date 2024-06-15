@@ -7,8 +7,10 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 
 import CurveImg from '@/images/long-curve.svg';
+import DefaultUserImg from '@/images/default-user.webp';
+import { Creator } from '@/types';
 
-export default function CreatorList() {
+export default function CreatorList({ creatorList }: { creatorList: Creator[] }) {
   return (
     <div className='mb-9 rounded-lg border-2 p-9 shadow-outlineCard'>
       <div className='mb-7 flex justify-between'>
@@ -18,19 +20,21 @@ export default function CreatorList() {
         </div>
         <Button variant='outline' className='self-start'>查看更多</Button>
       </div>
-      {Array.from({ length: 5 }, (_, i) => i).map((item) => {
+      {creatorList.map((item) => {
         return (
-          <div key={item} className='after:block after:border-b-2 after:border-dotted after:border-grey-100 after:content-[""] after:last-of-type:border-b-0'>
+          <div key={item.userId} className='after:block after:border-b-2 after:border-dotted after:border-grey-100 after:content-[""] after:last-of-type:border-b-0'>
             <div className='flex py-4'>
               <Avatar>
-                <AvatarImage asChild src='https://picsum.photos/id//100/100'>
-                  <Image src='https://picsum.photos/id/100/100' alt='logo' width={40} height={40} priority />
+                <AvatarImage asChild src={item.avatarImageUrl || '/images/default-user.webp'}>
+                  <Image src={item.avatarImageUrl || DefaultUserImg} alt={item.displayName || 'creator'} width={40} height={40} priority />
                 </AvatarImage>
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>
+                  <Image src={DefaultUserImg} alt={item.displayName || 'creator'} />
+                </AvatarFallback>
               </Avatar>
               <div className='pl-4'>
-                <h4 className='mb-1 text-xl font-bold'>馬亞弗朗西斯</h4>
-                <p className='line-clamp-2 text-grey-400'>瑪雅是一位對冒險充滿熱情的旅行者。她喜歡挑戰自己,瑪雅是一位對冒險充滿熱情的旅行者。她喜歡挑戰自己,探索世...</p>
+                <h4 className='mb-1 text-xl font-bold'>{item.displayName}</h4>
+                {item.bio && <p className='line-clamp-2 text-grey-400'>{item.bio}</p>}
               </div>
             </div>
           </div>

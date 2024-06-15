@@ -4,11 +4,14 @@ import CreatorList from '@/components/CreatorList';
 import PopularAreas from '@/components/PopularAreas';
 import Content from './@content/page';
 import { Button } from '@/components/ui/button';
+import { getCreators } from '@/lib/nextApi';
 
 import BannerImg from '@/images/banner.webp';
 import BannerSmImg from '@/images/banner-sm.webp';
 
-export default function Home() {
+export default async function Home() {
+  const creators = await getCreators({ page: 1, pageSize: 5, type: 'hot' });
+
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
       <section className='relative md:max-w-[94%] md:self-end 2xl:max-w-[1800px]'>
@@ -27,7 +30,7 @@ export default function Home() {
           <Content />
         </div>
         <div className='col-span-12 xl:col-span-4'>
-          <CreatorList />
+          <CreatorList creatorList={creators} />
           <PopularAreas />
           </div>
       </div>
