@@ -6,10 +6,10 @@ import {
 } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { Button } from './ui/button';
+import { Creator } from '@/types';
 
 import CurveImg from '@/images/long-curve.svg';
 import DefaultUserImg from '@/images/default-user.webp';
-import { Creator } from '@/types';
 
 export default function CreatorList({ creatorList }: { creatorList: Creator[] }) {
   return (

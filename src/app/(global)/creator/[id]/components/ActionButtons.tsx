@@ -1,33 +1,41 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useUserStore } from '@/providers/userProvider';
-import { followCreator } from '@/lib/authApi';
+import { followCreator, unFollowCreator } from '@/lib/authApi';
 import { useMutation } from '@tanstack/react-query';
-import { toast } from '@/components/ui/use-toast';
 
-export default function ActionButtons({ creatorId }: { creatorId: string }) {
+export default function ActionButtons({ creatorId, userAlreadyFollowed }: { creatorId: string, userAlreadyFollowed?: boolean }) {
   const { isLogin } = useUserStore((state) => state);
-
-  const { mutate: followCreatorMutate } = useMutation({ mutationFn: followCreator });
+  const { mutate: followCreatorMutate } = useMutation({ mutationFn: followCreator, onMutate: () => setIsFollowd(true) });
+  const { mutate: unFollowCreatorMutate } = useMutation({ mutationFn: unFollowCreator, onMutate: () => setIsFollowd(false) });
+  const [isFollowed, setIsFollowd] = useState(userAlreadyFollowed);
 
   const handleFollow = () => {
-    followCreatorMutate(creatorId, {
-      onSuccess: () => {
-        // TODO: update button UI only, no need to show toast
-        toast({ title: '追蹤成功', variant: 'success' });
-      },
-      onError: () => {
-        toast({ title: '追蹤失敗', variant: 'error' });
-      },
-    });
+    if (isFollowed) {
+      unFollowCreatorMutate(creatorId, {
+        onError: () => {
+          setIsFollowd(false);
+        },
+      });
+    } else {
+      followCreatorMutate(creatorId, {
+        onError: () => {
+          setIsFollowd(true);
+        },
+      });
+    }
   };
 
   if (!isLogin) return null;
 
   return (
     <div className='flex gap-3 md:self-start'>
-      <Button variant='outline' className='flex-1 bg-transparent md:flex-initial' onClick={handleFollow}>追蹤</Button>
+      <Button variant='outline' className='flex-1 bg-transparent md:flex-initial' onClick={handleFollow}>
+        {isFollowed ? '追蹤中' : '追蹤'}
+      </Button>
+      {/* TODO: show edit button only if user is creator */}
       <Button className='flex-1 md:flex-initial'>編輯</Button>
     </div>
   );

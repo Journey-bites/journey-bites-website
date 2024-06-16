@@ -54,7 +54,15 @@ export async function getCreators({ page, pageSize, search, type }: SearchReques
   return res;
 }
 
-export async function getCreatorById(id: string) {
-  const res = await nextFetch<Creator>(`/creator/${id}`, { method: 'GET' });
+export async function getCreatorById(id: string, token?: string) {
+  const options: RequestInit = {
+    method: 'GET',
+  };
+  if (token) {
+    options.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  const res = await nextFetch<Creator>(`/creator/${id}`, options);
   return res;
 }

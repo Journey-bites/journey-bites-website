@@ -46,6 +46,7 @@ export interface Creator extends Profile {
   userId: string;
   email: string;
   followersCount: number;
+  userAlreadyFollowed?: boolean;
   followers: {
     followerId: string
   }[];

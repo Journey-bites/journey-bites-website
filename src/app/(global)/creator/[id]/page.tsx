@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { cookies } from 'next/headers';
 import ActionButtons from './components/ActionButtons';
 import { getCreatorById } from '@/lib/nextApi';
 import {
@@ -9,12 +10,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import SocialLink from '@/components/custom/SocialLink';
+import { JOURNEY_BITES_COOKIE } from '@/constants';
 
 import DefaultUserImg from '@/images/default-user.webp';
 import TempImg from '@/images/not-found-img.webp';
 
 export default async function CreatorInfoPage({ params }: { params: { id: string } }) {
-  const creator = await getCreatorById(params.id);
+  const token = cookies().get(JOURNEY_BITES_COOKIE);
+  const creator = await getCreatorById(params.id, token?.value);
   return (
     <>
       <section className='bg-primary-100 py-10 md:py-15'>
@@ -28,7 +31,7 @@ export default async function CreatorInfoPage({ params }: { params: { id: string
                 <span className='text-xl text-grey-400'>{creator.followersCount} 追蹤</span>
               </div>
             </div>
-            <ActionButtons creatorId={creator.userId} />
+            <ActionButtons creatorId={creator.userId} userAlreadyFollowed={creator.userAlreadyFollowed} />
           </div>
           {creator.bio && <p className='mt-6 text-base font-medium text-grey-500 md:mt-9 md:text-xl'>{creator.bio}</p>}
         </div>
