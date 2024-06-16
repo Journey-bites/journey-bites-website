@@ -5,14 +5,18 @@ import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
 import { useEditor } from '@/lib/useEditor';
 
-const EditorWrapper= () => {
+interface EditorWrapperProps {
+  editContent?: string;
+}
+
+const EditorWrapper: React.FC<EditorWrapperProps> = ( { editContent } ) => {
+  console.log( 'editContent', editContent );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const [content, setContent] = useState<string>('');
+  const [content, setContent] = useState<string>(editContent || '');
   const { editorProps } = useEditor();
   const handleContentChange = (reason: string) => {
     setContent(reason);
-    console.log(reason);
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

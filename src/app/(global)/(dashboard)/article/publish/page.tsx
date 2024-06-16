@@ -9,13 +9,14 @@ import TextAreaField from '@/components/custom/TextAreaField';
 import { useEditor } from '@/lib/useEditor';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
 import { useUserStore } from '@/providers/userProvider';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
+import { Tag, TagInput } from 'emblor';
 
 const categoryOptions: { label: string; value: string; }[]= [
   { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
@@ -29,18 +30,6 @@ const categoryOptions: { label: string; value: string; }[]= [
 const needsPayOptions: { label: string; value: string; }[]= [
   { label: '免費', value: 'false' },
   { label: '付費', value: 'true' }
-];
-
-const tagOptions: { label: string; value: string; }[]= [
-  { label: '台灣', value: 'Taiwan' },
-  { label: '日本', value: 'Japan' },
-  { label: '中國', value: 'China' },
-  { label: '泰國', value: 'Thailand' },
-  { label: '丹麥', value: 'Denmark' },
-  { label: '冰島', value: 'Iceland' },
-  { label: '克羅埃西亞', value: 'Croatia' },
-  { label: '西班牙', value: '西班牙' },
-  { label: '南非', value: 'South Africa' },
 ];
 
 function generateValidationValues(options: { value: string; }[]): [string, string] {
@@ -57,13 +46,16 @@ const formSchema = z.object({
   }),
   needsPay: z.enum(generateValidationValues(needsPayOptions), {
     message: '選項為必填',
-  })
+  }),
+  tags: z.array(z.object({ id: z.string(), text: z.string() })),
 });
 
 export default function PublishArticle() {
   const providers = useUserStore((state) => state);
   console.log(providers);
   const { editorProps } = useEditor();
+  const [tags, setTags] = useState < Tag[] > ([]);
+  const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
 
@@ -72,10 +64,13 @@ export default function PublishArticle() {
   }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log('values', values.tags);
+    const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
+    console.log(tags);
     if (!editorProps) return;
-    const needsPay = Boolean(values.needsPay);
-    const createArticleRequest = { ...values, needsPay, ...editorProps, creator: '666b4090cf615869b955ca83' };
-    // console.log({ ...createArticleRequest, ...editorProps });
+    const needsPay = (values.needsPay === 'false') ? false : Boolean(values.needsPay);
+    const createArticleRequest = { ...values, tags, needsPay, ...editorProps, creator: '666b4090cf615869b955ca83' };
+    console.log({ createArticleRequest });
     createArticleMutate(createArticleRequest, {
       onSuccess: () => {
         toast({ title: '成功送出', variant: 'success' });
@@ -94,58 +89,90 @@ export default function PublishArticle() {
       abstract: '',
       thumbnailUrl: '',
       category: '',
-      needsPay: 'false'
+      needsPay: 'false',
+      tags: []
     },
   });
+  const { control, handleSubmit, formState: { isValid } } = form;
 
   return (
-    <main className='mx-auto mb-10 grid size-full place-items-center'>
-      <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 pt-10'>
-        <div className='mb-10 text-center text-3xl text-primary-300'>
-          發布設定
-        </div>
-        <InputField
-          className='w-[270px]'
-          control={form.control}
-          name='title'
-          label='標題'
-          placeholder='請輸入標題'
-        />
-        <TextAreaField
-          className='w-[270px] resize-none'
-          control={form.control}
-          name='abstract'
-          label='摘要'
-          placeholder='請輸入摘要'
-        />
-        <InputField
-          className='w-[270px]'
-          control={form.control}
-          name='thumbnailUrl'
-          label='縮圖'
-          placeholder='請輸入縮圖網址 https://'
-          formDescription='無縮圖時將由系統自動帶入預設圖片'
-        />
-        <SelectField
-          className='w-[270px]'
-          control={form.control}
-          name='category'
-          label='文章分類'
-          placeholder='設定文章分類'
-          options={categoryOptions}
-        />
-        <SelectField
-          className='w-[270px]'
-          control={form.control}
-          name='needsPay'
-          label='內容收費'
-          placeholder='設定文章是否收費'
-          options={needsPayOptions}
-        />
-        <Button type='submit' disabled={!form.formState.isValid} isLoading={isUpdateCreateArticle}>發布文章</Button>
-      </form>
-    </Form>
+    <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>
+      <div className='mb-10 pt-10 text-center text-3xl text-primary-300'>
+        發布設定
+      </div>
+      <div className='mb-6 w-full space-y-4 rounded-lg border bg-card p-5 text-card-foreground shadow-sm'>
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
+            <InputField
+              className='w-full'
+              control={control}
+              name='title'
+              label='標題'
+              placeholder='文章標題'
+            />
+            <TextAreaField
+              className='w-full resize-none'
+              control={control}
+              name='abstract'
+              label='摘要'
+              placeholder='文章摘要'
+            />
+            <InputField
+              className='w-full'
+              control={control}
+              name='thumbnailUrl'
+              label='縮圖'
+              placeholder='請輸入縮圖網址 https://'
+              formDescription='無縮圖時將由系統自動帶入預設圖片'
+            />
+            <SelectField
+              className='w-full'
+              control={control}
+              name='category'
+              label='文章分類'
+              placeholder='設定文章分類'
+              options={categoryOptions}
+            />
+            <SelectField
+              className='w-full'
+              control={control}
+              name='needsPay'
+              label='內容收費'
+              placeholder='設定文章是否收費'
+              options={needsPayOptions}
+            />
+            <Controller
+              name='tags'
+              control={control}
+              render={({ field }) => (
+                <div className='tagInput'>
+                  <TagInput
+                    tags={tags}
+                    setTags={(newTags) => {
+                      setTags(newTags);
+                      field.onChange(newTags);
+                    }}
+                    placeholder='為文章加上標籤'
+                    className='h-10 w-full sm:max-w-[350px]'
+                    activeTagIndex={activeTagIndex}
+                    setActiveTagIndex={setActiveTagIndex}
+                    inlineTags={false}
+                    inputFieldPosition='top'
+                    maxTags={5}
+                    size={'lg'}
+                    showCount={true}
+                    shape=''
+                  />
+                </div>
+              )}
+            />
+            <div className='text-center'>
+              <Button className='mr-4 bg-grey text-black hover:bg-grey-400 hover:text-white'>取消</Button>
+              <Button type='submit' disabled={!isValid} isLoading={isUpdateCreateArticle}>發布文章</Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </main>
   );
 }

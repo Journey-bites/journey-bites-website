@@ -14,13 +14,13 @@ type SelectFieldProps<T extends FieldValues> = {
   options: { label: string, value: string }[];
 };
 
-export default function TextAreaField<T extends FieldValues>({ className, control, name, label, placeholder, formDescription, options }: SelectFieldProps<T>) {
+export default function SelectField<T extends FieldValues>({ className, control, name, label, placeholder, formDescription, options }: SelectFieldProps<T>) {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
-      <FormItem className={className}>
+      <FormItem className={className} { ...field }>
         <FormLabel>{label}</FormLabel>
         <Select onValueChange={field.onChange} defaultValue={field.value}>
           <FormControl>

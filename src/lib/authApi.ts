@@ -41,3 +41,8 @@ export async function createArticle(createArticleRequest : CreateArticleRequest)
   const res = await fetchWithToken<ApiResponse>('post', '/article', { data: createArticleRequest });
   return res;
 }
+
+export async function editArticle(editArticleRequest : CreateArticleRequest) {
+  const res = await fetchWithToken<ApiResponse>('get', '/article', { data: editArticleRequest });
+  return res;
+}

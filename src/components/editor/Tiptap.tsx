@@ -8,7 +8,7 @@ import { Image as TiptapImage } from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import CharacterCount from '@tiptap/extension-character-count';
-import { LIMIT as limit, CONTENT_1 } from '../../constants/editorSettings';
+import { LIMIT as limit } from '../../constants/editorSettings';
 import '@/components/editor/style.css';
 
 interface TiptapProps {
@@ -21,7 +21,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
     onChange(newContent);
   };
   const editor = useEditor({
-    content: CONTENT_1,
+    content: content,
     editable: true,
     extensions: [
       StarterKit,

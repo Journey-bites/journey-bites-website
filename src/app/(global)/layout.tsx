@@ -25,10 +25,12 @@ export default function GlobalLayout({
     }
   }, [setAuth]);
 
+  const hideHeader = pathname === '/article/publish' || pathname === '/article/create';
+
   return (
     <>
       <ReactQueryProvider>
-        { pathname === '/article/create' || '/article/publish' ? null : <Header />}
+        { !hideHeader && <Header /> }
         {children}
         {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       </ReactQueryProvider>
