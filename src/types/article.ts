@@ -5,17 +5,17 @@ export type RecommendArticle = {
   body: string;
 };
 
-export type CreateArticleRequest = {
-  creator?: string,
-  title: string,
-  abstract?: string,
-  content: string,
-  thumbnailUrl?: string,
-  needsPay: boolean,
-  wordsCount: number,
-  tags?: string[],
-  category: string,
-}
+// export type CreateArticleRequest = {
+//   creator?: string,
+//   title: string,
+//   abstract?: string,
+//   content: string,
+//   thumbnailUrl?: string,
+//   needsPay: boolean,
+//   wordsCount: number,
+//   tags?: string[],
+//   category: string,
+// }
 
 export type Article = {
   id: string,
@@ -38,3 +38,5 @@ export type Article = {
   createdAt: Date,
   updatedAt: Date,
 }
+
+export type CreateArticleRequest = Omit<Article, 'creator_id'| 'status' | 'createdAt' | 'updatedAt'>;

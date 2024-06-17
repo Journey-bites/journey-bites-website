@@ -6,17 +6,25 @@ import {
 import { Button } from '@/components/ui/button';
 import InputField from '@/components/custom/InputField';
 import TextAreaField from '@/components/custom/TextAreaField';
-import { useEditor } from '@/lib/useEditor';
+import { useEditor } from '@/stores/useEditorStore';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
-import { useUserStore } from '@/providers/userProvider';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
+
+const defaultTags: Tag[] = [
+  { id: '1', text: 'Sports' },
+  { id: '2', text: 'Programming' },
+  { id: '3', text: 'Travel' },
+  { id: '4', text: 'Music' },
+  { id: '5', text: 'Food' },
+];
+// const defaultTags: Tag[] = [];
 
 const categoryOptions: { label: string; value: string; }[]= [
   { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
@@ -51,25 +59,23 @@ const formSchema = z.object({
 });
 
 export default function PublishArticle() {
-  const providers = useUserStore((state) => state);
-  console.log(providers);
   const { editorProps } = useEditor();
-  const [tags, setTags] = useState < Tag[] > ([]);
+  const [tags, setTags] = useState <Tag[]> (defaultTags || []);
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
 
   useEffect(() => {
-
-  }, []);
+    if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
+  }, [editorProps]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log('values', values.tags);
-    const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
-    console.log(tags);
+    console.log(editorProps);
     if (!editorProps) return;
+    const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
     const needsPay = (values.needsPay === 'false') ? false : Boolean(values.needsPay);
-    const createArticleRequest = { ...values, tags, needsPay, ...editorProps, creator: '666b4090cf615869b955ca83' };
+    const createArticleRequest = { ...editorProps, ...values, tags, needsPay, creator: '666b4090cf615869b955ca83' };
     console.log({ createArticleRequest });
     createArticleMutate(createArticleRequest, {
       onSuccess: () => {
@@ -94,6 +100,11 @@ export default function PublishArticle() {
     },
   });
   const { control, handleSubmit, formState: { isValid } } = form;
+
+  function setValue(arg0: string, arg1: [Tag, ...Tag[]]) {
+    console.log(arg0, arg1);
+    console.log(arg1);
+  }
 
   return (
     <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>
@@ -147,9 +158,11 @@ export default function PublishArticle() {
               render={({ field }) => (
                 <div className='tagInput'>
                   <TagInput
+                    {...field}
                     tags={tags}
                     setTags={(newTags) => {
                       setTags(newTags);
+                      setValue('tags', newTags as [Tag, ...Tag[]]);
                       field.onChange(newTags);
                     }}
                     placeholder='為文章加上標籤'
@@ -161,14 +174,13 @@ export default function PublishArticle() {
                     maxTags={5}
                     size={'lg'}
                     showCount={true}
-                    shape=''
                   />
                 </div>
               )}
             />
             <div className='text-center'>
               <Button className='mr-4 bg-grey text-black hover:bg-grey-400 hover:text-white'>取消</Button>
-              <Button type='submit' disabled={!isValid} isLoading={isUpdateCreateArticle}>發布文章</Button>
+              <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateCreateArticle}>發布文章</Button>
             </div>
           </form>
         </Form>

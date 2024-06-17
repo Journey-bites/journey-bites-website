@@ -30,7 +30,7 @@ export default function HeaderButtons() {
           ) : (
             <>
               <Button asChild size='sm'>
-                <Link href='#'>開始創作</Link>
+                <Link href='/article/create'>開始創作</Link>
               </Button>
               <DropdownMenu
                 triggerButton={

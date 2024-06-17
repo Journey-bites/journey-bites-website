@@ -1,3 +1,7 @@
+.tiptap {
+  min-height: 50vh;
+}
+
 .tiptap h1 {
   font-size: 24px;
 }

@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { DialogComponent } from './EditorDialog';
 import { useDialog } from '@/stores/useDialogStore';
-import { useEditor } from '@/lib/useEditor';
+import { useEditor } from '@/stores/useEditorStore';
 import { LIMIT, COMMON_ACTIVE_CLASS_NAME, COMMON_CLASS_NAME } from '../../constants/editorSettings';
 import { Button } from '@/components/ui/button';
 
@@ -71,13 +71,24 @@ const Toolbar = ({ editor }: Props) => {
     // console.log(editor.getText().replace(/\s+/g, ' ').trim().length);
     const wordsCount = editor.getText().replace(/\s+/g, ' ').trim().length;
     console.log(editor.getHTML());
-    setEditorProps({ content: editor.getHTML(), wordsCount });
+    setEditorProps({
+      content: editor.getHTML(),
+      wordsCount,
+      id: '',
+      title: '',
+      creator: '',
+      abstract: '',
+      thumbnailUrl: '',
+      needsPay: false,
+      readingTime: 0,
+      tags: [],
+      category: ''
+    });
   };
 
   return (
     <div
-      className='sticky top-0 z-10 flex w-full flex-wrap items-center
-    justify-between gap-5 rounded-t-md border border-gray-700 bg-white/70 px-4 py-3 backdrop-blur-md'
+      className='sticky top-0 z-10 flex w-full flex-wrap items-center justify-between gap-5 rounded-t-md border border-gray-700 bg-white/70 px-4 py-3 backdrop-blur-md'
     >
       <div className='flex w-full flex-wrap items-center justify-start gap-5'>
         <button
@@ -257,17 +268,15 @@ const Toolbar = ({ editor }: Props) => {
         </button>
         <DialogComponent handleDialog={handleDialog} />
       </div>
-      <div>
       {characterCount >= LIMIT ? (
-        <div className='text-red-500'>
-          {characterCount}/{LIMIT} characters
+        <div className='py-2 text-red-500'>
+          {characterCount}/{LIMIT} 字
         </div>
       ) : (
-        <div>
-          {characterCount}/{LIMIT} characters
+        <div className='py-2'>
+          {characterCount}/{LIMIT} 字
         </div>
       )}
-    </div>
       {!editor.isEmpty && (
         <Button
         onClick={() => handleSubmit()}

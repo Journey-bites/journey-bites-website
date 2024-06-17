@@ -3,18 +3,20 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
-import { useEditor } from '@/lib/useEditor';
+import { useEditor } from '@/stores/useEditorStore';
 
 interface EditorWrapperProps {
-  editContent?: string;
+  isEditing: boolean;
+  editContent?: string | undefined;
 }
 
-const EditorWrapper: React.FC<EditorWrapperProps> = ( { editContent } ) => {
-  console.log( 'editContent', editContent );
+const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const [content, setContent] = useState<string>(editContent || '');
+  const [content, setContent] = useState<string>('');
+  const [isLoading, setLoading] = useState(true);
   const { editorProps } = useEditor();
+
   const handleContentChange = (reason: string) => {
     setContent(reason);
   };
@@ -27,7 +29,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ( { editContent } ) => {
   };
 
   useEffect(() => {
-    const handleBeforeUnload = (e: { preventDefault: () => void; returnValue: string; }) => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (!isSubmitting) {
         e.preventDefault();
         e.returnValue = '您即將離開檔案未儲存';
@@ -41,18 +43,34 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ( { editContent } ) => {
     };
   }, [isSubmitting]);
 
+  useEffect(() => {
+    if(editContent) {
+      setContent(editContent);
+      setLoading(false);
+    }
+    setLoading(false);
+  }, [editContent]);
+
   return (
     <form
       onSubmit={handleSubmit}
-      className='mx-auto mb-10 grid size-full max-w-[1308] place-items-center pt-10'
+      className='mx-auto mb-10 grid size-full max-w-[1308px] place-items-center pt-10'
     >
-      <div className='mb-10 text-center text-3xl text-primary-300'>
-        新增文章
-      </div>
-      <Tiptap
-        content={content}
-        onChange={(newContent: string) => handleContentChange(newContent)}
-      />
+      {isLoading ? (
+        <p>Loading...</p> // 載入狀態顯示 Loading...
+        ) : (
+          isEditing ? (
+            content && <Tiptap
+            content={content}
+            onChange={(newContent) => handleContentChange(newContent)}
+          />
+        ) : (
+          <Tiptap
+            content={content}
+            onChange={(newContent) => handleContentChange(newContent)}
+          />
+        )
+      )}
     </form>
   );
 };
