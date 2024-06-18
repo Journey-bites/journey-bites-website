@@ -169,7 +169,10 @@ const Toolbar = ({ editor }: Props) => {
           <AlignCenter className='size-5' />
         </button>
         <button
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          onClick={(e) => {
+            e.preventDefault();
+            editor.chain().focus().setTextAlign('right').run();
+          }}
           className={editor.isActive({ textAlign: 'right' })
             ? COMMON_ACTIVE_CLASS_NAME
             : COMMON_CLASS_NAME
@@ -202,7 +205,7 @@ const Toolbar = ({ editor }: Props) => {
               : COMMON_CLASS_NAME
           }
         >
-          <List className='size-5' />
+          <ListOrdered className='size-5' />
         </button>
         <button
           onClick={(e) => {
@@ -215,7 +218,7 @@ const Toolbar = ({ editor }: Props) => {
               : COMMON_CLASS_NAME
           }
         >
-          <ListOrdered className='size-5' />
+          <List className='size-5' />
         </button>
         <button onClick={setLink} className={
           editor.isActive('link')

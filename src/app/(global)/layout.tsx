@@ -12,6 +12,7 @@ export default function GlobalLayout({
   children,
 }: Readonly<{
   children: ReactNode;
+  params: string
 }>) {
 
   const { setAuth } = useUserStore((state) => state);

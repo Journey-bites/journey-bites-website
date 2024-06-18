@@ -38,3 +38,8 @@
 .tiptap ul {
   list-style: decimal;
 }
+
+ol p.mb-6,
+li p.mb-6 {
+  margin-bottom: 0 !important;
+}

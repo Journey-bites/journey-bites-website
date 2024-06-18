@@ -17,12 +17,19 @@ import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 
+const EditArticle = {
+  // title: '冰島旅遊適合你嗎？──兩次造訪冰島後我學到的事',
+  // abstract: '像《白日夢冒險王》的班史提勒在遼闊公路上追夢？在極光、瀑布、懸崖前露出觀光客的滿足微笑？這些你對冰島旅遊的美好想像，可能都會在親訪後大失所望。分別在秋季、夏季踏上冰島的作者，比較兩者的旅行體驗差異，並帶來當地最真實的氣候、路況指南。',
+  // thumbnailUrl: 'https://cw-image-resizer.cwg.tw/resize/uri/https%3A%2F%2Fstorage.googleapis.com%2Fcrossing-cms-cwg-tw%2Farticle%2F202205%2Farticle-6274da3fed0eb.jpg/?w=1170&format=webp',
+  // category: [{ label: '旅遊食記', value: '旅遊食記' }]
+};
+
 // const defaultTags: Tag[] = [
-//   { id: '1', text: 'Sports' },
-//   { id: '2', text: 'Programming' },
-//   { id: '3', text: 'Travel' },
-//   { id: '4', text: 'Music' },
-//   { id: '5', text: 'Food' },
+//   { id: '1', text: '旅遊' },
+//   { id: '2', text: '冰島' },
+//   { id: '3', text: '極光' },
+//   { id: '4', text: '白日夢冒險王' },
+//   { id: '5', text: '雷克雅維克' },
 // ];
 const defaultTags: Tag[] = [];
 
@@ -91,9 +98,9 @@ export default function PublishArticle() {
     mode: 'onBlur',
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      abstract: '',
-      thumbnailUrl: '',
+      title: EditArticle?.title || '',
+      abstract: EditArticle?.abstract || '',
+      thumbnailUrl: EditArticle?.thumbnailUrl || '',
       category: '',
       needsPay: 'false',
       tags: []

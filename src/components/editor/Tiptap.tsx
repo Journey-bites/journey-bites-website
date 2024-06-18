@@ -25,11 +25,25 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
     content: content,
     editable: true,
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: {
+          HTMLAttributes:
+          {
+            class: 'mb-9 text-3xl font-black',
+          }
+        },
+        paragraph: {
+          HTMLAttributes:
+          {
+            class: 'mb-6',
+          }
+        }
+      }),
       Underline,
       TiptapImage.configure({
+        inline: true,
         HTMLAttributes: {
-          class: 'object-contain',
+          class: 'object-contain rounded-lg inline-block',
         }
       }),
       TextAlign.configure({
