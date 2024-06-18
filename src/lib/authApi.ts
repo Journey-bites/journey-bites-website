@@ -35,3 +35,11 @@ export async function updateUserProfile(profile: Profile) {
   const res = await fetchWithToken<ApiResponse>('patch', '/user', { data: profile });
   return res;
 }
+
+export async function followCreator(creatorId: string) {
+  return await fetchWithToken<ApiResponse>('post', `/user/${creatorId}/follow`);
+}
+
+export async function unFollowCreator(creatorId: string) {
+  return await fetchWithToken<ApiResponse>('delete', `/user/${creatorId}/follow`);
+}

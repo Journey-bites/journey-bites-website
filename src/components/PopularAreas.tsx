@@ -7,9 +7,9 @@ export default function PopularAttractions() {
   const data = ['日本', '京都', '夏威夷', '泰國', '長灘島', '拉斯維加斯', '北海道', '台南', '布拉格', '比利時'];
 
   return (
-    <div className='mb-9 rounded-lg border-2 p-5 shadow-outlineCard md:p-9'>
+    <div className='rounded-lg border-2 p-9 shadow-outlineCard'>
       <div className='mb-7'>
-        <h3 className='mb-2 text-2xl font-medium md:mb-3 md:text-3xl'>熱門景點</h3>
+        <h3 className='mb-3 text-3xl'>熱門景點</h3>
         <Image src={CurveImg} alt='popular attractions' />
       </div>
       <div className='flex flex-wrap gap-x-2 gap-y-3'>
