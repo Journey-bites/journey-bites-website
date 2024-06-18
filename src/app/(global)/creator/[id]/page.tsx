@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { cookies } from 'next/headers';
-import ActionButtons from './components/ActionButtons';
 import { getCreatorById } from '@/lib/nextApi';
 import {
   Select,
@@ -11,8 +10,8 @@ import {
 } from '@/components/ui/select';
 import SocialLink from '@/components/custom/SocialLink';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
+import CreatorInfo from '@/components/creator/CreatorInfo';
 
-import DefaultUserImg from '@/images/default-user.webp';
 import TempImg from '@/images/not-found-img.webp';
 
 export default async function CreatorInfoPage({ params }: { params: { id: string } }) {
@@ -22,18 +21,7 @@ export default async function CreatorInfoPage({ params }: { params: { id: string
     <>
       <section className='bg-primary-100 py-10 md:py-15'>
         <div className='w-full px-6 md:mx-auto md:max-w-[56%] md:p-0'>
-          <div className='flex flex-col justify-between gap-5 md:flex-row md:gap-0'>
-            <div className='flex items-center gap-6'>
-              <Image className='size-20 rounded-full md:size-30' src={creator.avatarImageUrl || DefaultUserImg} alt={creator.displayName || 'creator'} width={120} height={120} priority />
-               <div>
-                <h2 className='mb-2 text-3xl font-black'>{creator.displayName}</h2>
-                {/* <span className='pr-4 text-xl text-grey-400'>12 文章</span> */}
-                <span className='text-xl text-grey-400'>{creator.followersCount} 追蹤</span>
-              </div>
-            </div>
-            <ActionButtons creatorId={creator.userId} userAlreadyFollowed={creator.userAlreadyFollowed} />
-          </div>
-          {creator.bio && <p className='mt-6 text-base font-medium text-grey-500 md:mt-9 md:text-xl'>{creator.bio}</p>}
+          <CreatorInfo creatorInfo={creator} />
         </div>
       </section>
       <section className='mt-12 w-full px-6 md:mx-auto md:mt-20 md:max-w-[56%]'>
