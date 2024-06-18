@@ -1,5 +1,5 @@
 .tiptap {
-  min-height: 50vh;
+  min-height: 80vh;
 }
 
 .tiptap h1 {
@@ -8,4 +8,33 @@
 
 .tiptap .ProseMirror-selectednode {
   outline: 3px solid #68cef8;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--grey-400);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap p.is-empty::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
+}
+
+.tiptap ol {
+  list-style: disc;
+}
+
+.tiptap ul {
+  list-style: decimal;
 }

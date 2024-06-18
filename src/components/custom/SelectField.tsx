@@ -20,7 +20,7 @@ export default function SelectField<T extends FieldValues>({ className, control,
       control={control}
       name={name}
       render={({ field }) => (
-      <FormItem className={className} { ...field }>
+      <FormItem className={className}>
         <FormLabel>{label}</FormLabel>
         <Select onValueChange={field.onChange} defaultValue={field.value}>
           <FormControl>

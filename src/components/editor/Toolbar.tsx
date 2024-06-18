@@ -217,7 +217,11 @@ const Toolbar = ({ editor }: Props) => {
         >
           <ListOrdered className='size-5' />
         </button>
-        <button onClick={setLink} className={editor.isActive('link') ? 'is-active' : ''}>
+        <button onClick={setLink} className={
+          editor.isActive('link')
+            ? COMMON_ACTIVE_CLASS_NAME
+            : COMMON_CLASS_NAME
+          }>
           <Link2 className='size-5' />
         </button>
         <button

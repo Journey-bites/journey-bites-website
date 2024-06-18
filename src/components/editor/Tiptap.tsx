@@ -9,6 +9,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import CharacterCount from '@tiptap/extension-character-count';
 import { LIMIT as limit } from '../../constants/editorSettings';
+import Placeholder from '@tiptap/extension-placeholder';
 import '@/components/editor/style.css';
 
 interface TiptapProps {
@@ -44,6 +45,11 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
       }),
       CharacterCount.configure({
         limit,
+      }),
+      Placeholder.configure({
+        considerAnyAsEmpty: true,
+        // showOnlyCurrent: false,
+        placeholder: '開始屬於你的精彩創作...',
       }),
     ],
     editorProps: {

@@ -17,14 +17,14 @@ import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 
-const defaultTags: Tag[] = [
-  { id: '1', text: 'Sports' },
-  { id: '2', text: 'Programming' },
-  { id: '3', text: 'Travel' },
-  { id: '4', text: 'Music' },
-  { id: '5', text: 'Food' },
-];
-// const defaultTags: Tag[] = [];
+// const defaultTags: Tag[] = [
+//   { id: '1', text: 'Sports' },
+//   { id: '2', text: 'Programming' },
+//   { id: '3', text: 'Travel' },
+//   { id: '4', text: 'Music' },
+//   { id: '5', text: 'Food' },
+// ];
+const defaultTags: Tag[] = [];
 
 const categoryOptions: { label: string; value: string; }[]= [
   { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
