@@ -137,7 +137,7 @@ export default function ArticlePage({ params }: { params: { id: string } }) {
             </div>
             <div className='flex flex-col items-end gap-1'>
               <small className='text-grey-300'>{travelArticle.readingTime} min</small>
-              <LikeButton count={travelArticle.status.likes} iconVariant />
+              <LikeButton count={travelArticle.status.likes} withBackground />
             </div>
           </div>
           {parse(cleanContentHtml)}

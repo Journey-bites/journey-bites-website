@@ -9,8 +9,10 @@ export default function CreatorInfo({ creatorInfo, bioClassName }: { creatorInfo
   return (
     <>
       <div className='flex flex-col justify-between gap-5 md:flex-row md:gap-0'>
-      <div className='flex items-center gap-6'>
-        <Image className='size-20 rounded-full md:size-30' src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} width={120} height={120} priority />
+        <div className='flex items-center gap-6'>
+          <div className='relative size-20 overflow-hidden rounded-full md:size-30'>
+            <Image src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} fill priority />
+          </div>
           <div>
           <h2 className='mb-2 text-3xl font-black'>{creatorInfo.displayName}</h2>
           {/* <span className='pr-4 text-xl text-grey-400'>12 文章</span> */}

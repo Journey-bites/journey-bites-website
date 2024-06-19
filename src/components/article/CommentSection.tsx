@@ -12,7 +12,7 @@ import LikeButton from '../common/LikeButton';
 import UserAvatar from '../common/UserAvatar';
 import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
 
-export default function CommentSection({ comments }: { comments: Comment[] | [] }) {
+export default function CommentSection({ comments }: { comments: Comment[] }) {
   const { isLogin, auth } = useUserStore((state) => state);
   return (
     <section className='overflow-hidden border-2 border-x-0 border-grey-200 text-grey-500 md:rounded-lg md:border-x-2'>
