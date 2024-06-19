@@ -86,24 +86,6 @@ const commentData: Comment[] = [
   }
 ];
 
-DOMPurify.addHook('beforeSanitizeElements', (node) => {
-  if (node.tagName) {
-    switch (node.tagName) {
-      case 'P':
-        node.classList.add('mb-6');
-        break;
-      case 'H1':
-        node.classList.add('mb-9', 'text-3xl', 'font-black');
-        break;
-      case 'IMG':
-        node.classList.add('rounded-lg');
-        break;
-      default:
-        break;
-    }
-  }
-});
-
 function ArticleContainer({ children, className, ...props }: PropsWithChildren & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
   return (
     <div
