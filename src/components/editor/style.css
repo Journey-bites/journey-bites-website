@@ -1,5 +1,5 @@
-.tiptap {
-  min-height: 80vh;
+.ProseMirror {
+  @apply p-12 px-8 sm:px-12;
 }
 
 .tiptap h1 {
@@ -42,10 +42,6 @@
 ol p.mb-6,
 li p.mb-6 {
   margin-bottom: 0 !important;
-}
-
-.ProseMirror {
-  @apply p-12 px-8 sm:px-12;
 }
 
 .ProseMirror .is-editor-empty:first-child::before {

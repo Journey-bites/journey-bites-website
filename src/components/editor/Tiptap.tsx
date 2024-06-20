@@ -11,22 +11,31 @@ import CharacterCount from '@tiptap/extension-character-count';
 import { LIMIT as limit } from '../../constants/editorSettings';
 import Placeholder from '@tiptap/extension-placeholder';
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
+import Document from '@tiptap/extension-document';
 import '@/components/editor/style.css';
+import { useCallback, useMemo } from 'react';
 
 interface TiptapProps {
   onChange: (value: string) => void
   content: string;
 }
 
+const forceTitleDocument = Document.extend({
+  content: 'heading block*',
+});
+
 const Tiptap = ({ onChange, content }: TiptapProps) => {
-  const handleChange = (newContent: string) => {
+  const handleChange = useCallback((newContent: string) => {
     onChange(newContent);
-  };
+  }, [onChange]);
+
   const editor = useEditor({
-    content: content,
+    content,
     editable: true,
-    extensions: [
+    extensions: useMemo(() => [
+      forceTitleDocument,
       StarterKit.configure({
+        document: false,
         heading: {
           HTMLAttributes:
           {
@@ -67,15 +76,22 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
         limit,
       }),
       Placeholder.configure({
-        considerAnyAsEmpty: true,
+        // considerAnyAsEmpty: true,
         // showOnlyCurrent: false,
-        placeholder: '開始屬於你的精彩創作...',
+        // placeholder: '開始屬於你的精彩創作...',
+        placeholder: ({ node }) => {
+          if (node.type.name === 'heading') {
+            return '請輸入標題';
+          }
+
+          return '開始屬於你的精彩創作...';
+        },
       }),
-    ],
+    ], []),
     editorProps: {
       attributes: {
         class:
-          'flex-auto flex-col px-4 py-3 justify-start border-b border-r border-l border-gray-700 text-primary-400 items-center w-full gap-3 font-medium text-[16px] pt-4 rounded-bl-md rounded-br-md outline-none',
+          'flex-auto flex-col px-4 py-3 justify-start text-primary-400 items-center w-full gap-3 font-medium text-[16px] pt-4 rounded-bl-md rounded-br-md outline-none',
       },
     },
     onUpdate: ({ editor }) => {
@@ -84,7 +100,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
   });
 
   return (
-    <div className='w-[67.5%] sm:w-full sm:px-4 md:w-full md:px-4 xs:w-full xs:px-4'>
+    <div className='relative min-h-[500px] w-full border-muted shadow-lg'>
       <Toolbar editor={editor} content={content}/>
       <EditorContent style={{ whiteSpace: 'pre-line' }} editor={editor} />
     </div>

@@ -22,8 +22,9 @@ import {
 import { DialogComponent } from './EditorDialog';
 import { useDialog } from '@/stores/useDialogStore';
 import { useEditor } from '@/stores/useEditorStore';
-import { LIMIT, COMMON_ACTIVE_CLASS_NAME, COMMON_CLASS_NAME } from '../../constants/editorSettings';
+import { LIMIT } from '../../constants/editorSettings';
 import { Button } from '@/components/ui/button';
+import { Toggle } from '@/components/ui/toggle';
 
 type Props = {
   editor: Editor | null;
@@ -40,8 +41,7 @@ const Toolbar = ({ editor }: Props) => {
 
   const characterCount = editor.storage.characterCount.characters();
 
-  const setLink = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+  const setLink = () => {
     const previousUrl = editor.getAttributes('link').href;
     const url = window.prompt('URL', previousUrl);
 
@@ -88,191 +88,130 @@ const Toolbar = ({ editor }: Props) => {
 
   return (
     <div
-      className='sticky top-0 z-10 flex w-full flex-wrap items-center justify-between gap-5 rounded-t-md border border-gray-700 bg-white/70 px-4 py-3 backdrop-blur-md'
+      className='sticky top-0 z-10 flex w-full flex-wrap items-center justify-between gap-5 rounded-t-md bg-white/70 px-4 py-3 backdrop-blur-md'
     >
       <div className='flex w-full flex-wrap items-center justify-start gap-5'>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleBold().run();
-          }}
-          className={
-            editor.isActive('bold')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('bold')}
+          onPressedChange={() => { editor.chain().focus().toggleBold().run(); }}
         >
-          <Bold className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleItalic().run();
-          }}
-          className={
-            editor.isActive('italic')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <Bold className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('italic')}
+          onPressedChange={() => { editor.chain().focus().toggleItalic().run(); }}
         >
-          <Italic className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleUnderline().run();
-          }}
-          className={
-            editor.isActive('underline')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <Italic className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('underline')}
+          onPressedChange={() => { editor.chain().focus().toggleUnderline().run(); }}
         >
-          <Underline className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleStrike().run();
-          }}
-          className={
-            editor.isActive('strike')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <Underline className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('strike')}
+          onPressedChange={() => { editor.chain().focus().toggleStrike().run(); }}
         >
-          <Strikethrough className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().setTextAlign('left').run();
-          }}
-          className={
-            editor.isActive({ textAlign: 'left' })
-            ? COMMON_ACTIVE_CLASS_NAME
-            : COMMON_CLASS_NAME
-          }
+          <Strikethrough className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive({ textAlign: 'left' })}
+          onPressedChange={() => { editor.chain().focus().setTextAlign('left').run(); }}
         >
-          <AlignLeft className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().setTextAlign('center').run();
-          }}
-          className={editor.isActive({ textAlign: 'center' })
-            ? COMMON_ACTIVE_CLASS_NAME
-            : COMMON_CLASS_NAME
-        }
+          <AlignLeft className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive({ textAlign: 'center' })}
+          onPressedChange={() => { editor.chain().focus().setTextAlign('center').run(); }}
         >
-          <AlignCenter className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().setTextAlign('right').run();
-          }}
-          className={editor.isActive({ textAlign: 'right' })
-            ? COMMON_ACTIVE_CLASS_NAME
-            : COMMON_CLASS_NAME
-        }
+          <AlignCenter className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive({ textAlign: 'right' })}
+          onPressedChange={() => { editor.chain().focus().setTextAlign('right').run(); }}
         >
-          <AlignRight className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleHeading({ level: 1 }).run();
-          }}
-          className={
-            editor.isActive('heading', { level: 1 })
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <AlignRight className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('heading', { level: 1 })}
+          onPressedChange={() => { editor.chain().focus().toggleHeading({ level: 1 }).run(); }}
         >
-          <Heading1 className='size-5' />
-        </button>
-
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleBulletList().run();
-          }}
-          className={
-            editor.isActive('bulletList')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <Heading1 className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('bulletList')}
+          onPressedChange={() => { editor.chain().focus().toggleBulletList().run(); }}
         >
-          <ListOrdered className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().toggleOrderedList().run();
-          }}
-          className={
-            editor.isActive('orderedList')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <ListOrdered className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('orderedList')}
+          onPressedChange={() => { editor.chain().focus().toggleOrderedList().run(); }}
         >
-          <List className='size-5' />
-        </button>
-        <button onClick={setLink} className={
-          editor.isActive('link')
-            ? COMMON_ACTIVE_CLASS_NAME
-            : COMMON_CLASS_NAME
-          }>
-          <Link2 className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().unsetLink().run();
-          }}
-          disabled={!editor.isActive('link')}
+          <List className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('link')}
+          onPressedChange={setLink}
         >
-          <Unlink2 className='size-5' />
-        </button>
-        <button onClick={(e) => {
-            e.preventDefault();
-            handleDialog();
-          }}
-          className={
-            editor.isActive('image')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }>
-          <ImageIcon className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().undo().run();
-          }}
-          className={
-            editor.isActive('undo')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <Link2 className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          data-state='off'
+          pressed={!editor.isActive('link')}
+          onPressedChange={() => { editor.chain().focus().unsetLink().run(); }}
         >
-          <Undo className='size-5' />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            editor.chain().focus().redo().run();
-          }}
-          className={
-            editor.isActive('redo')
-              ? COMMON_ACTIVE_CLASS_NAME
-              : COMMON_CLASS_NAME
-          }
+          <Unlink2 className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('image')}
+          onPressedChange={() => { handleDialog(); }}
         >
-          <Redo className='size-5' />
-        </button>
+          <ImageIcon className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('undo')}
+          onPressedChange={() => { editor.chain().focus().undo().run(); }}
+        >
+          <Undo className='size-4' />
+        </Toggle>
+        <Toggle
+          className='px-2'
+          size='sm'
+          pressed={editor.isActive('redo')}
+          onPressedChange={() => { editor.chain().focus().redo().run(); }}
+        >
+          <Redo className='size-4' />
+        </Toggle>
         <DialogComponent handleDialog={handleDialog} />
       </div>
       {characterCount >= LIMIT ? (
@@ -284,7 +223,7 @@ const Toolbar = ({ editor }: Props) => {
           {characterCount}/{LIMIT} 字
         </div>
       )}
-      {!editor.isEmpty && (
+      {!editor.isEmpty && characterCount > 0 && (
         <Button
         onClick={() => handleSubmit()}
           type='submit'
