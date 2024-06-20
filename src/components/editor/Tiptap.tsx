@@ -10,6 +10,7 @@ import { Link as TiptapLink } from '@tiptap/extension-link';
 import CharacterCount from '@tiptap/extension-character-count';
 import { LIMIT as limit } from '../../constants/editorSettings';
 import Placeholder from '@tiptap/extension-placeholder';
+import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
 import '@/components/editor/style.css';
 
 interface TiptapProps {
@@ -39,11 +40,16 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
           }
         }
       }),
+      GlobalDragHandle.configure({
+        dragHandleWidth: 20, // default
+        scrollTreshold: 100,
+        dragHandleSelector: '.custom-drag-handle',
+    }),
       Underline,
       TiptapImage.configure({
         inline: true,
         HTMLAttributes: {
-          class: 'object-contain rounded-lg inline-block',
+          class: 'object-contain rounded-lg border border-muted inline-block',
         }
       }),
       TextAlign.configure({
