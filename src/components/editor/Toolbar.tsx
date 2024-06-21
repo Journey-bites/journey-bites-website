@@ -68,21 +68,10 @@ const Toolbar = ({ editor }: Props) => {
   };
 
   const handleSubmit = () => {
-    // console.log(editor.getText().replace(/\s+/g, ' ').trim().length);
-    const wordsCount = editor.getText().replace(/\s+/g, ' ').trim().length;
-    console.log(editor.getHTML());
+    // const wordsCount = editor.getText().replace(/\s+/g, ' ').trim().length;
     setEditorProps({
       content: editor.getHTML(),
-      wordsCount,
-      id: '',
-      title: '',
-      creator: '',
-      abstract: '',
-      thumbnailUrl: '',
-      needsPay: false,
-      readingTime: 0,
-      tags: [],
-      category: ''
+      wordsCount: characterCount,
     });
   };
 

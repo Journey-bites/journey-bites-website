@@ -5,9 +5,16 @@ import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
 import { useEditor } from '@/stores/useEditorStore';
 
+interface PostData {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
 interface EditorWrapperProps {
   isEditing: boolean;
-  editContent?: string | undefined;
+  editContent?: PostData | undefined;
 }
 
 const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent }) => {
@@ -15,7 +22,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   const router = useRouter();
   const [content, setContent] = useState<string>('');
   const [isLoading, setLoading] = useState(true);
-  const { editorProps } = useEditor();
+  const { setEditorProps } = useEditor();
 
   const handleContentChange = (reason: string) => {
     setContent(reason);
@@ -23,16 +30,30 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    if(isEditing && editContent?.id) {
+      const updatedProps = {
+        id: editContent?.id.toString(),
+        title: editContent?.title,
+        abstract: '簡單摘要',
+        thumbnailUrl: '',
+        category: '步道旅行',
+        needsPay: true,
+        tags: ['旅遊']
+      };
+
+      setEditorProps(updatedProps);
+      return router.push(`/article/publish/${editContent?.id}`);
+    }
     router.push('/article/publish');
-    setContent('');
-    console.log(editorProps);
+    // setContent('');
+    // console.log(editorProps)
   };
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (!isSubmitting) {
         e.preventDefault();
-        e.returnValue = '您即將離開檔案未儲存';
       }
     };
 
@@ -45,7 +66,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
 
   useEffect(() => {
     if(editContent) {
-      setContent(editContent);
+      setContent(editContent.body);
       setLoading(false);
     }
     setLoading(false);

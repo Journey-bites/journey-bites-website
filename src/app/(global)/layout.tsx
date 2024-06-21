@@ -26,7 +26,10 @@ export default function GlobalLayout({
     }
   }, [setAuth]);
 
-  const hideHeader = pathname === '/article/publish' || pathname === '/article/create';
+  const articleIdMatch = pathname.match(/\/article\/edit\/(\d+)/);
+  const articleId = articleIdMatch ? articleIdMatch[1] : null;
+
+  const hideHeader = pathname === '/article/publish' || pathname === '/article/create' || pathname === `/article/edit/${articleId}`;
 
   return (
     <>

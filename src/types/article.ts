@@ -39,4 +39,4 @@ export type Article = {
   updatedAt: Date,
 }
 
-export type CreateArticleRequest = Omit<Article, 'creator_id'| 'status' | 'createdAt' | 'updatedAt'>;
+export type CreateArticleRequest = Partial<Omit<Article, 'creator_id'| 'status' | 'createdAt' | 'updatedAt'>>;

@@ -17,6 +17,14 @@ import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 
+// const defaultTags: Tag[] = [
+//   { id: '1', text: '旅遊' },
+//   { id: '2', text: '冰島' },
+//   { id: '3', text: '極光' },
+//   { id: '4', text: '白日夢冒險王' },
+//   { id: '5', text: '雷克雅維克' },
+// ];
+
 const categoryOptions: { label: string; value: string; }[]= [
   { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
   { label: '步道旅行', value: '步道旅行' },
@@ -36,6 +44,17 @@ function generateValidationValues(options: { value: string; }[]): [string, strin
   return values;
 }
 
+function convertTags(tagTexts: string[]): Tag[] {
+  return tagTexts.map((text, index) => ({
+    id: (index + 1).toString(),
+    text: text
+  }));
+}
+
+// function extractTagTexts(tags: Tag[]): string[] {
+//   return tags.map(tag => tag.text);
+// }
+
 const formSchema = z.object({
   title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
   abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
@@ -51,7 +70,8 @@ const formSchema = z.object({
 
 export default function PublishArticle() {
   const { editorProps } = useEditor();
-  const [tags, setTags] = useState <Tag[]> ([]);
+  const defaultTags: string[] = editorProps?.tags || [];
+  const [tags, setTags] = useState <Tag[]> (convertTags(defaultTags) || []);
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
@@ -64,7 +84,14 @@ export default function PublishArticle() {
     console.log('values', values.tags);
     console.log(editorProps);
     if (!editorProps) return;
-    const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
+    let tags: string[] = [];
+
+    if (values.tags && Array.isArray(values.tags) && values.tags.length > 0) {
+      tags = values.tags.map(tag => tag.text);
+    } else if (defaultTags && defaultTags.length > 0) {
+      tags = defaultTags;
+    }
+
     const needsPay = (values.needsPay === 'false') ? false : Boolean(values.needsPay);
     const createArticleRequest = { ...editorProps, ...values, tags, needsPay, creator: '666b4090cf615869b955ca83' };
     console.log({ createArticleRequest });
@@ -78,24 +105,29 @@ export default function PublishArticle() {
     });
   }
 
+// console.log(editorProps);
   const form = useForm<z.infer<typeof formSchema>>({
     mode: 'onBlur',
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      abstract: '',
-      thumbnailUrl: '',
-      category: '',
-      needsPay: 'false',
+      title: editorProps?.title || '',
+      abstract: editorProps?.abstract || '',
+      thumbnailUrl: editorProps?.thumbnailUrl || '',
+      category: editorProps?.category || '',
+      needsPay: editorProps?.needsPay ? 'true' : 'false',
       tags: []
     },
   });
-  const { control, handleSubmit, formState: { isValid } } = form;
+  const { control, handleSubmit, formState: { isValid }, trigger } = form;
 
   function setValue(arg0: string, arg1: [Tag, ...Tag[]]) {
     console.log(arg0, arg1);
     console.log(arg1);
   }
+
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
 
   return (
     <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>

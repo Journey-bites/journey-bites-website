@@ -10,7 +10,7 @@ type Props = {
 }
 
 const EditArticle: React.FC<Props> = ({ params }) => {
-  const [editContent, setEditContent] = useState('');
+  const [editContent, setEditContent] = useState();
   const router = useRouter();
   const { id } = params;
   console.log(params.id);
@@ -24,7 +24,7 @@ const EditArticle: React.FC<Props> = ({ params }) => {
       .then(response => response.json())
       .then(json => {
         console.log(json);
-        setEditContent(json.body);
+        setEditContent(json);
       });
     } catch(err) {
       console.log(err);

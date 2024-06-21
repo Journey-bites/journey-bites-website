@@ -28,23 +28,20 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
     onOpen();
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let validatedUrl;
+    const url = e.target.value;
 
     try {
-      validatedUrl = schema.parse(e.target.value);
-      setData({ url: e.target.value });
+      schema.parse(url);
+      setData({ url });
     } catch (e) {
       if (e instanceof z.ZodError) {
           const errors = e.errors.map(error => error.message);
+          setData({ url: '' });
           return errors;
       } else {
         throw new Error('Unexpected error occurred');
       }
-    } finally {
-      validatedUrl ? null : setData({ url: '' });
     }
-
-    setData({ url: e.target.value });
   };
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
