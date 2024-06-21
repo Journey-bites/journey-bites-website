@@ -4,9 +4,9 @@ import { HttpException } from '@/lib/HttpExceptions';
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
-async function nextFetch<T>(url: string, option?: RequestInit): Promise<T> {
+async function nextFetch<T>(url: string, option?: RequestInit, disabledCache?: boolean): Promise<T> {
   const fetchOption = { ...option };
-  if (isDevMode) {
+  if (isDevMode || disabledCache) {
     fetchOption.cache = 'no-store';
   } else {
     fetchOption.next = { revalidate: 60 };
@@ -63,6 +63,6 @@ export async function getCreatorById(id: string, token?: string) {
       Authorization: `Bearer ${token}`,
     };
   }
-  const res = await nextFetch<Creator>(`/creator/${id}`, options);
+  const res = await nextFetch<Creator>(`/creator/${id}`, options, true);
   return res;
 }
