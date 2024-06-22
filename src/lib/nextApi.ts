@@ -68,6 +68,6 @@ export async function getCreatorById(id: string, token?: string) {
 }
 
 export async function getCreatorFollowers(creatorId: string) {
-  const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`);
+  const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`, {}, true);
   return res;
 }
