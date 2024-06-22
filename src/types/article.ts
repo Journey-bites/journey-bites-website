@@ -1,22 +1,10 @@
 // need to be replaced
-export type Article = {
+export type Articles = {
   userId: number;
   id: number;
   title: string;
   body: string;
 };
-
-// export type CreateArticleRequest = {
-//   creator?: string,
-//   title: string,
-//   abstract?: string,
-//   content: string,
-//   thumbnailUrl?: string,
-//   needsPay: boolean,
-//   wordsCount: number,
-//   tags?: string[],
-//   category: string,
-// }
 
 export type Article = {
   id: string,
@@ -41,6 +29,7 @@ export type Article = {
 }
 
 export type CreateArticleRequest = Partial<Omit<Article, 'creator_id'| 'status' | 'createdAt' | 'updatedAt'>>;
+
 type ArticleStatus = {
   views: number;
   likes: number;

@@ -75,7 +75,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   return (
     <form
       onSubmit={handleSubmit}
-      className='mx-auto mb-10 grid size-full max-w-[1024px] place-items-center px-4 pt-10'
+      className='mx-auto mb-10 grid size-full max-w-screen-lg place-items-center px-4 pt-10'
     >
       {isLoading ? (
         <p>Loading...</p> // 載入狀態顯示 Loading...
