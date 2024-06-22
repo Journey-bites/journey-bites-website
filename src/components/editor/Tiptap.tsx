@@ -12,7 +12,9 @@ import { LIMIT as limit } from '../../constants/editorSettings';
 import Placeholder from '@tiptap/extension-placeholder';
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
 import Document from '@tiptap/extension-document';
+import { ResizableImage } from 'tiptap-extension-resizable-image';
 import '@/components/editor/style.css';
+import 'tiptap-extension-resizable-image/styles.css';
 import { useCallback, useMemo } from 'react';
 
 interface TiptapProps {
@@ -34,6 +36,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
     editable: true,
     extensions: useMemo(() => [
       forceTitleDocument,
+      ResizableImage,
       StarterKit.configure({
         document: false,
         heading: {
@@ -56,7 +59,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
     }),
       Underline,
       TiptapImage.configure({
-        inline: true,
+        // inline: true,
         HTMLAttributes: {
           class: 'object-contain rounded-lg border border-muted inline-block',
         }

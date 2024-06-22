@@ -63,7 +63,17 @@ const Toolbar = ({ editor }: Props) => {
 
   const handleDialog = (url?: string) => {
     onOpen();
-    if(url) editor.chain().focus().setImage({ src: url }).run();
+    // if(url) editor.chain().focus().setImage({ src: url }).run();
+    if(url) {
+      editor.commands.setResizableImage({
+        src: url,
+        alt: '',
+        title: '',
+        className: 'rounded-lg border border-muted',
+        'data-keep-ratio': true,
+      });
+      editor.chain().focus();
+    }
     setData({ url: '' });
   };
 
@@ -124,7 +134,7 @@ const Toolbar = ({ editor }: Props) => {
           className='px-2'
           size='sm'
           pressed={editor.isActive({ textAlign: 'center' })}
-          onPressedChange={() => { editor.chain().focus().setTextAlign('center').run(); }}
+          onPressedChange={() => { editor.chain().setTextAlign('center').run(); }}
         >
           <AlignCenter className='size-4' />
         </Toggle>
@@ -132,7 +142,7 @@ const Toolbar = ({ editor }: Props) => {
           className='px-2'
           size='sm'
           pressed={editor.isActive({ textAlign: 'right' })}
-          onPressedChange={() => { editor.chain().focus().setTextAlign('right').run(); }}
+          onPressedChange={() => { editor.chain().setTextAlign('right').run(); }}
         >
           <AlignRight className='size-4' />
         </Toggle>
@@ -140,7 +150,7 @@ const Toolbar = ({ editor }: Props) => {
           className='px-2'
           size='sm'
           pressed={editor.isActive('heading', { level: 1 })}
-          onPressedChange={() => { editor.chain().focus().toggleHeading({ level: 1 }).run(); }}
+          onPressedChange={() => { editor.chain().toggleHeading({ level: 1 }).run(); }}
         >
           <Heading1 className='size-4' />
         </Toggle>
