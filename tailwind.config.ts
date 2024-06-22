@@ -130,8 +130,11 @@ const config = {
       boxShadow: {
         tabs: '0px 2px 8px 0px rgba(39, 41, 55, 0.08)',
         base: '0 4px 6px 0px rgba(0, 0, 0, 0.09)',
-        outlineCard: '0px 2px 4px 0px rgba(174, 174, 174, 0.25)'
+        outlineCard: '0px 2px 4px 0px rgba(174, 174, 174, 0.25)',
       },
+      backgroundImage: {
+        'comment-texture': 'url(\'~@/images/comment-texture.png\')',
+      }
     },
   },
   plugins: [require('tailwindcss-animate')],

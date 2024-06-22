@@ -8,21 +8,21 @@ import { useMutation } from '@tanstack/react-query';
 
 export default function ActionButtons({ creatorId, userAlreadyFollowed }: { creatorId: string, userAlreadyFollowed?: boolean }) {
   const { isLogin } = useUserStore((state) => state);
-  const { mutate: followCreatorMutate } = useMutation({ mutationFn: followCreator, onMutate: () => setIsFollowd(true) });
-  const { mutate: unFollowCreatorMutate } = useMutation({ mutationFn: unFollowCreator, onMutate: () => setIsFollowd(false) });
-  const [isFollowed, setIsFollowd] = useState(userAlreadyFollowed);
+  const { mutate: followCreatorMutate } = useMutation({ mutationFn: followCreator, onMutate: () => setIsFollowed(true) });
+  const { mutate: unFollowCreatorMutate } = useMutation({ mutationFn: unFollowCreator, onMutate: () => setIsFollowed(false) });
+  const [isFollowed, setIsFollowed] = useState(userAlreadyFollowed);
 
   const handleFollow = () => {
     if (isFollowed) {
       unFollowCreatorMutate(creatorId, {
         onError: () => {
-          setIsFollowd(false);
+          setIsFollowed(false);
         },
       });
     } else {
       followCreatorMutate(creatorId, {
         onError: () => {
-          setIsFollowd(true);
+          setIsFollowed(true);
         },
       });
     }

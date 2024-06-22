@@ -16,7 +16,7 @@ export default function Header() {
   // }
 
   return (
-    <header className='sticky top-0 z-40 border border-b-gray-200 bg-white'>
+    <header className='sticky top-0 z-40 bg-white md:border md:border-b-gray-200'>
       <div className='mx-auto flex w-[67.5%] items-center justify-between py-5 xs:w-full xs:px-4 xl:max-w-[1296px]'>
         <div className='flex items-center gap-12'>
           <Link href='/'>

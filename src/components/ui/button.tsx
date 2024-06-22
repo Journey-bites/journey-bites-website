@@ -28,6 +28,7 @@ const buttonVariants = cva(
         pillPrimary:
           'rounded-full border-2 border-primary font-bold text-primary hover:border-primary-300 hover:bg-primary-300 hover:text-white  active:border-primary-400 active:bg-primary-400',
         icon: 'color-primary flex size-11 rounded-full border-none bg-primary-100 p-0 hover:bg-primary-300 active:bg-primary-400',
+        clean: 'p-0'
       },
     },
     defaultVariants: {
