@@ -16,6 +16,6 @@ async function nextFetch<T>(url: string, option?: RequestInit): Promise<T> {
 }
 
 export async function getCategories() {
-  const res = await nextFetch<Category[]>('/categories');
+  const res = await nextFetch<Category[]>('/category');
   return res;
 }

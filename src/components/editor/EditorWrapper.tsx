@@ -37,9 +37,9 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
         title: editContent?.title,
         abstract: '簡單摘要',
         thumbnailUrl: '',
-        category: '步道旅行',
+        category: '666d3789b8ae1350672e06e9',
         needsPay: true,
-        tags: ['旅遊']
+        tags: ['旅遊', '台灣']
       };
 
       setEditorProps(updatedProps);

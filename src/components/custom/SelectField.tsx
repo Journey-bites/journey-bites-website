@@ -11,7 +11,7 @@ type SelectFieldProps<T extends FieldValues> = {
   label: string;
   placeholder?: string;
   formDescription?: string;
-  options: { label: string, value: string }[];
+  options: { id: string, name: string }[];
 };
 
 export default function SelectField<T extends FieldValues>({ className, control, name, label, placeholder, formDescription, options }: SelectFieldProps<T>) {
@@ -30,8 +30,8 @@ export default function SelectField<T extends FieldValues>({ className, control,
           </FormControl>
           <SelectContent>
             {options.map(option => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
+              <SelectItem key={option.id} value={option.id}>
+                {option.name}
               </SelectItem>
             ))}
           </SelectContent>

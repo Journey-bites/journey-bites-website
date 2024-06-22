@@ -16,33 +16,21 @@ import { useMutation } from '@tanstack/react-query';
 import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
+import { getCategories } from '@/lib/nextApi';
 
-// const defaultTags: Tag[] = [
-//   { id: '1', text: '旅遊' },
-//   { id: '2', text: '冰島' },
-//   { id: '3', text: '極光' },
-//   { id: '4', text: '白日夢冒險王' },
-//   { id: '5', text: '雷克雅維克' },
-// ];
-
-const categoryOptions: { label: string; value: string; }[]= [
-  { label: '台灣旅遊地圖', value: '台灣旅遊地圖' },
-  { label: '步道旅行', value: '步道旅行' },
-  { label: '健行日記', value: '健行日記' },
-  { label: '創作者列表', value: '創作者列表' },
-  { label: '旅遊食記', value: '旅遊食記' },
-  { label: '台灣百岳', value: '台灣百岳' },
+const categoryDefaultOptions: { id: string; name: string; }[]= [
+  { id: '666d36fdb8ae1350672e06e7', name: '台灣旅遊地圖' },
+  { id: '666d3738b8ae1350672e06e8', name: '步道旅行' },
+  { id: '666d3789b8ae1350672e06e9', name: '健行日記' },
+  { id: '666d379eb8ae1350672e06ea', name: '創作者列表' },
+  { id: '666d37b9b8ae1350672e06eb', name: '旅遊食記' },
+  { id: '666d38827f918c5671fdf510', name: '台灣百岳' },
 ];
 
-const needsPayOptions: { label: string; value: string; }[]= [
-  { label: '免費', value: 'false' },
-  { label: '付費', value: 'true' }
+const needsPayOptions: { id: string; name: string; }[]= [
+  { id: 'false', name: '免費' },
+  { id: 'true', name: '付費' }
 ];
-
-function generateValidationValues(options: { value: string; }[]): [string, string] {
-  const values = options.map(option => option.value) as [string, string];
-  return values;
-}
 
 function convertTags(tagTexts: string[]): Tag[] {
   return tagTexts.map((text, index) => ({
@@ -55,30 +43,57 @@ function convertTags(tagTexts: string[]): Tag[] {
 //   return tags.map(tag => tag.text);
 // }
 
-const formSchema = z.object({
-  title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
-  abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-  thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
-  category: z.enum(generateValidationValues(categoryOptions), {
-    message: '選項為必填',
-  }),
-  needsPay: z.enum(generateValidationValues(needsPayOptions), {
-    message: '選項為必填',
-  }),
-  tags: z.array(z.object({ id: z.string(), text: z.string() })),
-});
-
 export default function PublishArticle() {
   const { editorProps } = useEditor();
   const defaultTags: string[] = editorProps?.tags || [];
   const [tags, setTags] = useState <Tag[]> (convertTags(defaultTags) || []);
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
+  const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
+
+  const categoryValidation = z.string().refine(value => {
+    if (categoryOptions.length === 0) {
+      return categoryDefaultOptions.some(option => option.id === value);
+    } else {
+      return categoryOptions.some(option => option.id === value);
+    }
+  }, {
+    message: '選項為必填',
+  });
+
+  const needsPayValidation = z.string().refine(value => needsPayOptions.some(option => option.id === value), {
+    message: '選項為必填',
+  });
+
+  const formSchema = z.object({
+    title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
+    abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
+    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
+    category: categoryValidation,
+    needsPay: needsPayValidation,
+    tags: z.array(z.object({ id: z.string(), text: z.string() })),
+  });
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
 
   useEffect(() => {
     if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
   }, [editorProps]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getCategories();
+        const categoryOptions = res.map(({ id, name }) => ({
+          id,
+          name
+        }));
+
+        setCategoryOptions(categoryOptions);
+      } catch (error) {
+        toast({ title: 'Error fetching categories: ' + error + '', variant: 'error' });
+      }
+    })();
+  }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log('values', values.tags);
@@ -165,7 +180,7 @@ export default function PublishArticle() {
               name='category'
               label='文章分類'
               placeholder='設定文章分類'
-              options={categoryOptions}
+              options={categoryOptions.length > 0 ? categoryOptions : categoryDefaultOptions}
             />
             <SelectField
               className='w-full'
