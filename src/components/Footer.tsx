@@ -8,10 +8,10 @@ import CurveImg from '@/images/curve.svg';
 
 export default function Footer() {
   return (
-    <footer className='sticky top-[100vh] mt-[100px] flex flex-col items-center bg-grey py-12 leading-7 text-grey-500'>
+    <footer className='sticky top-[100vh] mt-9 flex flex-col items-center bg-grey py-12 leading-7 text-grey-500 md:mt-[100px]'>
       <Link href='/'>
-        <Image className='mb-5 xs:hidden' src={LogoImg} alt='Journey Bites' />
-        <Image className='mb-4 hidden xs:block' src={LogoSmImg} alt='Journey Bites' />
+        <Image className='mb-5 hidden md:block' src={LogoImg} alt='Journey Bites' />
+        <Image className='mb-4 md:hidden' src={LogoSmImg} alt='Journey Bites' />
       </Link>
       <Image className='mb-9' src={CurveImg} alt='curve' />
       <ul className='mb-3 flex gap-4 font-bold'>
@@ -27,7 +27,7 @@ export default function Footer() {
           <Link href='#'>隱私權政策</Link>
         </li>
       </ul>
-      <div className='text-base xs:text-sm'>&copy; 2024 Journey Bites</div>
+      <div className='text-sm md:text-base'>&copy; 2024 Journey Bites</div>
     </footer>
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import type { Articles } from '@/types/article';
-import getArticles from '@/lib/actions';
+import type { Article } from '@/types/article';
+import { getArticles } from '@/lib/nextApi';
 
 export default function useGetPosts(initialData: Articles[]) {
   return useInfiniteQuery<Articles[], Error>({

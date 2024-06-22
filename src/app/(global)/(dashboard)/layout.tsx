@@ -3,7 +3,6 @@
 import type { PropsWithChildren } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/providers/userProvider';
-import { useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 
 // currently just use storage service
@@ -23,12 +22,10 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   const { isLogin } = useUserStore((state) => state);
   const router = useRouter();
 
-  useEffect(() => {
-    // can't use !isLogin, because it's null at first
-    if (isLogin === false) {
-      router.replace('/login');
-    }
-  }, [isLogin, router]);
+  // can't use !isLogin, because it's null at first
+  if (isLogin === false) {
+    router.replace('/login');
+  }
 
   return (
     <>

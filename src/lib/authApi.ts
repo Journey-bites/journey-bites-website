@@ -46,3 +46,10 @@ export async function editArticle(editArticleRequest : CreateArticleRequest) {
   const res = await fetchWithToken<ApiResponse>('get', '/article', { data: editArticleRequest });
   return res;
 }
+export async function followCreator(creatorId: string) {
+  return await fetchWithToken<ApiResponse>('post', `/user/${creatorId}/follow`);
+}
+
+export async function unFollowCreator(creatorId: string) {
+  return await fetchWithToken<ApiResponse>('delete', `/user/${creatorId}/follow`);
+}

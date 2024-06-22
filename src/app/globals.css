@@ -115,6 +115,11 @@ h1 {
   font-size: calc(var(--font-size-base) * 3);
   line-height: calc(var(--line-height-base) * 2.4);
   font-weight: var(--font-weight-black);
+
+  @media (max-width: 768px) {
+    font-size: calc(var(--font-size-base) * 1.875);
+    line-height: calc(var(--line-height-base) * 1.8);
+  }
 }
 
 h2 {

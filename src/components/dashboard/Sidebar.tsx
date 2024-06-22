@@ -94,8 +94,8 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className='col-span-3 min-h-[733px] rounded-md border border-gray-200 p-6 pt-9 shadow-tabs sm:hidden xs:hidden'>
-        <div className='relative mx-auto mb-9 size-[120px] rounded-full'>
+      <div className='col-span-3 hidden min-h-[733px] rounded-md border border-gray-200 p-6 pt-9 shadow-tabs md:block'>
+        <div className='relative mx-auto mb-9 size-30 rounded-full'>
           <Image
             src={previewAvatarImgSrc || DefaultUserImg}
             fill

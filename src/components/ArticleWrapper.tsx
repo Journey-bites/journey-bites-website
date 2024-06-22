@@ -6,7 +6,7 @@ import type { RecommendArticle } from '@/types/article';
 import ArticleContent from './ArticleContent';
 import useGetPosts from '@/hook/useGetPosts';
 import { ThumbsUp } from 'lucide-react';
-import Loading from '@/components/loading';
+import LoadingSkeleton from './LoadingSkeleton';
 
 type Props = {
   posts: RecommendArticle[];
@@ -41,7 +41,7 @@ const PostsWrapper = ({ posts }: Props) => {
       </div>
     </div>
     {isFetchingNextPage && hasNextPage ? (
-        <Loading />
+        <LoadingSkeleton />
     ) : (
       <div className='h-10' ref={ref} />
     )}

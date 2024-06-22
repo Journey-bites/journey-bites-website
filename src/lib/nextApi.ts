@@ -1,11 +1,19 @@
 import { ApiSuccessResponse } from '@/types/apiResponse';
-import { Category } from '@/types';
+import { Category, Creator, SearchRequestQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
 
-const API_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/api/v1' : process.env.NEXT_PUBLIC_API_BASE_URL;
+const isDevMode = process.env.NODE_ENV === 'development';
 
-async function nextFetch<T>(url: string, option?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${url}`, option);
+async function nextFetch<T>(url: string, option?: RequestInit, disabledCache?: boolean): Promise<T> {
+  const fetchOption = { ...option };
+  if (isDevMode || disabledCache) {
+    fetchOption.cache = 'no-store';
+  } else {
+    fetchOption.next = { revalidate: 60 };
+  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
+    ...fetchOption
+  });
   const data: ApiSuccessResponse<T> = await res.json();
 
   if (!res.ok) {
@@ -17,5 +25,44 @@ async function nextFetch<T>(url: string, option?: RequestInit): Promise<T> {
 
 export async function getCategories() {
   const res = await nextFetch<Category[]>('/category');
+  return res;
+}
+
+export async function getArticles({
+  pageParam = 1,
+}: {
+  pageParam: unknown;
+}) {
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=6`
+  );
+  return res.json();
+}
+
+export async function getCreators({ page, pageSize, search, type }: SearchRequestQuery) {
+  const endpoint = '/creator';
+  const params = new URLSearchParams();
+  const query = Object.entries({ page, pageSize, search, type });
+
+  for(const [key, value] of query) {
+    if (value) {
+      params.append(key, value.toString());
+    }
+  }
+  const url = `${endpoint}?${params.toString()}`;
+  const res = await nextFetch<Creator[]>(url, { method: 'GET' });
+  return res;
+}
+
+export async function getCreatorById(id: string, token?: string) {
+  const options: RequestInit = {
+    method: 'GET',
+  };
+  if (token) {
+    options.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  const res = await nextFetch<Creator>(`/creator/${id}`, options, true);
   return res;
 }
