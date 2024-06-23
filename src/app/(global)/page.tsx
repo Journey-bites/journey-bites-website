@@ -11,7 +11,7 @@ import BannerImg from '@/images/banner.webp';
 import BannerSmImg from '@/images/banner-sm.webp';
 
 export default async function Home() {
-  const creators = await getCreators({ page: 1, pageSize: 5, type: 'hot' });
+  const creators = await getCreators({ page: 1, pageSize: 5, type: 'random' });
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
