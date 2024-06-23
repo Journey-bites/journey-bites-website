@@ -78,10 +78,10 @@ const Toolbar = ({ editor }: Props) => {
   };
 
   const handleSubmit = () => {
-    // const wordsCount = editor.getText().replace(/\s+/g, ' ').trim().length;
+    // const wordCount = editor.getText().replace(/\s+/g, ' ').trim().length;
     setEditorProps({
       content: editor.getHTML(),
-      wordsCount: characterCount,
+      wordCount: characterCount,
     });
   };
 

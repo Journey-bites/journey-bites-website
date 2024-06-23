@@ -14,8 +14,8 @@ export type Article = {
   abstract: string,
   content: string,
   thumbnailUrl: string,
-  needsPay: boolean,
-  wordsCount: number,
+  isNeedPay: boolean,
+  wordCount: number,
   readingTime: number,
   status: {
     views: number,

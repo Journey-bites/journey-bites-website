@@ -27,7 +27,7 @@ const categoryDefaultOptions: { id: string; name: string; }[]= [
   { id: '666d38827f918c5671fdf510', name: '台灣百岳' },
 ];
 
-const needsPayOptions: { id: string; name: string; }[]= [
+const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: 'false', name: '免費' },
   { id: 'true', name: '付費' }
 ];
@@ -60,7 +60,7 @@ export default function PublishArticle() {
     message: '選項為必填',
   });
 
-  const needsPayValidation = z.string().refine(value => needsPayOptions.some(option => option.id === value), {
+  const isNeedPayValidation = z.string().refine(value => isNeedPayOptions.some(option => option.id === value), {
     message: '選項為必填',
   });
 
@@ -69,7 +69,7 @@ export default function PublishArticle() {
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
     thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
     category: categoryValidation,
-    needsPay: needsPayValidation,
+    isNeedPay: isNeedPayValidation,
     tags: z.array(z.object({ id: z.string(), text: z.string() })),
   });
 
@@ -107,8 +107,8 @@ export default function PublishArticle() {
       tags = defaultTags;
     }
 
-    const needsPay = (values.needsPay === 'false') ? false : Boolean(values.needsPay);
-    const createArticleRequest = { ...editorProps, ...values, tags, needsPay, creator: '666b4090cf615869b955ca83' };
+    const isNeedPay = (values.isNeedPay === 'false') ? false : Boolean(values.isNeedPay);
+    const createArticleRequest = { ...editorProps, ...values, tags, isNeedPay, creator: '666b4090cf615869b955ca83' };
     console.log({ createArticleRequest });
     createArticleMutate(createArticleRequest, {
       onSuccess: () => {
@@ -129,7 +129,7 @@ export default function PublishArticle() {
       abstract: editorProps?.abstract || '',
       thumbnailUrl: editorProps?.thumbnailUrl || '',
       category: editorProps?.category || '',
-      needsPay: editorProps?.needsPay ? 'true' : 'false',
+      isNeedPay: editorProps?.isNeedPay ? 'true' : 'false',
       tags: []
     },
   });
@@ -185,10 +185,10 @@ export default function PublishArticle() {
             <SelectField
               className='w-full'
               control={control}
-              name='needsPay'
+              name='isNeedPay'
               label='內容收費'
               placeholder='設定文章是否收費'
-              options={needsPayOptions}
+              options={isNeedPayOptions}
             />
             <Controller
               name='tags'
