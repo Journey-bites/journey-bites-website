@@ -4,23 +4,22 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
 import { useEditor } from '@/stores/useEditorStore';
-
-interface PostData {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-}
+import { type Article } from '@/types/article';
 
 interface EditorWrapperProps {
   isEditing: boolean;
-  editContent?: PostData | undefined;
+  editContent?: {
+    data: Article;
+  };
 }
+
+const initialOptions: Partial<Article> = {};
 
 const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const [content, setContent] = useState<string>('');
+  const [options, setOptions] = useState<Partial<Article>>(initialOptions);
   const [isLoading, setLoading] = useState(true);
   const { setEditorProps } = useEditor();
 
@@ -31,19 +30,21 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
     e.preventDefault();
     setIsSubmitting(true);
 
-    if(isEditing && editContent?.id) {
+    if(isEditing && options) {
+
       const updatedProps = {
-        id: editContent?.id.toString(),
-        title: editContent?.title,
-        abstract: '簡單摘要',
-        thumbnailUrl: '',
-        category: '666d3789b8ae1350672e06e9',
-        needsPay: true,
-        tags: ['旅遊', '台灣']
+        id: options?.id,
+        title: options?.title,
+        abstract: options?.abstract,
+        content,
+        thumbnailUrl: options?.thumbnailUrl,
+        category: options?.category,
+        isNeedPay: options?.isNeedPay,
+        tags: options?.tags,
       };
 
       setEditorProps(updatedProps);
-      return router.push(`/article/publish/${editContent?.id}`);
+      return router.push(`/article/publish/${options?.id}`);
     }
     router.push('/article/publish');
     // setContent('');
@@ -65,8 +66,9 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   }, [isSubmitting]);
 
   useEffect(() => {
-    if(editContent) {
-      setContent(editContent.body);
+    if(editContent && editContent.data) {
+      setOptions(editContent?.data);
+      setContent(editContent?.data?.content);
       setLoading(false);
     }
     setLoading(false);

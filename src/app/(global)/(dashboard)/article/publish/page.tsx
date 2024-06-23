@@ -19,17 +19,16 @@ import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 
 const categoryDefaultOptions: { id: string; name: string; }[]= [
-  { id: '666d36fdb8ae1350672e06e7', name: '台灣旅遊地圖' },
-  { id: '666d3738b8ae1350672e06e8', name: '步道旅行' },
-  { id: '666d3789b8ae1350672e06e9', name: '健行日記' },
-  { id: '666d379eb8ae1350672e06ea', name: '創作者列表' },
-  { id: '666d37b9b8ae1350672e06eb', name: '旅遊食記' },
-  { id: '666d38827f918c5671fdf510', name: '台灣百岳' },
+  { id: '台灣旅遊地圖', name: '台灣旅遊地圖' },
+  { id: '步道旅行', name: '步道旅行' },
+  { id: '健行日記', name: '健行日記' },
+  { id: '旅遊食記', name: '旅遊食記' },
+  { id: '台灣百岳', name: '台灣百岳' },
 ];
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
-  { id: 'false', name: '免費' },
-  { id: 'true', name: '付費' }
+  { id: '免費', name: '免費' },
+  { id: '付費', name: '付費' }
 ];
 
 export default function PublishArticle() {
@@ -40,15 +39,15 @@ export default function PublishArticle() {
 
   const categoryValidation = z.string().refine(value => {
     if (categoryOptions.length === 0) {
-      return categoryDefaultOptions.some(option => option.id === value);
+      return categoryDefaultOptions.some(option => option.name === value);
     } else {
-      return categoryOptions.some(option => option.id === value);
+      return categoryOptions.some(option => option.name === value);
     }
   }, {
     message: '選項為必填',
   });
 
-  const isNeedPayValidation = z.string().refine(value => isNeedPayOptions.some(option => option.id === value), {
+  const isNeedPayValidation = z.string().refine(value => isNeedPayOptions.some(option => option.name === value), {
     message: '選項為必填',
   });
 
@@ -112,7 +111,7 @@ export default function PublishArticle() {
       abstract: '',
       thumbnailUrl: '',
       category: '',
-      isNeedPay: 'false',
+      isNeedPay: '免費',
       tags: []
     },
   });

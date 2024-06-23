@@ -13,23 +13,22 @@ import { useForm, Controller } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { createArticle } from '@/lib/authApi';
+import { editArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 
 const categoryDefaultOptions: { id: string; name: string; }[]= [
-  { id: '666d36fdb8ae1350672e06e7', name: '台灣旅遊地圖' },
-  { id: '666d3738b8ae1350672e06e8', name: '步道旅行' },
-  { id: '666d3789b8ae1350672e06e9', name: '健行日記' },
-  { id: '666d379eb8ae1350672e06ea', name: '創作者列表' },
-  { id: '666d37b9b8ae1350672e06eb', name: '旅遊食記' },
-  { id: '666d38827f918c5671fdf510', name: '台灣百岳' },
+  { id: '台灣旅遊地圖', name: '台灣旅遊地圖' },
+  { id: '步道旅行', name: '步道旅行' },
+  { id: '健行日記', name: '健行日記' },
+  { id: '旅遊食記', name: '旅遊食記' },
+  { id: '台灣百岳', name: '台灣百岳' },
 ];
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
-  { id: 'false', name: '免費' },
-  { id: 'true', name: '付費' }
+  { id: '免費', name: '免費' },
+  { id: '付費', name: '付費' }
 ];
 
 function convertTags(tagTexts: string[]): Tag[] {
@@ -49,18 +48,19 @@ export default function PublishArticle() {
   const [tags, setTags] = useState <Tag[]> (convertTags(defaultTags) || []);
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
+  const [initialLoad, setInitialLoad] = useState(false);
 
   const categoryValidation = z.string().refine(value => {
     if (categoryOptions.length === 0) {
       return categoryDefaultOptions.some(option => option.id === value);
     } else {
-      return categoryOptions.some(option => option.id === value);
+      return categoryOptions.some(option => option.name === value);
     }
   }, {
     message: '選項為必填',
   });
 
-  const isNeedPayValidation = z.string().refine(value => isNeedPayOptions.some(option => option.id === value), {
+  const isNeedPayValidation = z.string().refine(value => isNeedPayOptions.some(option => option.name === value), {
     message: '選項為必填',
   });
 
@@ -73,10 +73,20 @@ export default function PublishArticle() {
     tags: z.array(z.object({ id: z.string(), text: z.string() })),
   });
 
-  const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
+  const { mutate: editArticleMutate, isPending: isUpdateEditArticle } = useMutation({
+    mutationFn: editArticle,
+    onSuccess: () => {
+      toast({ title: '成功送出', variant: 'success' });
+    },
+    onError: (err) => {
+      console.log(err);
+      toast({ title: '送出失敗', variant: 'error' });
+    },
+  });
 
   useEffect(() => {
     if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
+    setInitialLoad(true);
   }, [editorProps]);
 
   useEffect(() => {
@@ -101,26 +111,27 @@ export default function PublishArticle() {
     if (!editorProps) return;
     let tags: string[] = [];
 
-    if (values.tags && Array.isArray(values.tags) && values.tags.length > 0) {
-      tags = values.tags.map(tag => tag.text);
-    } else if (defaultTags && defaultTags.length > 0) {
+    // if (values.tags && Array.isArray(values.tags) && values.tags.length > 0) {
+    //   tags = values.tags.map(tag => tag.text);
+    // } else if (defaultTags && defaultTags.length > 0) {
+    //   tags = defaultTags;
+    // }
+
+    if (initialLoad && defaultTags && !selectedValue) {
       tags = defaultTags;
+      setInitialLoad(false);
+    } else if (selectedValue) {
+      tags = values.tags.map(tag => tag.text);
+    } else {
+      tags = values.tags.map(tag => tag.text);;
     }
 
-    const isNeedPay = (values.isNeedPay === 'false') ? false : Boolean(values.isNeedPay);
-    const createArticleRequest = { ...editorProps, ...values, tags, isNeedPay, creator: '666b4090cf615869b955ca83' };
-    console.log({ createArticleRequest });
-    createArticleMutate(createArticleRequest, {
-      onSuccess: () => {
-        toast({ title: '成功送出', variant: 'success' });
-      },
-      onError: () => {
-        toast({ title: '送出失敗', variant: 'error' });
-      },
-    });
+    const isNeedPay = (values.isNeedPay === '免費') ? false : Boolean(values.isNeedPay);
+    const editArticleRequest = { ...editorProps, ...values, tags, isNeedPay };
+    console.log({ editArticleRequest });
+    editArticleMutate(editArticleRequest);
   }
 
-// console.log(editorProps);
   const form = useForm<z.infer<typeof formSchema>>({
     mode: 'onBlur',
     resolver: zodResolver(formSchema),
@@ -129,15 +140,17 @@ export default function PublishArticle() {
       abstract: editorProps?.abstract || '',
       thumbnailUrl: editorProps?.thumbnailUrl || '',
       category: editorProps?.category || '',
-      isNeedPay: editorProps?.isNeedPay ? 'true' : 'false',
+      isNeedPay: editorProps?.isNeedPay ? '付費' : '免費',
       tags: []
     },
   });
-  const { control, handleSubmit, formState: { isValid }, trigger } = form;
+  const { control, handleSubmit, formState: { isValid }, trigger, watch } = form;
+  const selectedValue = watch('tags');
 
   function setValue(arg0: string, arg1: [Tag, ...Tag[]]) {
     console.log(arg0, arg1);
     console.log(arg1);
+    return arg1;
   }
 
   useEffect(() => {
@@ -218,7 +231,7 @@ export default function PublishArticle() {
             />
             <div className='text-center'>
               <Button className='mr-4 bg-grey text-black hover:bg-grey-400 hover:text-white'>取消</Button>
-              <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateCreateArticle}>發布文章</Button>
+              <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateEditArticle}>發布文章</Button>
             </div>
           </form>
         </Form>

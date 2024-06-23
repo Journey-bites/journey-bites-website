@@ -16,14 +16,13 @@ const EditArticle: React.FC<Props> = ({ params }) => {
   console.log(params.id);
   useEffect(() => {
     if(!id) {
-      router.push('/');
+      router.replace('/');
       return;
     }
     try {
-      fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/article/${id}`)
       .then(response => response.json())
       .then(json => {
-        console.log(json);
         setEditContent(json);
       });
     } catch(err) {

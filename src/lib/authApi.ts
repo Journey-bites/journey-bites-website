@@ -43,9 +43,10 @@ export async function createArticle(createArticleRequest : CreateArticleRequest)
 }
 
 export async function editArticle(editArticleRequest : CreateArticleRequest) {
-  const res = await fetchWithToken<ApiResponse>('get', '/article', { data: editArticleRequest });
+  const res = await fetchWithToken<ApiResponse>('patch', `/article/${editArticleRequest.id}`, { data: editArticleRequest });
   return res;
 }
+
 export async function followCreator(creatorId: string) {
   return await fetchWithToken<ApiResponse>('post', `/user/${creatorId}/follow`);
 }

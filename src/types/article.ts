@@ -16,12 +16,8 @@ export type Article = {
   thumbnailUrl: string,
   isNeedPay: boolean,
   wordCount: number,
-  readingTime: number,
-  status: {
-    views: number,
-    likes: number,
-    subscriptions: number,
-  },
+  readTime: number,
+  status: ArticleStatus,
   tags: string[],
   category: string,
   createdAt: Date,
@@ -44,9 +40,9 @@ export type ArticleType = {
   abstract: string;
   content: string;
   thumbnailUrl: string;
-  needsPay: boolean;
-  wordsCount: number;
-  readingTime: number;
+  isNeedsPay: boolean;
+  wordCount: number;
+  readTime: number;
   status: ArticleStatus;
   tags: string[];
   category: string;
