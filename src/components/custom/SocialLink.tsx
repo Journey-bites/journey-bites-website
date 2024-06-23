@@ -1,23 +1,44 @@
 'use client';
 
 import { Bookmark, Eye, Heart } from 'lucide-react';
+import ProtectedComponent from '../common/ProtectedComponent';
 
-export default function SocialLink() {
+type SocialLinkProps = {
+  views: number;
+  likes: number;
+  articleId: string;
+}
+
+export default function SocialLink({ views, likes, articleId }: SocialLinkProps) {
+  function handleLikeArticle() {
+    // TODO: Like article
+    console.log(articleId);
+  }
+
+  function handleSaveArticle() {
+    // TODO: Save article
+    console.log(articleId);
+  }
+
   return (
     <div className='flex gap-3'>
       <div className='flex gap-1'>
         <Eye className='stroke-grey-300' />
-        <span>2333</span>
+        <span>{views}</span>
       </div>
       <div className='flex gap-1'>
-        <button>
-          <Heart className='stroke-danger' />
-        </button>
-        <span>2333</span>
+        <ProtectedComponent onClick={handleLikeArticle}>
+          <button>
+            <Heart className='stroke-danger' />
+          </button>
+        </ProtectedComponent>
+        <span>{likes}</span>
       </div>
-      <button>
-        <Bookmark className='stroke-primary' />
-      </button>
+      <ProtectedComponent onClick={handleSaveArticle}>
+        <button>
+          <Bookmark className='stroke-primary' />
+        </button>
+      </ProtectedComponent>
     </div>
   );
 }

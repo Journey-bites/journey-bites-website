@@ -1,6 +1,7 @@
 import { ApiSuccessResponse } from '@/types/apiResponse';
 import { Category, Creator, Follow, SearchRequestQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
+import { ArticleType } from '@/types/article';
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
@@ -29,14 +30,23 @@ export async function getCategories() {
 }
 
 export async function getArticles({
-  pageParam = 1,
-}: {
-  pageParam: unknown;
-}) {
-  const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=6`
-  );
-  return res.json();
+  page,
+  pageSize,
+  q,
+  type,
+}: SearchRequestQuery) {
+  const endpoint = '/articles';
+  const params = new URLSearchParams();
+  const query = Object.entries({ page, pageSize, q, type });
+
+  for(const [key, value] of query) {
+    if (value) {
+      params.append(key, value.toString());
+    }
+  }
+  const url = `${endpoint}?${params.toString()}`;
+  const res = await nextFetch<ArticleType[]>(url);
+  return res;
 }
 
 export async function getCreators({ page, pageSize, search, type }: SearchRequestQuery) {
