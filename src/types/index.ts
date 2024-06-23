@@ -3,6 +3,11 @@ export enum InputType {
   PASSWORD = 'password',
 }
 
+export enum OrderBy {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
 export type Tab = {
   value: string;
   label: string;
