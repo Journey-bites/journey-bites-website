@@ -13,9 +13,9 @@ import {
   AvatarImage,
 } from '@/components/ui/avatar';
 import SocialLink from './custom/SocialLink';
-import type { RecommendArticle } from '@/types/article';
+import type { Articles } from '@/types/article';
 
-type Props = { post: RecommendArticle };
+type Props = { post: Articles };
 
 export default function ArticleContent({ post }: Props) {
 
