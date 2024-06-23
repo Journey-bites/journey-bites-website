@@ -54,3 +54,9 @@ export interface Creator extends Profile {
     followingsId: string
   }[];
 }
+
+export interface Follow extends Profile {
+  userId: string;
+  email: string;
+  isMutualFollow: boolean;
+}

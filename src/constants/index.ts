@@ -9,3 +9,8 @@ export const GOOGLE_LOGIN_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/go
 export const LOCAL_STORAGE_KEY = {
   redirectUrl: 'redirect_url',
 };
+
+export const QUERY_KEY = {
+  following: 'following',
+  followers: 'followers',
+};

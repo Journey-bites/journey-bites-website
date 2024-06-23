@@ -15,8 +15,8 @@ export default function ProtectedComponent({ children, onClick }: ProtectedCompo
   const pathname = usePathname();
 
   const handleClick = (e: MouseEvent) => {
+    e.preventDefault();
     if (!isLogin) {
-      e.preventDefault();
       localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
       router.push('/login');
     } else {

@@ -1,4 +1,4 @@
-import { UserInfo } from './index';
+import { Follow, UserInfo } from './index';
 import StatusCode from './StatusCode';
 
 export interface ApiResponse {
@@ -19,3 +19,5 @@ export interface ApiSuccessResponse<T> extends ApiResponse {
 export type LoginResponse = ApiSuccessResponse<{ token: string }>;
 
 export type UserResponse = ApiSuccessResponse<UserInfo>;
+
+export type UserFollowResponse = ApiSuccessResponse<Follow[]>;
