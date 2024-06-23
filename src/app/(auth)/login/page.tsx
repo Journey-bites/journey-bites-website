@@ -94,7 +94,8 @@ export default function Login() {
         <Button variant='outline' asChild>
           <a href={GOOGLE_LOGIN_URL}>使用 Google 登入</a>
         </Button>
-        <Button variant='outline'>使用 Facebook 登入</Button>
+        {/* Will be developed in the future */}
+        {/* <Button variant='outline'>使用 Facebook 登入</Button> */}
       </div>
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
