@@ -16,7 +16,7 @@ export default function Register() {
       </div>
       <div className='my-7 flex flex-col gap-5'>
         <Button variant='outline' asChild>
-          <a href={GOOGLE_LOGIN_URL}>使用 Google 登入</a>
+          <a href={GOOGLE_LOGIN_URL}>使用 Google 註冊</a>
         </Button>
         {/* Will be developed in the future */}
         {/* <Button variant='outline'>使用 Facebook 註冊</Button> */}
