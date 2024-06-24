@@ -7,9 +7,10 @@ import { LOCAL_STORAGE_KEY } from '@/constants';
 
 type ProtectedComponentProps = {
   onClick?: () => void;
+  href?: string;
 } & PropsWithChildren;
 
-export default function ProtectedComponent({ children, onClick }: ProtectedComponentProps) {
+export default function ProtectedComponent({ children, onClick, href }: ProtectedComponentProps) {
   const { isLogin } = useUserStore((state) => state);
   const router = useRouter();
   const pathname = usePathname();
@@ -19,10 +20,10 @@ export default function ProtectedComponent({ children, onClick }: ProtectedCompo
     if (!isLogin) {
       localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
       router.push('/login');
+    } else if (typeof onClick === 'function') {
+      onClick();
     } else {
-      if (typeof onClick === 'function') {
-        onClick();
-      };
+      router.push(href || '/');
     }
   };
 
