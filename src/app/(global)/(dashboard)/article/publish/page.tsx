@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import {
   Form,
 } from '@/components/ui/form';
@@ -36,6 +37,7 @@ export default function PublishArticle() {
   const [tags, setTags] = useState <Tag[]> ([]);
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
+  const router = useRouter();
 
   const categoryValidation = z.string().refine(value => {
     if (categoryOptions.length === 0) {
@@ -90,12 +92,12 @@ export default function PublishArticle() {
     console.log(editorProps);
     if (!editorProps) return;
     const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
-    const isNeedPay = (values.isNeedPay === 'false') ? false : Boolean(values.isNeedPay);
+    const isNeedPay = (values.isNeedPay === '免費') ? false : true;
     const createArticleRequest = { ...editorProps, ...values, tags, isNeedPay };
-    console.log({ createArticleRequest });
     createArticleMutate(createArticleRequest, {
       onSuccess: () => {
         toast({ title: '成功送出', variant: 'success' });
+        router.push('/manage/content');
       },
       onError: () => {
         toast({ title: '送出失敗', variant: 'error' });
