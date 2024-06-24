@@ -8,6 +8,12 @@ export enum OrderBy {
   DESC = 'desc',
 }
 
+export enum SearchType {
+  Article = 'article',
+  // Category = 'category',
+  // Creator = 'creator'
+}
+
 export type Tab = {
   value: string;
   label: string;

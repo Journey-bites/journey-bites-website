@@ -34,7 +34,7 @@ export default async function CreatorInfoPage({ params }: { params: { id: string
             </SelectContent>
           </Select>
         </div>
-        <LargeArticleCard showCreatedAt />
+        {/* <LargeArticleCard showCreatedAt /> */}
       </section>
     </>
   );

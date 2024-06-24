@@ -22,10 +22,10 @@ export default function ContentPage() {
               <SelectItem value={OrderBy.ASC}>由舊到新</SelectItem>
             </SelectContent>
           </Select>
-          <SearchInput value='' onChange={() => {}} />
+          <SearchInput value='' onChange={() => {}} onKeyDown={() => {}} />
         </div>
         <p className='my-5 text-grey-300'>共 10 篇文章</p>
-        <LargeArticleCard isUsersArticle />
+        {/* <LargeArticleCard isUsersArticle /> */}
       </section>
     </>
   );
