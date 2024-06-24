@@ -56,7 +56,7 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
               }
             >
           <DropdownMenuLinkItem>
-            <Link href={`/article/edit/${auth?.id}`}>編輯</Link>
+            <Link href={`/article/edit/${article.id}`}>編輯</Link>
           </DropdownMenuLinkItem>
           <DropdownMenuLinkItem>
             <button onClick={handleShareArticle}>分享</button>
