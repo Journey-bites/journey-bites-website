@@ -52,6 +52,7 @@ export type RequestPageQuery = {
 export type SearchRequestQuery = {
   search?: string;
   type?: 'hot' | 'random';
+  q?: string;
 } & RequestPageQuery;
 
 export interface Creator extends Profile {

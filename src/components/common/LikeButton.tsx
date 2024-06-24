@@ -7,7 +7,7 @@ import { HeartIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import ProtectedComponent from './ProtectedComponent';
-import { likeArticle } from '@/lib/authApi';
+import { likeArticle, unlikeArticle } from '@/lib/authApi';
 
 type LikeButtonProps = {
   articleId: string;
@@ -40,7 +40,7 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
   });
 
   const { mutate: unlikeArticleMutate } = useMutation({
-    mutationFn: likeArticle,
+    mutationFn: unlikeArticle,
     onMutate: () => {
       setIsLiked(false);
       setLikesCount((prev) => prev > 0 ? prev - 1 : 0);

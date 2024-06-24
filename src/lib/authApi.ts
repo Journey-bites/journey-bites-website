@@ -2,7 +2,7 @@ import jsCookie from 'js-cookie';
 import type { AxiosRequestConfig, Method } from 'axios';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
-import { ApiResponse, CommentResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
+import { ApiResponse, ArticlesResponse, CommentResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
 import { Profile } from '@/types';
 import { CreateArticleRequest } from '@/types/article';
 
@@ -80,4 +80,14 @@ export async function likeArticle({ articleId }: { articleId: string }) {
 export async function unlikeArticle({ articleId }: { articleId: string }) {
   const res = await fetchWithToken<ApiResponse>('delete', `/article/${articleId}/like`);
   return res;
+}
+
+export async function deleteArticle({ articleId }: { articleId: string }) {
+  const res = await fetchWithToken<ApiResponse>('delete', `/article/${articleId}`);
+  return res;
+}
+
+export async function getUserArticles() {
+  const res = await fetchWithToken<ArticlesResponse>('get', '/user/articles');
+  return res.data;
 }

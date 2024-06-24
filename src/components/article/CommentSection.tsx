@@ -7,7 +7,7 @@ import { zhTW } from 'date-fns/locale/zh-TW';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/providers/userProvider';
 import { Button } from '../ui/button';
-import LikeButton from '../common/LikeButton';
+// import LikeButton from '../common/LikeButton';
 import UserAvatar from '../common/UserAvatar';
 import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -77,15 +77,16 @@ export default function CommentSection({ articleId }: { articleId: string }) {
                       <span className='text-base font-normal text-grey-300 md:pl-4'>{formatDistance(new Date(comment.updatedAt), new Date(), { addSuffix: true, locale: zhTW })}</span>
                     </div>
                     <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
-                    <div className='hidden md:block'>
+                    {/* TODO: Currently not support comment like feature */}
+                    {/* <div className='hidden md:block'>
                       <LikeButton count={comment.likes} />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
-                <div className='md:hidden'>
+                {/* <div className='md:hidden'>
                   <p className='mb-4 text-base'>{comment.content}</p>
                   <LikeButton count={comment.likes} />
-                </div>
+                </div> */}
               </div>
             ))
           )

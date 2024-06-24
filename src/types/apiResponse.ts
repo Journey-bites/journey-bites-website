@@ -1,4 +1,4 @@
-import { Comment } from './article';
+import { Comment, ArticleType } from './article';
 import { Follow, UserInfo } from './index';
 import StatusCode from './StatusCode';
 
@@ -26,3 +26,5 @@ export type UserFollowResponse = ApiSuccessResponse<Follow[]>;
 export type PostCommentResponse = ApiSuccessResponse<{ commentId: string }>;
 
 export type CommentResponse = ApiSuccessResponse<Comment[]>;
+
+export type ArticlesResponse = ApiSuccessResponse<ArticleType[]>;

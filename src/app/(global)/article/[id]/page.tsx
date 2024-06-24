@@ -41,7 +41,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
           <h1 className='mb-5 text-xl font-bold md:mb-9 md:text-3xl md:font-black'>{article.title}</h1>
           <div className='mb-9 flex items-center justify-between'>
             <div className='flex items-center gap-2 p-0 xs:p-1'>
-              <div className='relative size-10 md:size-15'>
+              <div className='relative size-10 overflow-hidden rounded-full md:size-15'>
                 <Image fill sizes='5vw' src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} />
               </div>
               <div className='flex flex-col items-start gap-1'>

@@ -25,15 +25,6 @@ export default function SearchPage() {
     setValue(keywords);
   }, [keywords]);
 
-  if (!keywords || (isFetched && !articles?.length)) {
-    return (
-      <div className='flex flex-col items-center justify-center gap-2'>
-        <FrownIcon className='size-10 stroke-grey-500' />
-        <p className='text-grey-500'>目前沒有搜尋結果</p>
-      </div>
-    );
-  }
-
   if (isLoading) {
     return (
       <div className='flex min-h-[300px] items-center justify-center'>
@@ -56,13 +47,20 @@ export default function SearchPage() {
       <div className='flex justify-center bg-primary-100 pb-10 pt-15'>
         <div className='w-full px-6 md:w-container'>
           <SearchInput value={value} onChange={(e) => setValue(e.target.value)} onKeyDown={handleSearch} />
-          <p className='mt-4 text-grey-300'>{`一共搜尋到 ${articles?.length} 篇文章`}</p>
+          {articles && articles?.length > 0 && <p className='mt-4 text-grey-300'>{`一共搜尋到 ${articles?.length} 篇文章`}</p>}
         </div>
       </div>
       <div className='mx-auto mt-[58px] flex w-full flex-col gap-6 px-6 md:w-container'>
-        {articles?.map((article) => (
-          <LargeArticleCard key={article.id} article={article} />
-        ))}
+        {(isFetched && !articles?.length) ? (
+          <div className='flex flex-col items-center justify-center gap-2'>
+            <FrownIcon className='size-10 stroke-grey-500' />
+            <p className='text-grey-500'>目前沒有搜尋結果</p>
+          </div>
+        ) : (
+          articles?.map((article) => (
+            <LargeArticleCard key={article.id} article={article} />
+          ))
+        )}
       </div>
     </div>
   );

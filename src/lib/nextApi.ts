@@ -91,3 +91,8 @@ export async function getCommentsByArticleId(articleId: string) {
   const res = await nextFetch<Comment[]>(`/article/${articleId}/comments`, {}, true);
   return res;
 }
+
+export async function getCreatorArticles({ creatorId }: { creatorId: string }) {
+  const res = await nextFetch<ArticleType[]>(`/creator/${creatorId}/articles`);
+  return res;
+}

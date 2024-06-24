@@ -134,6 +134,9 @@ const config = {
       },
       backgroundImage: {
         'comment-texture': 'url(\'~@/images/comment-texture.png\')',
+      },
+      width: {
+        container: '56%'
       }
     },
   },
