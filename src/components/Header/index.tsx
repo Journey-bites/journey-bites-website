@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import HeaderNav from './HeaderNav';
+// import HeaderNav from './HeaderNav';
 // import { getCategories } from '@/lib/nextApi';
 import SearchBar from '../custom/SearchBar';
 import HeaderButtons from './HeaderButtons';
@@ -23,8 +23,9 @@ export default function Header() {
             <Image className='hidden md:block' src={Logo} alt='Journey Bites' priority />
             <Image className='md:hidden' src={LogoSm} alt='Journey Bites' priority />
           </Link>
+          {/* TODO: add it back when search page is ready */}
           <div className='hidden gap-8 md:flex'>
-            <HeaderNav />
+            {/* <HeaderNav /> */}
             <SearchBar />
           </div>
         </div>

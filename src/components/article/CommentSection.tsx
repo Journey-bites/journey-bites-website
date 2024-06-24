@@ -4,22 +4,57 @@ import Link from 'next/link';
 import { SendIcon, FrownIcon } from 'lucide-react';
 import { formatDistance } from 'date-fns';
 import { zhTW } from 'date-fns/locale/zh-TW';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/providers/userProvider';
-import { Comment } from '@/types/article';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import LikeButton from '../common/LikeButton';
+// import LikeButton from '../common/LikeButton';
 import UserAvatar from '../common/UserAvatar';
 import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
+import { FieldValues, useForm } from 'react-hook-form';
+import { Form } from '../ui/form';
+import InputField from '../custom/InputField';
+import { addCommentToArticle } from '@/lib/authApi';
+import { getCommentsByArticleId } from '@/lib/nextApi';
+import { QUERY_KEY } from '@/constants';
+import { toast } from '../ui/use-toast';
 
-export default function CommentSection({ comments }: { comments: Comment[] }) {
+export default function CommentSection({ articleId }: { articleId: string }) {
   const { isLogin, auth } = useUserStore((state) => state);
+  const queryClient = useQueryClient();
+  const { data: comments } = useQuery({
+    queryKey: [QUERY_KEY.comments],
+    queryFn: () => getCommentsByArticleId(articleId),
+  });
+  const { mutate: addCommentMutate } = useMutation({
+    mutationFn: addCommentToArticle,
+  });
+  const form = useForm<FieldValues>({
+    defaultValues: {
+      commentText: ''
+    }
+  });
+  const { control, handleSubmit, formState: { isValid } } = form;
+
+  function onSubmit(data: FieldValues) {
+    addCommentMutate({ articleId, content: data.commentText }, {
+      onSuccess: () => {
+        form.reset();
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.comments] });
+      },
+      onError: () => {
+        toast({ title: '新增留言失敗', description: '請聯繫客服，或稍後再試', variant: 'error' });
+      }
+    });
+  }
+
+  if (!comments) return null;
+
   return (
     <section className='overflow-hidden border-2 border-x-0 border-grey-200 text-grey-500 md:rounded-lg md:border-x-2'>
       <div className='bg-grey bg-comment-texture bg-[length:40px] bg-repeat px-3 py-5 md:p-10'>
         <h3 className='mb-6'>
           回應
-          <small className='pl-2 text-lg text-grey-300'>({comments.length})</small>
+          <small className='pl-2 text-lg text-grey-300'>({comments?.length})</small>
         </h3>
         {
           comments.length === 0 && (
@@ -33,24 +68,25 @@ export default function CommentSection({ comments }: { comments: Comment[] }) {
         {
           comments.length > 0 && (
             comments.map((comment) => (
-              <div key={comment.commentId} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6'>
+              <div key={comment.id} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6'>
                 <div className='flex gap-4'>
-                  <UserAvatar userName={comment.user.displayName} avatarImgUrl={comment.user.avatarImgUrl} />
+                  <UserAvatar userName={comment.user.profile.displayName || ''} avatarImgUrl={comment.user.profile.avatarImageUrl} />
                   <div>
                     <div className='mb-2 flex flex-col text-xl font-bold md:flex-row'>
-                      {comment.user.displayName}
+                      {comment.user.profile.displayName}
                       <span className='text-base font-normal text-grey-300 md:pl-4'>{formatDistance(new Date(comment.updatedAt), new Date(), { addSuffix: true, locale: zhTW })}</span>
                     </div>
                     <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
-                    <div className='hidden md:block'>
+                    {/* TODO: Currently not support comment like feature */}
+                    {/* <div className='hidden md:block'>
                       <LikeButton count={comment.likes} />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
-                <div className='md:hidden'>
+                {/* <div className='md:hidden'>
                   <p className='mb-4 text-base'>{comment.content}</p>
                   <LikeButton count={comment.likes} />
-                </div>
+                </div> */}
               </div>
             ))
           )
@@ -61,10 +97,20 @@ export default function CommentSection({ comments }: { comments: Comment[] }) {
           isLogin ? (
             <>
               <UserAvatar userName={auth?.profile.displayName || ''} avatarImgUrl={auth?.profile.avatarImageUrl} />
-              <Input type='text' className='w-full border-none' placeholder='留言...' />
-              <Button variant='icon' className='group shrink-0'>
-                <SendIcon className='stroke-primary group-hover:stroke-primary-100' />
-              </Button>
+              <Form {...form}>
+                <form onSubmit={handleSubmit(onSubmit)} className='flex w-full gap-2'>
+                  <div className='grow'>
+                    <InputField
+                      control={control}
+                      name='commentText'
+                      placeholder='留言...'
+                    />
+                  </div>
+                  <Button disabled={!isValid} type='submit' variant='icon' className='group shrink-0'>
+                    <SendIcon className='stroke-primary group-hover:stroke-primary-100' />
+                  </Button>
+                </form>
+              </Form>
             </>
           ): (
               <p className='flex-1 text-center [&>a]:text-secondary'>如果需要留言，請先

@@ -8,6 +8,12 @@ export enum OrderBy {
   DESC = 'desc',
 }
 
+export enum SearchType {
+  Article = 'article',
+  // Category = 'category',
+  // Creator = 'creator'
+}
+
 export type Tab = {
   value: string;
   label: string;
@@ -32,6 +38,7 @@ export interface Profile {
 };
 
 export interface UserInfo {
+  id: string;
   email: string;
   emailVerified: boolean;
   profile: Profile;
@@ -45,6 +52,7 @@ export type RequestPageQuery = {
 export type SearchRequestQuery = {
   search?: string;
   type?: 'hot' | 'random';
+  q?: string;
 } & RequestPageQuery;
 
 export interface Creator extends Profile {

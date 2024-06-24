@@ -1,3 +1,4 @@
+import { Comment, ArticleType } from './article';
 import { Follow, UserInfo } from './index';
 import StatusCode from './StatusCode';
 
@@ -21,3 +22,9 @@ export type LoginResponse = ApiSuccessResponse<{ token: string }>;
 export type UserResponse = ApiSuccessResponse<UserInfo>;
 
 export type UserFollowResponse = ApiSuccessResponse<Follow[]>;
+
+export type PostCommentResponse = ApiSuccessResponse<{ commentId: string }>;
+
+export type CommentResponse = ApiSuccessResponse<Comment[]>;
+
+export type ArticlesResponse = ApiSuccessResponse<ArticleType[]>;

@@ -1,23 +1,25 @@
 'use client';
 
-import { Bookmark, Eye, Heart } from 'lucide-react';
+import { EyeIcon, HeartIcon } from 'lucide-react';
 
-export default function SocialLink() {
+type SocialLinkProps = {
+  views: number;
+  likes: number;
+  articleId: string;
+}
+
+export default function SocialLink({ views, likes }: SocialLinkProps) {
   return (
     <div className='flex gap-3'>
       <div className='flex gap-1'>
-        <Eye className='stroke-grey-300' />
-        <span>2333</span>
+        <EyeIcon className='stroke-grey-300' />
+        <span>{views}</span>
       </div>
       <div className='flex gap-1'>
-        <button>
-          <Heart className='stroke-danger' />
-        </button>
-        <span>2333</span>
+        <HeartIcon className='stroke-danger' />
+        <span>{likes}</span>
       </div>
-      <button>
-        <Bookmark className='stroke-primary' />
-      </button>
+      {/* <Bookmark className='stroke-primary' /> */}
     </div>
   );
 }

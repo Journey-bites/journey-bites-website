@@ -1,6 +1,7 @@
 import { ApiSuccessResponse } from '@/types/apiResponse';
 import { Category, Creator, Follow, SearchRequestQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
+import { ArticleType, Comment } from '@/types/article';
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
@@ -29,14 +30,23 @@ export async function getCategories() {
 }
 
 export async function getArticles({
-  pageParam = 1,
-}: {
-  pageParam: unknown;
-}) {
-  const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts?_page=${pageParam}&_limit=6`
-  );
-  return res.json();
+  page,
+  pageSize,
+  q,
+  type,
+}: SearchRequestQuery) {
+  const endpoint = '/articles';
+  const params = new URLSearchParams();
+  const query = Object.entries({ page, pageSize, q, type });
+
+  for(const [key, value] of query) {
+    if (value) {
+      params.append(key, value.toString());
+    }
+  }
+  const url = `${endpoint}?${params.toString()}`;
+  const res = await nextFetch<ArticleType[]>(url);
+  return res;
 }
 
 export async function getCreators({ page, pageSize, search, type }: SearchRequestQuery) {
@@ -69,5 +79,20 @@ export async function getCreatorById(id: string, token?: string) {
 
 export async function getCreatorFollowers(creatorId: string) {
   const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`, {}, true);
+  return res;
+}
+
+export async function getArticleById(id: string) {
+  const res = await nextFetch<ArticleType>(`/article/${id}`);
+  return res;
+}
+
+export async function getCommentsByArticleId(articleId: string) {
+  const res = await nextFetch<Comment[]>(`/article/${articleId}/comments`, {}, true);
+  return res;
+}
+
+export async function getCreatorArticles({ creatorId }: { creatorId: string }) {
+  const res = await nextFetch<ArticleType[]>(`/creator/${creatorId}/articles`);
   return res;
 }

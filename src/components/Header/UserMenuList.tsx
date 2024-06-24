@@ -44,7 +44,7 @@ export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: bool
 
   return (
     <>
-      <div className='mb-4 flex gap-3'>
+      <Link href={`/creator/${auth?.id}`} className='mb-4 flex gap-3'>
         <div className='relative size-10 overflow-hidden rounded-full'>
           <Image src={auth?.profile?.avatarImageUrl || DefaultUserImg} fill className='object-cover' alt='user img' />
         </div>
@@ -52,7 +52,7 @@ export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: bool
           <div className='font-bold leading-7 text-grey-500'>{auth?.profile.displayName}</div>
           <span className='text-grey-300'>{auth?.email}</span>
         </div>
-      </div>
+      </Link>
       {
         MenuLinks.map((link) => (
           isDropdownMenu ? (

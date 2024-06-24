@@ -1,3 +1,5 @@
+import { Profile } from './index';
+
 // need to be replaced
 export type Articles = {
   userId: number;
@@ -33,32 +35,33 @@ type ArticleStatus = {
 };
 
 export type ArticleType = {
-  articleId: string;
+  id: string;
   creatorId: string;
-  creator: string;
+  creator: {
+    profile: Profile
+  };
   title: string;
   abstract: string;
   content: string;
-  thumbnailUrl: string;
-  isNeedsPay: boolean;
+  thumbnailUrl?: string;
+  isNeedPay: boolean;
   wordCount: number;
   readTime: number;
   status: ArticleStatus;
-  tags: string[];
+  tags?: string[];
   category: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Comment = {
-  commentId: string;
-  articleId: string;
-  user: {
-    id: string;
-    displayName: string;
-    avatarImgUrl: string;
-  }
+  id: string;
   content: string;
   likes: number;
-  updatedAt: Date;
+  likedUserIds: string[];
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    profile: Profile
+  };
 };
