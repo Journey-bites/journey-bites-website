@@ -57,7 +57,7 @@ export default function LargeArticleCard({ showCreator, showReadTime, showCreate
           {showReadTime && '閱讀時間約為 5 分鐘'}
           {isUsersArticle && '10 分鐘前編輯'}
         </span>
-        <SocialLink></SocialLink>
+        <SocialLink views={0} likes={0} articleId={'123'}></SocialLink>
       </div>
     </div>
   );

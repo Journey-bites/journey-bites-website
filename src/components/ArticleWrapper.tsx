@@ -1,31 +1,31 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-import type { Articles } from '@/types/article';
-import ArticleContent from './ArticleContent';
-import useGetPosts from '@/hook/useGetPosts';
-import { ThumbsUp } from 'lucide-react';
-import LoadingSkeleton from './LoadingSkeleton';
+// import React, { useEffect } from 'react';
+// import { useInView } from 'react-intersection-observer';
+// import type { Article } from '@/types/article';
+// import ArticleContent from './ArticleContent';
+// import useGetPosts from '@/hook/useGetPosts';
+// import { ThumbsUp } from 'lucide-react';
+// import LoadingSkeleton from './LoadingSkeleton';
 
-type Props = {
-  posts: Articles[];
-};
+// type Props = {
+//   posts: Article[];
+// };
 
-const PostsWrapper = ({ posts }: Props) => {
-  const { ref, inView } = useInView({ threshold: 0, delay: 100 });
-  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useGetPosts(posts);
+const PostsWrapper = () => {
+  // const { ref, inView } = useInView({ threshold: 0, delay: 100 });
+  // const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+  //   useGetPosts(posts);
 
-  useEffect(() => {
-    if (inView) {
-      fetchNextPage();
-    }
-  }, [fetchNextPage, inView]);
+  // useEffect(() => {
+  //   if (inView) {
+  //     fetchNextPage();
+  //   }
+  // }, [fetchNextPage, inView]);
 
   return (
   <>
-    <div className='relative mt-9 rounded-lg bg-primary-100'>
+    {/* <div className='relative mt-9 rounded-lg bg-primary-100'>
       <h1 className='flex w-[200px] justify-center gap-3 border-b-10 border-r-10 border-white bg-primary p-4 text-2xl text-white'>
           <ThumbsUp />
           推薦文章
@@ -44,7 +44,7 @@ const PostsWrapper = ({ posts }: Props) => {
         <LoadingSkeleton />
     ) : (
       <div className='h-10' ref={ref} />
-    )}
+    )} */}
   </>
   );
 };

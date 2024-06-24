@@ -10,12 +10,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PartyPopper, ThumbsUp } from 'lucide-react';
 import SocialLink from './custom/SocialLink';
-import { Button } from './ui/button';
+// import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { ArticleType } from '@/types/article';
 
 import DefaultUserImg from '@/images/default-user.webp';
 import DefaultThumbnailImg from '@/images/default-thumbnail.webp';
+import Link from 'next/link';
 
 type ArticlesContainerProps = {
   type: 'hot' | 'recommend';
@@ -27,7 +28,7 @@ type ArticlesContainerProps = {
 export default async function ArticlesContainer({
   type,
   color,
-  showBtn,
+  // showBtn,
   articles
 }: ArticlesContainerProps) {
   const isHotType = type === 'hot';
@@ -38,19 +39,20 @@ export default async function ArticlesContainer({
         {isHotType ? <PartyPopper className='size-5 md:size-6' /> : <ThumbsUp />}
         <h1 className='text-xl md:text-2xl'>{isHotType ? '熱門文章' : '推薦文章'}</h1>
       </div>
-      <div className='flex justify-end'>
+      {/* TODO: add it back when search page is ready */}
+      {/* <div className='flex justify-end'>
         <Button variant='outline' className={cn('rounded-lg px-4 py-2 md:px-5 md:py-3', {
             ['md:hidden']: !showBtn,
           })}>
             查看更多
         </Button>
-      </div>
+      </div> */}
       <div className={cn('mt-7 grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2', {
-        ['md:mt-[116px]']: !showBtn,
+        ['md:mt-[116px]']: true, //!showBtn,
       })}>
         {articles.map((item) => (
           <Card key={item.id}>
-            <div className='flex flex-col-reverse gap-3 lg:flex-row'>
+            <Link href={`/article/${item.id}`} className='flex flex-col-reverse gap-3 lg:flex-row'>
               <div className='max-w-[232px] lg:max-w-[73.5%]'>
                 <CardHeader>
                   <CardTitle className='truncate text-xl font-bold'>
@@ -73,12 +75,12 @@ export default async function ArticlesContainer({
                   alt={item.title}
                 />
               </div>
-            </div>
+            </Link>
             <CardFooter className='my-2'>
               <Avatar className='size-6'>
-                <AvatarImage src={item.creator.avatarImageUrl || DefaultUserImg.src} asChild>
+                <AvatarImage src={item.creator.profile.avatarImageUrl || DefaultUserImg.src} asChild>
                   <Image
-                    src={item.creator.avatarImageUrl || DefaultUserImg}
+                    src={item.creator.profile.avatarImageUrl || DefaultUserImg}
                     alt='logo'
                     width={24}
                     height={24}
@@ -88,7 +90,7 @@ export default async function ArticlesContainer({
                   <Image src={DefaultUserImg} alt='user' />
                 </AvatarFallback>
               </Avatar>
-              <p className='px-2'>{item.creator.displayName}</p>
+              <Link href={`/creator/${item.creatorId}`} className='px-2'>{item.creator.profile.displayName}</Link>
             </CardFooter>
             <div className='flex items-center justify-between'>
               <CardDescription>{new Date(item.createdAt).toLocaleDateString()}</CardDescription>

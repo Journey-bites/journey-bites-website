@@ -5,7 +5,6 @@ import {
   AvatarImage,
 } from '@/components/ui/avatar';
 import Image from 'next/image';
-import { Button } from './ui/button';
 import { Creator } from '@/types';
 
 import CurveImg from '@/images/long-curve.svg';
@@ -19,7 +18,8 @@ export default function CreatorList({ creatorList }: { creatorList: Creator[] })
           <h3 className='mb-3 text-3xl font-medium'>創作者列表</h3>
           <Image src={CurveImg} alt='creator list' />
         </div>
-        <Button variant='outline' className='self-start'>查看更多</Button>
+        {/* TODO: add it back when search page is ready */}
+        {/* <Button variant='outline' className='self-start'>查看更多</Button> */}
       </div>
       {creatorList.map((item) => {
         return (

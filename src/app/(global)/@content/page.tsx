@@ -3,7 +3,7 @@ import ArticlesContainer from '@/components/ArticlesContainer';
 // import ArticleWrapper from '@/components/ArticleWrapper';
 
 export default async function Content() {
-  const hotArticles = await getArticles({ page: 1, pageSize: 4, type: 'hot' });
+  const hotArticles = await getArticles({ type: 'hot' });
 
   return (
     <>

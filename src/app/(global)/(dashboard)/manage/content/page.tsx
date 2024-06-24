@@ -22,7 +22,7 @@ export default function ContentPage() {
               <SelectItem value={OrderBy.ASC}>由舊到新</SelectItem>
             </SelectContent>
           </Select>
-          <SearchInput />
+          <SearchInput value='' onChange={() => {}} />
         </div>
         <p className='my-5 text-grey-300'>共 10 篇文章</p>
         <LargeArticleCard isUsersArticle />

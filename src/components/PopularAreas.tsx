@@ -1,4 +1,4 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 import Image from 'next/image';
 
 import CurveImg from '@/images/long-curve.svg';
@@ -14,7 +14,8 @@ export default function PopularAttractions() {
       </div>
       <div className='flex flex-wrap gap-x-2 gap-y-3'>
       {data.map((item) => (
-        <Link key={item} href='' className='rounded-[100px] border-2 border-primary-200 px-4 py-1 font-bold text-primary-200'>{item}</Link>
+        // Replace with Link after search page is ready
+        <div key={item} className='rounded-[100px] border-2 border-primary-200 px-4 py-1 font-bold text-primary-200'>{item}</div>
       ))}
       </div>
     </div>

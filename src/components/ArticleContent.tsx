@@ -45,7 +45,7 @@ export default function ArticleContent({ post }: Props) {
       </CardFooter>
       <div className='flex items-center justify-between'>
         <CardDescription>2024/3/23</CardDescription>
-        <SocialLink />
+        <SocialLink views={0} likes={0} articleId={post.id.toString()} />
       </div>
     </Card>
   );
