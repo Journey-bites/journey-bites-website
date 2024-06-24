@@ -2,7 +2,7 @@ import jsCookie from 'js-cookie';
 import type { AxiosRequestConfig, Method } from 'axios';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
-import { ApiResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
+import { ApiResponse, CommentResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
 import { Profile } from '@/types';
 import { CreateArticleRequest } from '@/types/article';
 
@@ -62,5 +62,12 @@ export async function getFollowings() {
 
 export async function getFollowers() {
   const res = await fetchWithToken<UserFollowResponse>('get', '/user/followers');
+  return res.data;
+}
+
+export async function addCommentToArticle({ articleId, content }: { articleId: string, content: string }) {
+  const res = await fetchWithToken<CommentResponse>('post', `/article/${articleId}/comment`, {
+    data: { content }
+  });
   return res.data;
 }

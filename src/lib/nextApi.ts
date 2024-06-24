@@ -1,7 +1,7 @@
 import { ApiSuccessResponse } from '@/types/apiResponse';
 import { Category, Creator, Follow, SearchRequestQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
-import { ArticleType } from '@/types/article';
+import { ArticleType, Comment } from '@/types/article';
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
@@ -79,5 +79,15 @@ export async function getCreatorById(id: string, token?: string) {
 
 export async function getCreatorFollowers(creatorId: string) {
   const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`, {}, true);
+  return res;
+}
+
+export async function getArticleById(id: string) {
+  const res = await nextFetch<ArticleType>(`/article/${id}`);
+  return res;
+}
+
+export async function getCommentsByArticleId(articleId: string) {
+  const res = await nextFetch<Comment[]>(`/article/${articleId}/comments`, {}, true);
   return res;
 }

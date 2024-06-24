@@ -37,7 +37,9 @@ type ArticleStatus = {
 export type ArticleType = {
   id: string;
   creatorId: string;
-  creator: Profile;
+  creator: {
+    profile: Profile
+  };
   title: string;
   abstract: string;
   content: string;
@@ -48,19 +50,18 @@ export type ArticleType = {
   status: ArticleStatus;
   tags?: string[];
   category: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Comment = {
-  commentId: string;
-  articleId: string;
-  user: {
-    id: string;
-    displayName: string;
-    avatarImgUrl: string;
-  }
+  id: string;
   content: string;
   likes: number;
-  updatedAt: Date;
+  likedUserIds: string[];
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    profile: Profile
+  };
 };

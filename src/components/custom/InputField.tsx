@@ -8,7 +8,7 @@ type InputFieldProps<T extends FieldValues> = {
   className?: string;
   control: Control<T>;
   name: Path<T>;
-  label: string;
+  label?: string;
   inputType?: HTMLInputTypeAttribute;
   placeholder?: string;
   formDescription?: string;
@@ -25,8 +25,8 @@ export default function InputField<T extends FieldValues>({ className, control, 
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
-        <FormControl>
+          {label && <FormLabel>{label}</FormLabel>}
+          <FormControl>
             <Input
               className={className}
               type={inputType || 'text'}
