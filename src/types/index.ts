@@ -3,6 +3,11 @@ export enum InputType {
   PASSWORD = 'password',
 }
 
+export enum OrderBy {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
 export type Tab = {
   value: string;
   label: string;
@@ -53,4 +58,10 @@ export interface Creator extends Profile {
   followings: {
     followingsId: string
   }[];
+}
+
+export interface Follow extends Profile {
+  userId: string;
+  email: string;
+  isMutualFollow: boolean;
 }

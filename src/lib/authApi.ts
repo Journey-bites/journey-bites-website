@@ -2,7 +2,7 @@ import jsCookie from 'js-cookie';
 import type { AxiosRequestConfig, Method } from 'axios';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
-import { ApiResponse, UserResponse } from '@/types/apiResponse';
+import { ApiResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
 import { Profile } from '@/types';
 import { CreateArticleRequest } from '@/types/article';
 
@@ -53,4 +53,14 @@ export async function followCreator(creatorId: string) {
 
 export async function unFollowCreator(creatorId: string) {
   return await fetchWithToken<ApiResponse>('delete', `/user/${creatorId}/follow`);
+}
+
+export async function getFollowings() {
+  const res = await fetchWithToken<UserFollowResponse>('get', '/user/followings');
+  return res.data;
+}
+
+export async function getFollowers() {
+  const res = await fetchWithToken<UserFollowResponse>('get', '/user/followers');
+  return res.data;
 }
