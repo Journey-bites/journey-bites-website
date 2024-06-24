@@ -71,7 +71,7 @@ export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: bool
         ))
       }
       {isDropdownMenu ? (
-         <DropdownMenuLinkItem className='mt-3 font-bold text-primary' onClick={handleLogout}>
+        <DropdownMenuLinkItem className='mt-3 font-bold text-primary' onClick={handleLogout}>
           <button>
             <LogOutIcon className='mr-2 size-6' />
             <span>登出</span>

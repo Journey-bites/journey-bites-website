@@ -1,12 +1,13 @@
 import type { HTMLInputTypeAttribute } from 'react';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import type { Control, FieldValues } from 'react-hook-form';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 import type { LucideIcon } from 'lucide-react';
 
-type InputFieldProps = {
-  control: Control<FieldValues>;
-  name: string;
+type InputFieldProps<T extends FieldValues> = {
+  className?: string;
+  control: Control<T>;
+  name: Path<T>;
   label: string;
   inputType?: HTMLInputTypeAttribute;
   placeholder?: string;
@@ -17,7 +18,7 @@ type InputFieldProps = {
   onBlur?: () => void;
 }
 
-export default function InputField ({ control, name, label, inputType, placeholder, formDescription, startIcon, endIcon, iconAction, onBlur }: InputFieldProps) {
+export default function InputField<T extends FieldValues>({ className, control, name, label, inputType, placeholder, formDescription, startIcon, endIcon, iconAction, onBlur }: InputFieldProps<T>) {
   return (
     <FormField
       control={control}
@@ -27,6 +28,7 @@ export default function InputField ({ control, name, label, inputType, placehold
           <FormLabel>{label}</FormLabel>
         <FormControl>
             <Input
+              className={className}
               type={inputType || 'text'}
               placeholder={placeholder || ''}
               startIcon={startIcon}

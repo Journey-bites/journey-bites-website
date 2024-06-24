@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
 import { z } from 'zod';
 
 import {
@@ -17,36 +19,36 @@ interface DialogComponentProps {
   handleDialog: (url: string) => void;
 }
 
-const schema = z.string().url({ message: '請填入正確的網址格式, ex: https://www.journeybites.com' }).refine(url => url.startsWith('https://'), {
-  message: 'URL must start with https://'
-});
+const urlRegex = /^https:\/\/(images\.unsplash\.com|i\.imgur\.com)\/.+$/;
+const schema = z.string().regex(urlRegex);
 
 export function DialogComponent({ handleDialog }: DialogComponentProps ) {
   const { isOpen, onClose, onOpen, data, setData } = useDialog();
+  const [isValid, setIsValid] = useState(false);
   const handleButtonClick = () => {
     if(isOpen) return onClose();
     onOpen();
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let validatedUrl;
+    const url = e.target.value;
 
     try {
-      validatedUrl = schema.parse(e.target.value);
-      setData({ url: e.target.value });
+      schema.parse(url);
+      setIsValid(true);
+      setData({ url });
     } catch (e) {
       if (e instanceof z.ZodError) {
           const errors = e.errors.map(error => error.message);
+          setData({ url: '' });
+          setIsValid(false);
           return errors;
       } else {
         throw new Error('Unexpected error occurred');
       }
-    } finally {
-      validatedUrl ? null : setData({ url: '' });
     }
-
-    setData({ url: e.target.value });
   };
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     if(data && data.url) handleDialog(data.url);
     onClose();
   };
@@ -66,9 +68,18 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
               className='col-span-3'
               onInput={handleChange}
             />
+            <p className={cn('mt-1 text-sm text-secondary', {
+              ['text-danger']: !isValid
+            })}>
+              請至
+              <a className='underline' href='https://imgur.com/' target='_blank' rel='noreferrer'> imgur </a>
+              或
+              <a className='underline' href='https://unsplash.com/' target='_blank' rel='noreferrer'> unsplash </a>
+              上傳圖片，造成不便敬請見諒
+            </p>
           </div>
         <DialogFooter>
-          <Button type='submit' onClick={handleSubmit}>確定</Button>
+          <Button type='submit' onClick={handleSubmit} disabled={!isValid}>確定</Button>
         </DialogFooter>
         </form>
       </DialogContent>

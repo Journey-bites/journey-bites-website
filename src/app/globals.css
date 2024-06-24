@@ -136,3 +136,16 @@ h4 {
   font-size: calc(var(--font-size-base) * 1.25);
   line-height: calc(var(--line-height-base) * 1.4);
 }
+
+.tagInput .rounded-md span {
+  background-color: #ffffff;
+  border-color: var(--primary-200);
+  border-width: 1px;
+  border-radius: 100px;
+  color: var(--primary-200);
+  padding: 2px 0 2px 12px;
+}
+
+.tagInput input.focus-visible\:ring-ring:focus-visible {
+  --tw-ring-color: inherit;
+}

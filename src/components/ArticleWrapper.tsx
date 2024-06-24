@@ -2,14 +2,14 @@
 
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import type { Article } from '@/types/article';
+import type { Articles } from '@/types/article';
 import ArticleContent from './ArticleContent';
 import useGetPosts from '@/hook/useGetPosts';
 import { ThumbsUp } from 'lucide-react';
 import LoadingSkeleton from './LoadingSkeleton';
 
 type Props = {
-  posts: Article[];
+  posts: Articles[];
 };
 
 const PostsWrapper = ({ posts }: Props) => {

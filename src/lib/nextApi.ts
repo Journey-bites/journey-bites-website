@@ -13,7 +13,7 @@ async function nextFetch<T>(url: string, option?: RequestInit, disabledCache?: b
   }
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
     ...fetchOption
-   });
+  });
   const data: ApiSuccessResponse<T> = await res.json();
 
   if (!res.ok) {
@@ -24,7 +24,7 @@ async function nextFetch<T>(url: string, option?: RequestInit, disabledCache?: b
 }
 
 export async function getCategories() {
-  const res = await nextFetch<Category[]>('/categories');
+  const res = await nextFetch<Category[]>('/category');
   return res;
 }
 
