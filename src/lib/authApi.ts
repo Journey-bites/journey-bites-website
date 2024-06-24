@@ -71,3 +71,13 @@ export async function addCommentToArticle({ articleId, content }: { articleId: s
   });
   return res.data;
 }
+
+export async function likeArticle({ articleId }: { articleId: string }) {
+  const res = await fetchWithToken<ApiResponse>('post', `/article/${articleId}/like`);
+  return res;
+}
+
+export async function unlikeArticle({ articleId }: { articleId: string }) {
+  const res = await fetchWithToken<ApiResponse>('delete', `/article/${articleId}/like`);
+  return res;
+}

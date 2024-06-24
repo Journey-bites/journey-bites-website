@@ -52,8 +52,8 @@ export default async function ArticlesContainer({
       })}>
         {articles.map((item) => (
           <Card key={item.id}>
-            <Link href={`/article/${item.id}`} className='flex flex-col-reverse gap-3 lg:flex-row'>
-              <div className='max-w-[232px] lg:max-w-[73.5%]'>
+            <Link href={`/article/${item.id}`} className='flex flex-col-reverse justify-between gap-3 lg:flex-row'>
+              <div className='max-w-[232px]'>
                 <CardHeader>
                   <CardTitle className='truncate text-xl font-bold'>
                     {item.title}
@@ -65,7 +65,7 @@ export default async function ArticlesContainer({
                   </p>
                 </CardContent>
               </div>
-              <div className='relative h-[140px] w-full lg:size-[100px]'>
+              <div className='relative size-[140px] w-full shrink-0 lg:size-[100px]'>
                 <Image
                   src={item.thumbnailUrl || DefaultThumbnailImg}
                   placeholder='empty'

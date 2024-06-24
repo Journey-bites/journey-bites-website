@@ -51,7 +51,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
             </div>
             <div className='flex flex-col items-end gap-1'>
               <small className='text-grey-300'>{article.readTime} min</small>
-              <LikeButton count={article.status.likes} withBackground />
+              <LikeButton articleId={params.id} count={article.status.likes} withBackground />
             </div>
           </div>
           {parse(cleanContentHtml)}
