@@ -115,16 +115,10 @@ export default function PublishArticle() {
     if (!editorProps) return;
     let tags: string[] = [];
 
-    // if (values.tags && Array.isArray(values.tags) && values.tags.length > 0) {
-    //   tags = values.tags.map(tag => tag.text);
-    // } else if (defaultTags && defaultTags.length > 0) {
-    //   tags = defaultTags;
-    // }
-
-    if (initialLoad && defaultTags && !selectedValue) {
+    if (initialLoad && defaultTags?.length > 0) {
       tags = defaultTags;
       setInitialLoad(false);
-    } else if (selectedValue) {
+    } else if (selectedValue?.length > 0) {
       tags = values.tags.map(tag => tag.text);
     } else {
       tags = values.tags.map(tag => tag.text);;
@@ -151,10 +145,8 @@ export default function PublishArticle() {
   const { control, handleSubmit, formState: { isValid }, trigger, watch } = form;
   const selectedValue = watch('tags');
 
-  function setValue(arg0: string, arg1: [Tag, ...Tag[]]) {
-    console.log(arg0, arg1);
-    console.log(arg1);
-    return arg1;
+  function setValue() {
+    setInitialLoad(false);
   }
 
   useEffect(() => {
