@@ -32,6 +32,7 @@ export interface Profile {
 };
 
 export interface UserInfo {
+  id: string;
   email: string;
   emailVerified: boolean;
   profile: Profile;

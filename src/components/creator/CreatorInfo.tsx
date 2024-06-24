@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { InstagramIcon, FacebookIcon, EarthIcon } from 'lucide-react';
 import { Creator } from '@/types';
-// import ActionButtons from '@/components/creator/ActionButtons';
+import ActionButtons from '@/components/creator/ActionButtons';
 import { cn } from '@/lib/utils';
 
 import DefaultUserImg from '@/images/default-user.webp';
@@ -38,7 +38,7 @@ export default function CreatorInfo({ creatorInfo, bioClassName }: { creatorInfo
             </div>
         </div>
       </div>
-      {/* <ActionButtons creatorId={creatorInfo.userId} userAlreadyFollowed={creatorInfo.userAlreadyFollowed} /> */}
+      {creatorInfo.userId &&<ActionButtons creatorId={creatorInfo.userId} userAlreadyFollowed={creatorInfo.userAlreadyFollowed} />}
       </div>
       {creatorInfo.bio && <p className={cn('mt-6 text-base font-medium text-grey-500 md:mt-9 md:text-xl', bioClassName)}>{creatorInfo.bio}</p>}
     </>
