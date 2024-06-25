@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { getCreatorById } from '@/lib/nextApi';
+import { NewspaperIcon } from 'lucide-react';
 // import {
 //   Select,
 //   SelectContent,
@@ -11,6 +12,7 @@ import { JOURNEY_BITES_COOKIE } from '@/constants';
 import CreatorInfo from '@/components/creator/CreatorInfo';
 import LargeArticleCard from '@/components/article/LargeArticleCard';
 import { getCreatorArticles } from '@/lib/nextApi';
+import NoResults from '@/components/dashboard/NoResults';
 // import { OrderBy } from '@/types';
 
 export default async function CreatorInfoPage({ params }: { params: { id: string } }) {
@@ -21,7 +23,7 @@ export default async function CreatorInfoPage({ params }: { params: { id: string
     <>
       <section className='bg-primary-100 py-10 md:py-15'>
         <div className='w-full px-6 md:mx-auto md:max-w-[56%] md:p-0'>
-          <CreatorInfo creatorInfo={creator} />
+          <CreatorInfo creatorInfo={creator} articleCount={articles.length} />
         </div>
       </section>
       <section className='mt-12 w-full px-6 md:mx-auto md:mt-20 md:max-w-[56%]'>
@@ -36,14 +38,20 @@ export default async function CreatorInfoPage({ params }: { params: { id: string
             </SelectContent>
           </Select>
         </div> */}
-        <div className='flex flex-col gap-4'>
-          {articles.map((article) => (
-            <LargeArticleCard
-              key={article.id}
-              article={article}
-            />
-          ))}
-        </div>
+        {
+          articles.length ? (
+            <div className='flex flex-col gap-4'>
+              {articles.map((article) => (
+                <LargeArticleCard
+                  key={article.id}
+                  article={article}
+                />
+              ))}
+            </div>
+          ): (
+            <NoResults title='此創作者尚無文章' icon={NewspaperIcon} />
+          )
+        }
       </section>
     </>
   );
