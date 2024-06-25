@@ -19,14 +19,6 @@ import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 
-const categoryDefaultOptions: { id: string; name: string; }[]= [
-  { id: '台灣旅遊地圖', name: '台灣旅遊地圖' },
-  { id: '步道旅行', name: '步道旅行' },
-  { id: '健行日記', name: '健行日記' },
-  { id: '旅遊食記', name: '旅遊食記' },
-  { id: '台灣百岳', name: '台灣百岳' },
-];
-
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
   { id: '付費', name: '付費' }
@@ -53,13 +45,7 @@ export default function PublishArticle() {
   const router = useRouter();
   const { id } = useParams();
 
-  const categoryValidation = z.string().refine(value => {
-    if (categoryOptions.length === 0) {
-      return categoryDefaultOptions.some(option => option.id === value);
-    } else {
-      return categoryOptions.some(option => option.name === value);
-    }
-  }, {
+  const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
   });
 
@@ -140,16 +126,17 @@ export default function PublishArticle() {
       tags: []
     },
   });
-  const { control, handleSubmit, formState: { isValid }, trigger, watch } = form;
-  const selectedValue = watch('tags');
+  const { control, handleSubmit, formState: { isValid }, trigger } = form;
 
   function setValue() {
     setInitialLoad(false);
   }
 
   useEffect(() => {
-    trigger();
-  }, [trigger]);
+    if (categoryOptions.length > 0) {
+      trigger();
+    }
+  }, [trigger, categoryOptions]);
 
   return (
     <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>
@@ -187,7 +174,7 @@ export default function PublishArticle() {
               name='category'
               label='文章分類'
               placeholder='設定文章分類'
-              options={categoryOptions.length > 0 ? categoryOptions : categoryDefaultOptions}
+              options={categoryOptions}
             />
             <SelectField
               className='w-full'
@@ -207,7 +194,7 @@ export default function PublishArticle() {
                     tags={tags}
                     setTags={(newTags) => {
                       setTags(newTags);
-                      setValue('tags', newTags as [Tag, ...Tag[]]);
+                      setValue();
                       field.onChange(newTags);
                     }}
                     placeholder='為文章加上標籤'
