@@ -1,27 +1,18 @@
 'use client';
 
-import { useState, type KeyboardEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import SearchIcon from '../icons/SearchIcon';
+import useSearch from '@/hook/useSearch';
 
 export default function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [keywords, setKeywords] = useState('');
-  const router = useRouter();
+  const { handleSearch } = useSearch({ keywords });
 
   const toggleSearchBar = () => {
     setIsOpen(!isOpen);
   };
-
-  function handleSearch(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const searchParams = new URLSearchParams();
-      searchParams.set('q', keywords);
-      router.push(`/search/article?${searchParams.toString()}`);
-    }
-  }
 
   return (
     <div className='flex items-center'>

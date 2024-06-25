@@ -4,10 +4,11 @@ import { LogOutIcon } from 'lucide-react';
 import { useUserStore } from '@/providers/userProvider';
 import { DropdownMenuLinkItem } from '../custom/DropdownMenu';
 import { logout } from '@/lib/authApi';
+import { SheetClose } from '../ui/sheet';
 
 import DefaultUserImg from '@/images/default-user.webp';
 
-const MenuLinks: { title: string, href: string }[] = [
+const MENU_LINKS: { title: string, href: string }[] = [
   {
     title: '個人資料管理',
     href: '/manage/user',
@@ -54,19 +55,20 @@ export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: bool
         </div>
       </Link>
       {
-        MenuLinks.map((link) => (
+        MENU_LINKS.map((link) => (
           isDropdownMenu ? (
             <DropdownMenuLinkItem key={link.href} className='mb-1'>
               <Link href={link.href}>{link.title}</Link>
             </DropdownMenuLinkItem>
           ) : (
-            <Link
-              key={link.href}
-              href={link.href}
-              className='relative mb-1 flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1 leading-7 focus:bg-primary focus:text-white'
-            >
-              {link.title}
-            </Link>
+              <SheetClose asChild key={link.href}>
+                <Link
+                  href={link.href}
+                  className='relative mb-1 flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1 leading-7 focus:bg-primary focus:text-white'
+                >
+                  {link.title}
+                </Link>
+              </SheetClose>
           )
         ))
       }
@@ -78,10 +80,10 @@ export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: bool
           </button>
         </DropdownMenuLinkItem>
       ) : (
-        <button className='mt-3 flex w-full cursor-pointer items-center px-2 py-1 font-bold leading-7 text-primary' onClick={handleLogout}>
+        <SheetClose className='mt-3 flex w-full cursor-pointer items-center px-2 py-1 font-bold leading-7 text-primary' onClick={handleLogout}>
           <LogOutIcon className='mr-2 size-6' />
           <span>登出</span>
-        </button>
+        </SheetClose>
       )}
     </>
   );
