@@ -118,8 +118,6 @@ export default function PublishArticle() {
     if (initialLoad && defaultTags?.length > 0) {
       tags = defaultTags;
       setInitialLoad(false);
-    } else if (selectedValue?.length > 0) {
-      tags = values.tags.map(tag => tag.text);
     } else {
       tags = values.tags.map(tag => tag.text);;
     }
