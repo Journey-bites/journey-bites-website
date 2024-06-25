@@ -14,4 +14,5 @@ export const QUERY_KEY = {
   following: 'following',
   followers: 'followers',
   comments: 'comments',
+  article: 'article',
 };

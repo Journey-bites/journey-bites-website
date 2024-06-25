@@ -7,7 +7,7 @@ import CreatorInfo from '@/components/creator/CreatorInfo';
 import CommentSection from '@/components/article/CommentSection';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getArticleById } from '@/lib/nextApi';
+import { getArticleById, getCreatorById } from '@/lib/nextApi';
 
 import DefaultUserImg from '@/images/default-user.webp';
 import FollowBtn from '@/components/article/FollowBtn';
@@ -27,12 +27,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
   const article = await getArticleById(params.id);
   // const content = article.isNeedPay ? article.abstract : article.content;
   const cleanContentHtml = DOMPurify.sanitize(article.content);
-  const creatorInfo = {
-    userId: article.creatorId,
-    displayName: article.creator.profile.displayName,
-    avatarImageUrl: article.creator.profile.avatarImageUrl,
-    bio: article.creator.profile.bio
-  };
+  const creatorInfo = await getCreatorById(article.creator.id);
   return (
     <>
       <ArticleContainer className='mx-6'>

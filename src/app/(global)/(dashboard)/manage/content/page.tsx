@@ -8,10 +8,11 @@ import TitleWIthIcon from '@/components/dashboard/TitleWIthIcon';
 // import SearchInput from '@/components/custom/SearchInput';
 import { getUserArticles } from '@/lib/authApi';
 import LargeArticleCard from '@/components/article/LargeArticleCard';
+import { QUERY_KEY } from '@/constants';
 
 export default function ContentPage() {
   const { data: articles } = useQuery({
-    queryKey: ['articles'],
+    queryKey: [QUERY_KEY.article],
     queryFn: getUserArticles,
   });
 

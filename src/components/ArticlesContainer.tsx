@@ -12,7 +12,7 @@ import { PartyPopper, ThumbsUp } from 'lucide-react';
 import SocialLink from './custom/SocialLink';
 // import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
-import { ArticleType } from '@/types/article';
+import { Article } from '@/types/article';
 
 import DefaultUserImg from '@/images/default-user.webp';
 import DefaultThumbnailImg from '@/images/default-thumbnail.webp';
@@ -22,7 +22,7 @@ type ArticlesContainerProps = {
   type: 'hot' | 'recommend';
   color: 'primary' | 'secondary';
   showBtn: boolean,
-  articles: ArticleType[]
+  articles: Article[]
 }
 
 export default async function ArticlesContainer({
@@ -90,7 +90,7 @@ export default async function ArticlesContainer({
                   <Image src={DefaultUserImg} alt='user' />
                 </AvatarFallback>
               </Avatar>
-              <Link href={`/creator/${item.creatorId}`} className='px-2'>{item.creator.profile.displayName}</Link>
+              <Link href={`/creator/${item.creator.id}`} className='px-2'>{item.creator.profile.displayName}</Link>
             </CardFooter>
             <div className='flex items-center justify-between'>
               <CardDescription>{new Date(item.createdAt).toLocaleDateString()}</CardDescription>
