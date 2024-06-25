@@ -1,7 +1,7 @@
 import { ApiSuccessResponse } from '@/types/apiResponse';
 import { Category, Creator, Follow, SearchRequestQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
-import { ArticleType, Comment } from '@/types/article';
+import { Article, Comment } from '@/types/article';
 
 const isDevMode = process.env.NODE_ENV === 'development';
 
@@ -45,7 +45,7 @@ export async function getArticles({
     }
   }
   const url = `${endpoint}?${params.toString()}`;
-  const res = await nextFetch<ArticleType[]>(url);
+  const res = await nextFetch<Article[]>(url);
   return res;
 }
 
@@ -83,7 +83,7 @@ export async function getCreatorFollowers(creatorId: string) {
 }
 
 export async function getArticleById(id: string) {
-  const res = await nextFetch<ArticleType>(`/article/${id}`);
+  const res = await nextFetch<Article>(`/article/${id}`);
   return res;
 }
 
@@ -93,6 +93,6 @@ export async function getCommentsByArticleId(articleId: string) {
 }
 
 export async function getCreatorArticles({ creatorId }: { creatorId: string }) {
-  const res = await nextFetch<ArticleType[]>(`/creator/${creatorId}/articles`);
+  const res = await nextFetch<Article[]>(`/creator/${creatorId}/articles`);
   return res;
 }

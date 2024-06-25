@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import SocialLink from '../custom/SocialLink';
 import { DropdownMenuComponent as DropdownMenu, DropdownMenuLinkItem } from '../custom/DropdownMenu';
 import UserAvatar from '../common/UserAvatar';
-import { ArticleType } from '@/types/article';
+import { Article } from '@/types/article';
 import { toast } from '../ui/use-toast';
 import { deleteArticle } from '@/lib/authApi';
 import { useUserStore } from '@/providers/userProvider';
@@ -17,7 +17,7 @@ import { useUserStore } from '@/providers/userProvider';
 import DefaultThumbnailImg from '@/images/default-thumbnail.webp';
 
 type LargeArticleCardProps = {
-  article: ArticleType
+  article: Article
   showCreator?: boolean;
   showReadTime?: boolean;
   showCreatedAt?: boolean;
