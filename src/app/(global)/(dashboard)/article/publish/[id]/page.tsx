@@ -55,7 +55,7 @@ export default function PublishArticle() {
 
   const categoryValidation = z.string().refine(value => {
     if (categoryOptions.length === 0) {
-      return categoryDefaultOptions.some(option => option.id === value);
+      return categoryDefaultOptions.some(option => option.name === value);
     } else {
       return categoryOptions.some(option => option.name === value);
     }
