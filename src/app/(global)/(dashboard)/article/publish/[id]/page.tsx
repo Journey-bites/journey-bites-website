@@ -209,7 +209,7 @@ export default function PublishArticle() {
                     tags={tags}
                     setTags={(newTags) => {
                       setTags(newTags);
-                      setValue('tags', newTags as [Tag, ...Tag[]]);
+                      setValue();
                       field.onChange(newTags);
                     }}
                     placeholder='為文章加上標籤'
