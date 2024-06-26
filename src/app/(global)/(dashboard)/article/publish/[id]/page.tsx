@@ -96,8 +96,6 @@ export default function PublishArticle() {
   }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values.tags);
-    console.log(editorProps);
     if (!editorProps) return;
     let tags: string[] = [];
 

@@ -16,8 +16,6 @@ export default function ContentPage() {
     queryFn: getUserArticles,
   });
 
-  console.log(articles);
-
   return (
     <>
       <TitleWIthIcon title='內容作品管理' icon={NewspaperIcon} />
