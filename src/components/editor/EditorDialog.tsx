@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { z } from 'zod';
 
 import {
   Dialog,
@@ -14,13 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useDialog } from '@/stores/useDialogStore';
+import { imgUrlValidate } from '@/constants/imgUrlValidate';
 
 interface DialogComponentProps {
   handleDialog: (url: string) => void;
 }
-
-const urlRegex = /^https:\/\/(images\.unsplash\.com|i\.imgur\.com)\/.+$/;
-const schema = z.string().regex(urlRegex);
 
 export function DialogComponent({ handleDialog }: DialogComponentProps ) {
   const { isOpen, onClose, onOpen, data, setData } = useDialog();
@@ -30,23 +27,17 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
     onOpen();
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const url = e.target.value;
+    const url = e.target.value;;
+    const validationErrors = imgUrlValidate(url);
 
-    try {
-      schema.parse(url);
+    if (validationErrors) {
+      console.error('Validation errors:', validationErrors);
+    } else {
       setIsValid(true);
       setData({ url });
-    } catch (e) {
-      if (e instanceof z.ZodError) {
-          const errors = e.errors.map(error => error.message);
-          setData({ url: '' });
-          setIsValid(false);
-          return errors;
-      } else {
-        throw new Error('Unexpected error occurred');
-      }
     }
   };
+
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     if(data && data.url) handleDialog(data.url);

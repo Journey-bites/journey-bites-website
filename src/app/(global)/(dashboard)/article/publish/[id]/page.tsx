@@ -18,6 +18,8 @@ import { editArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
+import Link from 'next/link';
+import { urlRegex } from '@/constants/imgUrlValidate';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -56,7 +58,7 @@ export default function PublishArticle() {
   const formSchema = z.object({
     title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
+    thumbnailUrl: z.string().optional().refine(val => !val || urlRegex.test(val), { message: '請至 imgur 或 unsplash 上傳圖片，造成不便敬請見諒' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
     tags: z.array(z.object({ id: z.string(), text: z.string() })),
@@ -109,8 +111,20 @@ export default function PublishArticle() {
     }
 
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-    const editArticleRequest = { ...editorProps, ...values, tags, isNeedPay };
-    console.log({ editArticleRequest });
+
+    let editArticleRequest;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { thumbnailUrl, ...restEditorProps } = { ...editorProps };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { thumbnailUrl: _, ...restValues } = { ...values };
+
+    if (values.thumbnailUrl && values.thumbnailUrl.trim()) {
+      editArticleRequest = { ...restEditorProps, ...values, tags, isNeedPay };
+    } else {
+      editArticleRequest = { ...restEditorProps, ...restValues, tags, isNeedPay };
+    }
+    console.log(editArticleRequest);
     editArticleMutate(editArticleRequest);
   }
 
@@ -211,7 +225,7 @@ export default function PublishArticle() {
               )}
             />
             <div className='text-center'>
-              <Button className='mr-4 bg-grey text-black hover:bg-grey-400 hover:text-white'>取消</Button>
+            <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild><Link href='/manage/content'>取消</Link></Button>
               <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateEditArticle}>發布文章</Button>
             </div>
           </form>
