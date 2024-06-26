@@ -14,7 +14,7 @@ export default async function Home() {
   const creators = await getCreators({ page: 1, pageSize: 5, type: 'random' });
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
-      <section className='relative md:max-w-[94%] md:self-end 2xl:max-w-[1800px]'>
+      <section className='relative md:max-w-[94%] md:self-end 2xl:mx-auto 2xl:max-w-[1800px]'>
         <div className='absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-white md:left-[11.7%] md:top-[38%] md:translate-y-0 md:text-left'>
           <h1 className='mb-3 md:mb-5'>探索無限創意的樂園</h1>
           <p className='mb-7 text-xl font-bold md:mb-9 md:text-3xl'>和我們一起發現、分享和創造</p>

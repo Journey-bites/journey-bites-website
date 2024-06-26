@@ -6,6 +6,7 @@ import { isAxiosError } from 'axios';
 import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
+import { LOCAL_STORAGE_KEY } from '@/constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -29,3 +30,7 @@ export function handleApiError(error: unknown, config: ErrorHandlingConfig, oper
     toast({ title: `${operation || '操作'}失敗`, description: '請聯繫客服，或稍後再試', variant: 'error' });
   }
 }
+
+export const storeRedirectPath = (pathname: string) => {
+  localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
+};
