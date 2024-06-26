@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   Form,
 } from '@/components/ui/form';
@@ -46,7 +46,6 @@ export default function PublishArticle() {
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
   const router = useRouter();
-  const { id } = useParams();
 
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
