@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { isAxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '../ui/button';
-import { cn } from '@/lib/utils';
+import { cn, handleApiError, storeRedirectPath } from '@/lib/utils';
 import ProtectedComponent from './ProtectedComponent';
 import { likeArticle, unlikeArticle } from '@/lib/authApi';
+import StatusCode from '@/types/StatusCode';
+import { toast } from '../ui/use-toast';
 
 type LikeButtonProps = {
   articleId: string;
@@ -18,6 +20,8 @@ type LikeButtonProps = {
 export default function LikeButton({ articleId, count, withBackground }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(count);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Not the best way to do it, but currently don't know is Already liked or not, optimize in the future
   const { mutate: likeArticleMutate } = useMutation({
@@ -27,14 +31,22 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
       setLikesCount((prev) => prev + 1);
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        if (error.response?.status === 400) {
+      handleApiError(error, {
+        [StatusCode.BAD_REQUEST]: () => {
           // Already liked, so unlike it
           unlikeArticleMutate({ articleId });
-        } else {
-          setIsLiked(false);
+        },
+        [StatusCode.RESOURCE_NOT_FOUND]: () => {
+          toast({ title: '文章已被刪除', description: '有緣再相見QQ', variant: 'error' });
+        },
+        [StatusCode.PERMISSION_DENIED]: () => {
+          toast({ title: '請重新登入', description: '三秒後將跳轉至登入頁面', variant: 'error' });
+          storeRedirectPath(pathname);
+          setTimeout(() => {
+            router.push('/login');
+          }, 3000);
         }
-      }
+      });
       setIsLiked(false);
     }
   });
@@ -46,14 +58,22 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
       setLikesCount((prev) => prev > 0 ? prev - 1 : 0);
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        if (error.response?.status === 400) {
-          // not liked already, so like it
+      handleApiError(error, {
+        [StatusCode.BAD_REQUEST]: () => {
+          // Not liked yet, so like it
           likeArticleMutate({ articleId });
-        } else {
-          setIsLiked(false);
+        },
+        [StatusCode.RESOURCE_NOT_FOUND]: () => {
+          toast({ title: '文章已被刪除', description: '有緣再相見QQ', variant: 'error' });
+        },
+        [StatusCode.PERMISSION_DENIED]: () => {
+          toast({ title: '請重新登入', description: '三秒後將跳轉至登入頁面', variant: 'error' });
+          storeRedirectPath(pathname);
+          setTimeout(() => {
+            router.push('/login');
+          }, 3000);
         }
-      }
+      });
       setIsLiked(false);
     },
   });

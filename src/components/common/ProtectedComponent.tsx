@@ -3,7 +3,7 @@
 import { ReactElement, cloneElement, isValidElement, type PropsWithChildren } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useUserStore } from '@/providers/userProvider';
-import { LOCAL_STORAGE_KEY } from '@/constants';
+import { storeRedirectPath } from '@/lib/utils';
 
 type ProtectedComponentProps = {
   onClick?: () => void;
@@ -18,7 +18,7 @@ export default function ProtectedComponent({ children, onClick, href }: Protecte
   const handleClick = (e: MouseEvent) => {
     e.preventDefault();
     if (!isLogin) {
-      localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
+      storeRedirectPath(pathname);
       router.push('/login');
     } else if (typeof onClick === 'function') {
       onClick();
