@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   Form,
 } from '@/components/ui/form';
@@ -18,6 +18,9 @@ import { editArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
+import { handleApiError } from '@/lib/utils';
+import StatusCode from '@/types/StatusCode';
+import { CreateArticleRequest } from '@/types/article';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -43,7 +46,6 @@ export default function PublishArticle() {
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
   const router = useRouter();
-  const { id } = useParams();
 
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
@@ -56,22 +58,14 @@ export default function PublishArticle() {
   const formSchema = z.object({
     title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
+    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
-    tags: z.array(z.object({ id: z.string(), text: z.string() })),
+    tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
 
   const { mutate: editArticleMutate, isPending: isUpdateEditArticle } = useMutation({
-    mutationFn: editArticle,
-    onSuccess: () => {
-      toast({ title: '成功送出', variant: 'success' });
-      router.push(`/article/${id}`);
-    },
-    onError: (err) => {
-      console.log(err);
-      toast({ title: '送出失敗', variant: 'error' });
-    },
+    mutationFn: editArticle
   });
 
   useEffect(() => {
@@ -96,22 +90,48 @@ export default function PublishArticle() {
   }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values.tags);
-    console.log(editorProps);
     if (!editorProps) return;
-    let tags: string[] = [];
+    let tags: string[] | undefined = [];
 
     if (initialLoad && defaultTags?.length > 0) {
       tags = defaultTags;
       setInitialLoad(false);
     } else {
-      tags = values.tags.map(tag => tag.text);;
+      tags = values.tags?.map(tag => tag.text);;
     }
 
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-    const editArticleRequest = { ...editorProps, ...values, tags, isNeedPay };
-    console.log({ editArticleRequest });
-    editArticleMutate(editArticleRequest);
+    const { title, abstract, category } = values;
+    const { content, wordCount, id } = editorProps;
+    const editArticleBody: CreateArticleRequest = {
+      id,
+      content,
+      wordCount,
+      isNeedPay,
+      title,
+      abstract,
+      category,
+      tags
+    };
+    if (values.thumbnailUrl) {
+      editArticleBody.thumbnailUrl = values.thumbnailUrl;
+    }
+    editArticleMutate(editArticleBody, {
+      onSuccess: () => {
+        toast({ title: '文章發布成功', description: '即將為您跳轉至文章頁', variant: 'success' });
+        router.push(`/article/${id}`);
+      },
+      onError: (error) => {
+        handleApiError(error, {
+          [StatusCode.ILLEGAL_PAYLOAD]: () => {
+            toast({ title: '請檢查輸入資料', variant: 'error' });
+          },
+          [StatusCode.PERMISSION_DENIED]: () => {
+            toast({ title: '請重新登入', variant: 'error' });
+          },
+        }, '編輯文章');
+      },
+    });
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
