@@ -2,7 +2,7 @@
 
 import EditorWrapper from '@/components/editor/EditorWrapper';
 import { useMutation } from '@tanstack/react-query';
-import { getArticleById } from '@/lib/authApi';
+import { getArticleById } from '@/lib/nextApi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
@@ -10,6 +10,7 @@ import { useUserStore } from '@/providers/userProvider';
 import { verifyAuthor } from '@/lib/utils';
 import { Lock } from 'lucide-react';
 import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
+import { type Article } from '@/types/article';
 
 type Props = {
   params: { id: string }
@@ -17,44 +18,34 @@ type Props = {
 }
 
 const EditArticle: React.FC<Props> = ({ params }) => {
-  const [editContent, setEditContent] = useState();
+  const [editContent, setEditContent] = useState<Article | undefined>(undefined);
   const [isAuthor, setIsAuthor] = useState(false);
   const [isVerifying, setIsVerifying] = useState(true);
   const router = useRouter();
   const { id } = params;
   const { auth } = useUserStore((state) => state);
 
-  console.log(params.id);
-
   const { mutate: getArticleByIdMutate, isPending: isGetArticleById } = useMutation({
     mutationFn: getArticleById,
-    onSuccess: (data) => {
+    onSuccess: (data: Article) => {
+      const { creator } = data;
+
       setEditContent(data);
       if(auth && auth.id) {
-        verifyAuthor(data?.data?.creator?.id, auth.id, router, () => setIsAuthor(true));
+        verifyAuthor(creator?.id, auth.id, router, () => setIsAuthor(true));
         setIsVerifying(false);
-        // verifyAuthor(data?.data?.creator?.id, auth.id);
       } else {
         console.log('auth is null or undefined');
         toast({ title: '用戶未登入', variant: 'error' });
-        // router.replace('/');
+        router.replace('/login');
       }
     },
     onError: (err) => {
       console.log(err);
       toast({ title: '找不到文章', variant: 'error' });
-      // router.replace('/');
+      router.replace('/');
     },
   });
-
-  // const verifyAuthor = (creatorId: string, currentUserId: string) => {
-  //   if (creatorId === currentUserId) {
-  //     setIsAuthor(true);
-  //   } else {
-  //     toast({ title: '未取得編輯權限', variant: 'error' });
-  //     // router.replace('/');
-  //   }
-  // };
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -77,7 +68,7 @@ const EditArticle: React.FC<Props> = ({ params }) => {
       編輯文章
     </div>
     {isGetArticleById || isVerifying ? (
-       <LoadingEditorSkeleton />
+      <LoadingEditorSkeleton />
       ) : isAuthor ? (
         <>
         <EditorWrapper isEditing={true} editContent={editContent} />

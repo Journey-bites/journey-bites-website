@@ -9,9 +9,7 @@ import LoadingEditorSkeleton from '../LoadingEditorSkeleton';
 
 interface EditorWrapperProps {
   isEditing: boolean;
-  editContent?: {
-    data: Article;
-  };
+  editContent?: Article;
 }
 
 const initialOptions: Partial<Article> = {};
@@ -67,9 +65,9 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   }, [isSubmitting]);
 
   useEffect(() => {
-    if(editContent && editContent.data) {
-      setOptions(editContent?.data);
-      setContent(editContent?.data?.content);
+    if(editContent) {
+      setOptions(editContent);
+      setContent(editContent.content);
       setLoading(false);
     }
     setLoading(false);
