@@ -22,7 +22,7 @@ export default function CreatorInfo({ creatorInfo, articleCount, bioClassName }:
           </div>
           <div>
           <h2 className='mb-2 text-3xl font-black'>{creatorInfo.displayName}</h2>
-          {articleCount && <span className='pr-4 text-xl text-grey-400'>{articleCount} 文章</span>}
+          <span className='pr-4 text-xl text-grey-400'>{articleCount} 文章</span>
           <span className='text-xl text-grey-400'>{creatorInfo.followersCount} 追蹤</span>
           <div className='my-2 flex gap-2'>
             {creatorInfo.socialLinks?.instagram && (
