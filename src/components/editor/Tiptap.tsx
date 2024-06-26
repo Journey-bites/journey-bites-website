@@ -61,7 +61,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
       TiptapImage.configure({
         // inline: true,
         HTMLAttributes: {
-          class: 'object-contain rounded-lg border border-muted inline-block',
+          class: 'object-contain rounded-lg border border-muted inline-block max-w-full',
         }
       }),
       TextAlign.configure({

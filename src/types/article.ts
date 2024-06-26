@@ -1,6 +1,6 @@
 import { Profile } from './index';
 
-// need to be replaced
+// need to be removed
 export type Articles = {
   userId: number;
   id: number;
@@ -8,51 +8,33 @@ export type Articles = {
   body: string;
 };
 
-export type Article = {
-  id: string,
-  creator_id: string,
-  creator: string,
-  title: string,
-  abstract: string,
-  content: string,
-  thumbnailUrl: string,
-  isNeedPay: boolean,
-  wordCount: number,
-  readTime: number,
-  status: ArticleStatus,
-  tags: string[],
-  category: string,
-  createdAt: Date,
-  updatedAt: Date,
-}
-
-export type CreateArticleRequest = Partial<Omit<Article, 'creator_id'| 'status' | 'createdAt' | 'updatedAt'>>;
-
 type ArticleStatus = {
   views: number;
   likes: number;
   subscriptions: number;
 };
 
-export type ArticleType = {
+export type Article = {
   id: string;
-  creatorId: string;
   creator: {
+    id: string;
     profile: Profile
   };
   title: string;
   abstract: string;
   content: string;
-  thumbnailUrl?: string;
   isNeedPay: boolean;
   wordCount: number;
   readTime: number;
   status: ArticleStatus;
-  tags?: string[];
   category: string;
   createdAt: string;
   updatedAt: string;
+  tags?: string[];
+  thumbnailUrl?: string;
 };
+
+export type CreateArticleRequest = Partial<Omit<Article, 'status' | 'createdAt' | 'updatedAt'>>;
 
 export type Comment = {
   id: string;

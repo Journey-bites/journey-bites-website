@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { MenuIcon, SearchIcon, User, User2Icon } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -8,11 +9,20 @@ import { DropdownMenuComponent as DropdownMenu } from '../custom/DropdownMenu';
 import UserMenuList from './UserMenuList';
 import { Input } from '../ui/input';
 import { Sheet, SheetTrigger, SheetContent, SheetFooter, SheetClose } from '../ui/sheet';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils';
 import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
+import useSearch from '@/hook/useSearch';
 
 export default function HeaderButtons() {
   const { isLogin } = useUserStore((state) => state);
+  const [sideMenuOpen, setSideMenuOpen] = useState(false);
+  const [keywords, setKeywords] = useState('');
+  const { handleSearch } = useSearch({ keywords });
+
+  function handleSideMenuClose() {
+    setKeywords('');
+    setSideMenuOpen(false);
+  }
 
   return (
     <>
@@ -56,10 +66,10 @@ export default function HeaderButtons() {
           </SheetContent>
           </Sheet>
         )}
-        <Sheet>
-          <SheetTrigger className='size-11 cursor-pointer md:hidden'>
+        <Sheet open={sideMenuOpen} onOpenChange={() => setSideMenuOpen(!sideMenuOpen)}>
+          <button onClick={() => setSideMenuOpen(true)} className='size-11 cursor-pointer md:hidden'>
             <MenuIcon />
-          </SheetTrigger>
+          </button>
           <SheetContent className='flex flex-col'>
             <div className='relative py-2'>
               <div
@@ -68,12 +78,18 @@ export default function HeaderButtons() {
                 <SearchIcon className='*:stroke-primary' />
               </div>
               <Input
+                value={keywords}
+                onChange={(e) => {
+                  setKeywords(e.target.value);
+                }}
+                onKeyDown={(e) => handleSearch(e, handleSideMenuClose)}
                 type='text'
                 className='rounded-md border-gray-200 py-2 pl-10 pr-4 placeholder:text-gray-300 focus:outline-none'
                 placeholder='Search'
               />
             </div>
-            <div className='p-2'>
+            {/* TODO: add it back when search page and API (getArticlesByCategory) is ready */}
+            {/* <div className='p-2'>
               <h4 className='mb-1 text-base font-bold text-primary'>探索</h4>
               <ul className='font-bold'>
                 <StyledListItem title='熱門景點' href='#'/>
@@ -83,7 +99,7 @@ export default function HeaderButtons() {
               <ul>
                 <StyledListItem title='台灣旅遊地圖' href='#'/>
               </ul>
-            </div>
+            </div> */}
             <SheetFooter className='mt-auto'>
               {isLogin ? (
                 <SheetClose asChild>
@@ -93,12 +109,16 @@ export default function HeaderButtons() {
                 </SheetClose>
               ): (
                   <div className='flex gap-6'>
-                    <Button variant='outline' className='w-full bg-transparent' asChild>
-                      <LoginLinkWithStorePathname />
-                    </Button>
-                    <Button className='w-full'>
-                      <Link href='/register'>註冊</Link>
-                    </Button>
+                    <SheetClose asChild>
+                      <Button variant='outline' className='w-full bg-transparent' asChild>
+                        <LoginLinkWithStorePathname />
+                      </Button>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Button asChild className='w-full'>
+                        <Link href='/register'>註冊</Link>
+                      </Button>
+                    </SheetClose>
                 </div>
               )}
             </SheetFooter>
@@ -109,10 +129,10 @@ export default function HeaderButtons() {
   );
 }
 
-function StyledListItem({ title, href, className }: { title: string, href: string, className?: string }) {
-  return (
-    <li className={cn('leading-7 p-2 rounded-lg active:bg-primary active:text-white', className)}>
-      <Link href={href}>{title}</Link>
-    </li>
-  );
-}
+// function StyledListItem({ title, href, className }: { title: string, href: string, className?: string }) {
+//   return (
+//     <li className={cn('leading-7 p-2 rounded-lg active:bg-primary active:text-white', className)}>
+//       <Link href={href}>{title}</Link>
+//     </li>
+//   );
+// }
