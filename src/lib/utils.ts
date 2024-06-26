@@ -6,7 +6,7 @@ import { isAxiosError } from 'axios';
 import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
-import { type NextRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,7 +34,7 @@ export function handleApiError(error: unknown, config: ErrorHandlingConfig, oper
 export function verifyAuthor (
   creatorId: string,
   currentUserId: string,
-  router: NextRouter,
+  router: ReturnType<typeof useRouter>,
   onSuccess: () => void
 ) {
   if (creatorId === currentUserId) {

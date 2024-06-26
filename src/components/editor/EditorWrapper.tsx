@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
 import { useEditor } from '@/stores/useEditorStore';
 import { type Article } from '@/types/article';
+import LoadingEditorSkeleton from '../LoadingEditorSkeleton';
 
 interface EditorWrapperProps {
   isEditing: boolean;
@@ -75,26 +76,28 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   }, [editContent]);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='mx-auto mb-10 grid size-full max-w-screen-lg place-items-center px-4 pt-10'
-    >
-      {isLoading ? (
-        <p>Loading...</p> // 載入狀態顯示 Loading...
-        ) : (
-          isEditing ? (
-            content && <Tiptap
-            content={content}
-            onChange={(newContent) => handleContentChange(newContent)}
-          />
-        ) : (
+    <>
+      {isLoading && (
+        <LoadingEditorSkeleton />
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className='mx-auto mb-10 grid size-full max-w-screen-lg place-items-center px-4 pt-10'
+      >
+        {isEditing && content && (
           <Tiptap
             content={content}
             onChange={(newContent) => handleContentChange(newContent)}
           />
-        )
-      )}
-    </form>
+        )}
+        {!isEditing && (
+          <Tiptap
+            content={content}
+            onChange={(newContent) => handleContentChange(newContent)}
+          />
+        )}
+      </form>
+    </>
   );
 };
 

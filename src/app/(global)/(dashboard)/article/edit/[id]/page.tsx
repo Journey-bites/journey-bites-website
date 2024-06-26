@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useUserStore } from '@/providers/userProvider';
 import { verifyAuthor } from '@/lib/utils';
-import { Lock, Loader2 } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Lock } from 'lucide-react';
+import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
 
 type Props = {
   params: { id: string }
@@ -22,7 +22,7 @@ const EditArticle: React.FC<Props> = ({ params }) => {
   const [isVerifying, setIsVerifying] = useState(true);
   const router = useRouter();
   const { id } = params;
-  const { auth } = useUserStore();
+  const { auth } = useUserStore((state) => state);
 
   console.log(params.id);
 
@@ -77,16 +77,7 @@ const EditArticle: React.FC<Props> = ({ params }) => {
       編輯文章
     </div>
     {isGetArticleById || isVerifying ? (
-        <div className='mt-10 text-center'>
-          {/* <main className='mx-auto size-full min-h-[500px] w-full max-w-screen-lg animate-pulse pb-10'>
-            Loadding...
-            <div className='mx-auto mt-10 min-h-[500px] rounded bg-gray-200 text-center'></div>
-          </main> */}
-          <div className='mx-auto size-full min-h-[500px] w-full max-w-screen-lg pb-10 text-center'>
-            <Loader2 className='mx-auto size-6 animate-spin' />
-            <Skeleton className='mx-auto mt-10 h-4 min-h-[500px] rounded' />
-          </div>
-        </div>
+       <LoadingEditorSkeleton />
       ) : isAuthor ? (
         <>
         <EditorWrapper isEditing={true} editContent={editContent} />
