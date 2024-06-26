@@ -20,6 +20,7 @@ import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 import { handleApiError } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
+import { CreateArticleRequest } from '@/types/article';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -102,8 +103,11 @@ export default function PublishArticle() {
 
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
     const { title, abstract, category } = values;
-    const editArticleBody = {
-      ...editorProps,
+    const { content, wordCount, id } = editorProps;
+    const editArticleBody: CreateArticleRequest = {
+      id,
+      content,
+      wordCount,
       isNeedPay,
       title,
       abstract,
@@ -115,6 +119,7 @@ export default function PublishArticle() {
     }
     editArticleMutate(editArticleBody, {
       onSuccess: () => {
+        toast({ title: '文章發布成功', description: '即將為您跳轉至文章頁', variant: 'success' });
         router.push(`/article/${id}`);
       },
       onError: (error) => {

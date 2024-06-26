@@ -93,6 +93,7 @@ export default function PublishArticle() {
     }
     createArticleMutate(createArticleBody, {
       onSuccess: () => {
+        toast({ title: '文章發布成功', description: '即將為您跳轉至文章管理頁', variant: 'success' });
         router.push('/manage/content');
       },
       onError: (error) => {
