@@ -18,6 +18,8 @@ import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
+import { handleApiError } from '@/lib/utils';
+import StatusCode from '@/types/StatusCode';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -42,13 +44,13 @@ export default function PublishArticle() {
   const formSchema = z.object({
     title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: 'URL must start with https' }),
+    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
     // category: z.string().refine(value => categoryOptions.some(option => option.id === value), {
     //   message: '選項為必填',
     // }),
-    tags: z.array(z.object({ id: z.string(), text: z.string() })),
+    tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
@@ -74,19 +76,34 @@ export default function PublishArticle() {
   }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values.tags);
-    console.log(editorProps);
     if (!editorProps) return;
     const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-    const createArticleRequest = { ...editorProps, ...values, tags, isNeedPay };
-    createArticleMutate(createArticleRequest, {
+    const { title, abstract, category } = values;
+    const createArticleBody = {
+      ...editorProps,
+      isNeedPay,
+      title,
+      abstract,
+      category,
+      tags
+    };
+    if (values.thumbnailUrl) {
+      createArticleBody.thumbnailUrl = values.thumbnailUrl;
+    }
+    createArticleMutate(createArticleBody, {
       onSuccess: () => {
-        toast({ title: '成功送出', variant: 'success' });
         router.push('/manage/content');
       },
-      onError: () => {
-        toast({ title: '送出失敗', variant: 'error' });
+      onError: (error) => {
+        handleApiError(error, {
+          [StatusCode.ILLEGAL_PAYLOAD]: () => {
+            toast({ title: '請檢查輸入資料', variant: 'error' });
+          },
+          [StatusCode.PERMISSION_DENIED]: () => {
+            toast({ title: '請重新登入', variant: 'error' });
+          },
+        }, '發布文章');
       },
     });
   }
@@ -97,10 +114,8 @@ export default function PublishArticle() {
     defaultValues: {
       title: '',
       abstract: '',
-      thumbnailUrl: '',
       category: '',
       isNeedPay: '免費',
-      tags: []
     },
   });
   const { control, handleSubmit, formState: { isValid } } = form;
