@@ -3,8 +3,10 @@ import { z } from 'zod';
 export const urlRegex = /^https:\/\/(images\.unsplash\.com|i\.imgur\.com|unsplash\.com)\/.+/;
 
 export function imgUrlValidate(url: string): string[] | null {
-  // const urlRegex = /^https:\/\/(images\.unsplash\.com|i\.imgur\.com|unsplash\.com)\/.+/;
-  const schema = z.string().regex(urlRegex);
+  const schema = z.string().url({ message: '請填入正確的網址格式, ex: https://www.journeybites.com' }).refine(url => url.startsWith('https://'), {
+    message: 'URL must start with https://'
+  });
+  // const schema = z.string().regex(urlRegex);
 
   try {
     schema.parse(url);
