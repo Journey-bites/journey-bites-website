@@ -19,7 +19,7 @@ import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 import Link from 'next/link';
-import { urlRegex } from '@/constants/imgUrlValidate';
+// import { urlRegex } from '@/constants/imgUrlValidate';
 import StatusCode from '@/types/StatusCode';
 import { handleApiError } from '@/lib/utils';
 
