@@ -34,10 +34,17 @@ export type RequestPageQuery = {
 }
 
 export type SearchRequestQuery = {
-  search?: string;
   type?: 'hot' | 'random';
-  q?: string;
 } & RequestPageQuery;
+
+export type GetArticlesQuery = {
+  q?: string;
+  category: string;
+} & SearchRequestQuery;
+
+export type GetCreatorQuery = {
+  search?: string;
+} & SearchRequestQuery;
 
 export interface Creator extends Profile {
   userId: string;
