@@ -3,17 +3,10 @@ import { Category, Creator, Follow, SearchRequestQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
 import { Article, Comment } from '@/types/article';
 
-const isDevMode = process.env.NODE_ENV === 'development';
-
-async function nextFetch<T>(url: string, option?: RequestInit, disabledCache?: boolean): Promise<T> {
-  const fetchOption = { ...option };
-  if (isDevMode || disabledCache) {
-    fetchOption.cache = 'no-store';
-  } else {
-    fetchOption.next = { revalidate: 60 };
-  }
+async function nextFetch<T>(url: string, option?: RequestInit): Promise<T> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
-    ...fetchOption
+    cache: 'no-store',
+    ...option
   });
   const data: ApiSuccessResponse<T> = await res.json();
 
@@ -73,12 +66,12 @@ export async function getCreatorById(id: string, token?: string) {
       Authorization: `Bearer ${token}`,
     };
   }
-  const res = await nextFetch<Creator>(`/creator/${id}`, options, true);
+  const res = await nextFetch<Creator>(`/creator/${id}`, options);
   return res;
 }
 
 export async function getCreatorFollowers(creatorId: string) {
-  const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`, {}, true);
+  const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`);
   return res;
 }
 
@@ -88,7 +81,7 @@ export async function getArticleById(id: string) {
 }
 
 export async function getCommentsByArticleId(articleId: string) {
-  const res = await nextFetch<Comment[]>(`/article/${articleId}/comments`, {}, true);
+  const res = await nextFetch<Comment[]>(`/article/${articleId}/comments`);
   return res;
 }
 

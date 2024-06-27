@@ -20,6 +20,8 @@ import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 import Link from 'next/link';
 import { urlRegex } from '@/constants/imgUrlValidate';
+import StatusCode from '@/types/StatusCode';
+import { handleApiError } from '@/lib/utils';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -44,13 +46,14 @@ export default function PublishArticle() {
   const formSchema = z.object({
     title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    thumbnailUrl: z.string().optional().refine(val => !val || urlRegex.test(val), { message: '請至 imgur 或 unsplash 上傳圖片，造成不便敬請見諒' }),
+    // thumbnailUrl: z.string().optional().refine(val => !val || urlRegex.test(val), { message: '請至 imgur 或 unsplash 上傳圖片，造成不便敬請見諒' }),
+    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
     // category: z.string().refine(value => categoryOptions.some(option => option.id === value), {
     //   message: '選項為必填',
     // }),
-    tags: z.array(z.object({ id: z.string(), text: z.string() })),
+    tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
@@ -76,33 +79,49 @@ export default function PublishArticle() {
   }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values.tags);
-    console.log(editorProps);
     if (!editorProps) return;
     const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
 
-    let createArticleRequest;
+    // let createArticleRequest;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { thumbnailUrl, ...restEditorProps } = { ...editorProps };
+    // const { thumbnailUrl, ...restEditorProps } = { ...editorProps };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { thumbnailUrl: _, ...restValues } = { ...values };
+    // const { thumbnailUrl: _, ...restValues } = { ...values };
 
-    if (values.thumbnailUrl && values.thumbnailUrl.trim()) {
-      createArticleRequest = { ...restEditorProps, ...values, tags, isNeedPay };
-    } else {
-      createArticleRequest = { ...restEditorProps, ...restValues, tags, isNeedPay };
+    // if (values.thumbnailUrl && values.thumbnailUrl.trim()) {
+    //   createArticleRequest = { ...restEditorProps, ...values, tags, isNeedPay };
+    // } else {
+    //   createArticleRequest = { ...restEditorProps, ...restValues, tags, isNeedPay };
+    // };
+
+    const { title, abstract, category } = values;
+    const createArticleBody = {
+      ...editorProps,
+      isNeedPay,
+      title,
+      abstract,
+      category,
+      tags
+    };
+    if (values.thumbnailUrl) {
+      createArticleBody.thumbnailUrl = values.thumbnailUrl;
     }
-    console.log(createArticleRequest);
-
-    createArticleMutate(createArticleRequest, {
+    createArticleMutate(createArticleBody, {
       onSuccess: () => {
-        toast({ title: '成功送出', variant: 'success' });
+        toast({ title: '文章發布成功', description: '即將為您跳轉至文章管理頁', variant: 'success' });
         router.push('/manage/content');
       },
-      onError: () => {
-        toast({ title: '送出失敗', variant: 'error' });
+      onError: (error) => {
+        handleApiError(error, {
+          [StatusCode.ILLEGAL_PAYLOAD]: () => {
+            toast({ title: '請檢查輸入資料', variant: 'error' });
+          },
+          [StatusCode.PERMISSION_DENIED]: () => {
+            toast({ title: '請重新登入', variant: 'error' });
+          },
+        }, '發布文章');
       },
     });
   }
@@ -113,10 +132,8 @@ export default function PublishArticle() {
     defaultValues: {
       title: '',
       abstract: '',
-      thumbnailUrl: '',
       category: '',
       isNeedPay: '免費',
-      tags: []
     },
   });
   const { control, handleSubmit, formState: { isValid } } = form;

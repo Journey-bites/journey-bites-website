@@ -7,6 +7,7 @@ import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
 import { useRouter } from 'next/navigation';
+import { LOCAL_STORAGE_KEY } from '@/constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -43,4 +44,7 @@ export function verifyAuthor (
     toast({ title: '您沒有編輯此文章的權限', variant: 'error' });
     // router.replace('/');
   }
+};
+export const storeRedirectPath = (pathname: string) => {
+  localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
 };
