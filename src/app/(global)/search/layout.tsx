@@ -1,5 +1,5 @@
-import { type PropsWithChildren } from 'react';
+import { type PropsWithChildren, Suspense } from 'react';
 
 export default function SearchLayout({ children }: PropsWithChildren) {
-  return children;
+  return <Suspense>{children}</Suspense>;
 }
