@@ -5,17 +5,12 @@ import Link from 'next/link';
 import { zhTW } from 'date-fns/locale/zh-TW';
 import { formatDistance } from 'date-fns';
 import { EllipsisVerticalIcon } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SocialLink from '../custom/SocialLink';
 import { DropdownMenuComponent as DropdownMenu, DropdownMenuLinkItem } from '../custom/DropdownMenu';
 import UserAvatar from '../common/UserAvatar';
 import { Article } from '@/types/article';
 import { toast } from '../ui/use-toast';
-import { deleteArticle } from '@/lib/authApi';
 import { useUserStore } from '@/providers/userProvider';
-import { QUERY_KEY } from '@/constants';
-import ConfirmDialog from '../custom/ConfirmDialog';
-import { useDialog } from '@/stores/useDialogStore';
 
 import DefaultThumbnailImg from '@/images/default-thumbnail.webp';
 
@@ -25,25 +20,12 @@ type LargeArticleCardProps = {
   showReadTime?: boolean;
   showCreatedAt?: boolean;
   isUsersArticle?: boolean;
+  deleteArticleConfirm?: (deletedArticleId: string) => void
 }
 
-export default function LargeArticleCard({ article, showCreator, showReadTime, showCreatedAt, isUsersArticle }: LargeArticleCardProps) {
+export default function LargeArticleCard({ article, showCreator, showReadTime, showCreatedAt, isUsersArticle, deleteArticleConfirm }: LargeArticleCardProps) {
   const { auth } = useUserStore((state) => state);
   const creatorInfo = article.creator?.profile || auth?.profile;
-
-  const { onOpen } = useDialog();
-
-  const queryClient = useQueryClient();
-  const { mutate: deleteArticleMutate } = useMutation({
-    mutationFn: deleteArticle,
-    onSuccess: () => {
-      toast({ title: '刪除成功', variant: 'success' });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.article] });
-    },
-    onError: () => {
-      toast({ title: '刪除失敗', description: '請聯繫客服，或稍後再試', variant: 'error' });
-    }
-  });
 
   function handleShareArticle() {
     navigator.clipboard.writeText(`${window.location.origin}/article/${article.id}`)
@@ -72,7 +54,14 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
             <button onClick={handleShareArticle}>分享</button>
           </DropdownMenuLinkItem>
           <DropdownMenuLinkItem className='text-danger'>
-            <button onClick={onOpen}>刪除</button>
+            <button
+              onClick={() => {
+                if (typeof deleteArticleConfirm === 'function') {
+                  deleteArticleConfirm(article.id);
+                };
+              }}>
+              刪除
+            </button>
           </DropdownMenuLinkItem>
         </DropdownMenu>
       )}
@@ -99,7 +88,6 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
         </span>
         <SocialLink views={article.status.views} likes={article.status.likes} articleId={article.id}></SocialLink>
       </div>
-      <ConfirmDialog description='確定要刪除嗎？' onConfirm={() => deleteArticleMutate({ articleId: article.id })} />
     </div>
   );
 }
