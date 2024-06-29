@@ -22,11 +22,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function CommentSection({ articleId }: { articleId: string }) {
   const [showAll, setShowAll] = useState(false);
   const [initialVisibleCount, setInitialVisibleCount] = useState<number>(1);
+  const latestCommentRef = useRef<HTMLDivElement>(null);
   const toggleShowAll = () => {
     setShowAll(!showAll);
   };
@@ -61,6 +62,12 @@ export default function CommentSection({ articleId }: { articleId: string }) {
     });
   }
 
+  useEffect(() => {
+    if (latestCommentRef.current) {
+      latestCommentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [comments]);
+
   if (!comments) return null;
 
   return (
@@ -80,8 +87,8 @@ export default function CommentSection({ articleId }: { articleId: string }) {
           )
         }
 
-        {comments.slice(0, initialVisibleCount).map((comment) => (
-          <div key={comment.id} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6'>
+        {comments.slice(0, initialVisibleCount).map((comment, index) => (
+          <div key={comment.id} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6' ref={index === comments.length - 1 ? latestCommentRef : null}>
             <div className='flex gap-4'>
               <UserAvatar userName={comment.user.profile.displayName || ''} avatarImgUrl={comment.user.profile.avatarImageUrl} />
               <div>
