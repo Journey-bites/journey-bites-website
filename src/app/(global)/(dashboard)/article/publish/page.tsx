@@ -59,8 +59,11 @@ export default function PublishArticle() {
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
 
   useEffect(() => {
-    if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
-  }, [editorProps]);
+    if(!editorProps) {
+      toast({ title: '您必須先建立文章，才能進行發布內容', variant: 'error' });
+      return router.replace('/article/create');
+    }
+  }, [editorProps, router]);
 
   useEffect(() => {
     (async () => {
@@ -82,7 +85,7 @@ export default function PublishArticle() {
     if (!editorProps) return;
     const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-
+    // legacy
     // let createArticleRequest;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

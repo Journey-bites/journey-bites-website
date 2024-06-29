@@ -39,7 +39,7 @@ function convertTags(tagTexts: string[]): Tag[] {
 //   return tags.map(tag => tag.text);
 // }
 
-export default function PublishArticle() {
+export default function PublishArticle({ params }: { params: { id: string } }) {
   const { editorProps } = useEditor();
   const defaultTags: string[] = editorProps?.tags || [];
   const [tags, setTags] = useState <Tag[]> (convertTags(defaultTags) || []);
@@ -47,6 +47,7 @@ export default function PublishArticle() {
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
   const router = useRouter();
+  const { id } = params;
 
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
@@ -71,9 +72,12 @@ export default function PublishArticle() {
   });
 
   useEffect(() => {
-    if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
+    if(!editorProps) {
+      toast({ title: '系統不會儲存任何資料，請重新操作', variant: 'error' });
+      return router.replace(`/article/edit/${id}`);
+    }
     setInitialLoad(true);
-  }, [editorProps]);
+  }, [editorProps, id, router]);
 
   useEffect(() => {
     (async () => {
@@ -103,7 +107,7 @@ export default function PublishArticle() {
     }
 
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-
+    // legacy
     // let editArticleRequest;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
