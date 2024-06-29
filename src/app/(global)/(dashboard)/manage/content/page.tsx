@@ -12,11 +12,10 @@ import { QUERY_KEY } from '@/constants';
 import ConfirmDialog from '@/components/custom/ConfirmDialog';
 import { toast } from '@/components/ui/use-toast';
 import { useState } from 'react';
-import { useDialog } from '@/stores/useDialogStore';
 
 export default function ContentPage() {
   const [deletedArticleId, setDeletedArticleId] = useState('');
-  const { onOpen } = useDialog();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { data: articles } = useQuery({
     queryKey: [QUERY_KEY.article],
@@ -36,7 +35,7 @@ export default function ContentPage() {
   });
 
   function deleteArticleConfirm(articleId: string) {
-    onOpen();
+    setOpenDeleteDialog(true);
     setDeletedArticleId(articleId);
   }
 
@@ -63,7 +62,12 @@ export default function ContentPage() {
           ))}
         </div>
       </section>
-      <ConfirmDialog description='確定要刪除嗎？' onConfirm={() => deleteArticleMutate({ articleId: deletedArticleId })} />
+      <ConfirmDialog
+        isOpen={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        description='確定要刪除嗎？'
+        onConfirm={() => deleteArticleMutate({ articleId: deletedArticleId })}
+      />
     </>
   );
 }

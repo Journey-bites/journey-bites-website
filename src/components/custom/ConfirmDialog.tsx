@@ -1,16 +1,16 @@
 'use client';
 
-import { useDialog } from '@/stores/useDialogStore';
 import { Button } from '../ui/button';
 import { Dialog, DialogClose, DialogTitle, DialogHeader, DialogFooter, DialogContent } from '../ui/dialog';
 
 type ConfirmDialogProps = {
+  isOpen: boolean;
+  onClose: () => void;
   description: string;
   onConfirm: () => void;
 };
 
-export default function ConfirmDialog({ description, onConfirm }: ConfirmDialogProps) {
-  const { isOpen, onClose } = useDialog();
+export default function ConfirmDialog({ isOpen, onClose, description, onConfirm }: ConfirmDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
