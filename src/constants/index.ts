@@ -15,4 +15,6 @@ export const QUERY_KEY = {
   followers: 'followers',
   comments: 'comments',
   article: 'article',
+  searchArticles: 'searchArticles',
+  searchCreators: 'searchCreators',
 };
