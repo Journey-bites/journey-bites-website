@@ -72,9 +72,11 @@ const config = {
         },
         warning: {
           DEFAULT: 'var(--warning)',
+          100: 'var(--warning-100)',
         },
         danger: {
           DEFAULT: 'var(--danger)',
+          100: 'var(--danger-100)',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
