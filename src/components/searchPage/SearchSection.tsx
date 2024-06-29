@@ -1,7 +1,6 @@
 'use client';
 
 import type { KeyboardEvent } from 'react';
-import SearchInput from '../custom/SearchInput';
 import { Article } from '@/types/article';
 import { Category, Creator } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';

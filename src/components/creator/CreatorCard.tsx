@@ -8,13 +8,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/constants';
 import { Button } from '../ui/button';
 import ProtectedComponent from '../common/ProtectedComponent';
-import { Creator } from '@/types';
+import { Creator, FollowData } from '@/types';
 import { getCreatorFollowers } from '@/lib/nextApi';
 import { followCreator, unFollowCreator } from '@/lib/authApi';
 
 import DefaultUserImg from '@/images/default-user.webp';
 
-export default function CreatorCard({ creator, hasFollowed }: { creator: Creator, hasFollowed: boolean }) {
+export default function CreatorCard({ creator, hasFollowed }: { creator: Creator | FollowData, hasFollowed: boolean }) {
   const [followed, setFollowed] = useState(hasFollowed);
   const queryClient = useQueryClient();
   const { data: creatorFollowers, error } = useQuery({

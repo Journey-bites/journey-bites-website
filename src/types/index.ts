@@ -59,7 +59,7 @@ export interface Creator extends Profile {
   }[];
 }
 
-export interface Follow extends Profile {
+export interface FollowData extends Profile {
   userId: string;
   email: string;
   isMutualFollow: boolean;
