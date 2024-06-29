@@ -1,7 +1,7 @@
 'use client';
 
 import { User2Icon, Loader2Icon } from 'lucide-react';
-import TitleWIthIcon from '@/components/dashboard/TitleWIthIcon';
+import TitleWithIcon from '@/components/dashboard/TitleWithIcon';
 import TabsWithContent from '@/components/dashboard/TabsWithContent';
 import ProfileForm from './ProfileForm';
 import LinksForm from './LinksForm';
@@ -12,7 +12,7 @@ export default function ManageUserPage() {
 
   return (
     <>
-      <TitleWIthIcon title='個人資料管理' icon={User2Icon} />
+      <TitleWithIcon title='個人資料管理' icon={User2Icon} />
       {!auth ? <Loader2Icon className='mx-auto size-6 animate-spin text-primary' /> : (
         <TabsWithContent
           defaultValue='profile'

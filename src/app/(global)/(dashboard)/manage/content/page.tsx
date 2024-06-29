@@ -2,7 +2,7 @@
 
 import { NewspaperIcon } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import TitleWIthIcon from '@/components/dashboard/TitleWIthIcon';
+import TitleWithIcon from '@/components/dashboard/TitleWithIcon';
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 // import { OrderBy } from '@/types';
 // import SearchInput from '@/components/custom/SearchInput';
@@ -40,9 +40,9 @@ export default function ContentPage() {
   }
 
   return (
-    <>
-      <TitleWIthIcon title='內容作品管理' icon={NewspaperIcon} />
-      <section>
+    <section>
+      <TitleWithIcon title='內容作品管理' icon={NewspaperIcon} />
+      <div>
         {/* <div className='flex gap-4'>
           <Select>
             <SelectTrigger className='w-[180px]'>
@@ -61,13 +61,13 @@ export default function ContentPage() {
             <LargeArticleCard key={article.id} article={article} isUsersArticle deleteArticleConfirm={deleteArticleConfirm} />
           ))}
         </div>
-      </section>
+      </div>
       <ConfirmDialog
         isOpen={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
         description='確定要刪除嗎？'
         onConfirm={() => deleteArticleMutate({ articleId: deletedArticleId })}
       />
-    </>
+    </section>
   );
 }
