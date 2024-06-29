@@ -26,10 +26,16 @@ export default function GlobalLayout({
     }
   }, [setAuth]);
 
-  const articleIdMatch = pathname.match(/\/article\/edit\/(\d+)/);
-  const articleId = articleIdMatch ? articleIdMatch[1] : null;
+const isEditPage = pathname.startsWith('/article/edit/');
+const isPublishPage = pathname === '/article/publish';
+const isCreatePage = pathname === '/article/create';
 
-  const hideHeader = pathname === '/article/publish' || pathname === '/article/create' || pathname === `/article/edit/${articleId}`;
+let articleId = null;
+if (isEditPage) {
+  articleId = pathname.split('/').pop();
+}
+
+const hideHeader = isPublishPage || isCreatePage || (isEditPage && articleId !== null);
 
   return (
     <>
