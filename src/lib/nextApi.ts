@@ -27,10 +27,11 @@ export async function getArticles({
   pageSize,
   q,
   type,
+  category
 }: GetArticlesQuery) {
   const endpoint = '/articles';
   const params = new URLSearchParams();
-  const query = Object.entries({ page, pageSize, q, type });
+  const query = Object.entries({ page, pageSize, q, type, category });
 
   for(const [key, value] of query) {
     if (value) {

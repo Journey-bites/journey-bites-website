@@ -39,7 +39,7 @@ export type SearchRequestQuery = {
 
 export type GetArticlesQuery = {
   q?: string;
-  category: string;
+  category?: string;
 } & SearchRequestQuery;
 
 export type GetCreatorQuery = {
