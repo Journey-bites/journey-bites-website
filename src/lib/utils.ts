@@ -44,3 +44,15 @@ export function sortDataByCreatedAt<T>(data: T & { createdAt: string }[] | undef
     return data.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 }
+
+export const debounce = (func: () => void, delay: number = 500) => {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  return (...args: []) => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
