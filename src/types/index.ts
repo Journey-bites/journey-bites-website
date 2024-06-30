@@ -8,6 +8,7 @@ export type Category = {
   id: string;
   name: string;
   path: string;
+  articleCount: number;
 };
 
 export type SocialLinks = {
@@ -34,7 +35,7 @@ export type RequestPageQuery = {
 }
 
 export type SearchRequestQuery = {
-  type?: 'hot' | 'random';
+  type?: 'hot';
 } & RequestPageQuery;
 
 export type GetArticlesQuery = {

@@ -9,11 +9,13 @@ import { DropdownMenuComponent as DropdownMenu } from '../custom/DropdownMenu';
 import UserMenuList from './UserMenuList';
 import { Input } from '../ui/input';
 import { Sheet, SheetTrigger, SheetContent, SheetFooter, SheetClose } from '../ui/sheet';
-// import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
 import useSearch from '@/hook/useSearch';
+import { Category } from '@/types';
+import { EXPLORE_LIST } from '@/constants';
 
-export default function HeaderButtons() {
+export default function HeaderButtons({ categories }: { categories: Category[] }) {
   const { isLogin } = useUserStore((state) => state);
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const [keywords, setKeywords] = useState('');
@@ -89,17 +91,24 @@ export default function HeaderButtons() {
               />
             </div>
             {/* TODO: add it back when search page and API (getArticlesByCategory) is ready */}
-            {/* <div className='p-2'>
+            <div className='p-2'>
               <h4 className='mb-1 text-base font-bold text-primary'>探索</h4>
               <ul className='font-bold'>
-                <StyledListItem title='熱門景點' href='#'/>
-                <StyledListItem title='最新文章' href='#'/>
+                {EXPLORE_LIST.map((list) => (
+                  <StyledListItem key={list.id} title={list.name} href={list.path} />
+                ))}
               </ul>
               <h5 className='mt-2 text-sm text-grey-300'>所有分類</h5>
               <ul>
-                <StyledListItem title='台灣旅遊地圖' href='#'/>
+                {categories?.map((category) => (
+                  <StyledListItem
+                    key={category.id}
+                    title={category.name}
+                    href={`/articles${category.path}`}
+                  />
+                ))}
               </ul>
-            </div> */}
+            </div>
             <SheetFooter className='mt-auto'>
               {isLogin ? (
                 <SheetClose asChild>
@@ -129,10 +138,12 @@ export default function HeaderButtons() {
   );
 }
 
-// function StyledListItem({ title, href, className }: { title: string, href: string, className?: string }) {
-//   return (
-//     <li className={cn('leading-7 p-2 rounded-lg active:bg-primary active:text-white', className)}>
-//       <Link href={href}>{title}</Link>
-//     </li>
-//   );
-// }
+function StyledListItem({ title, href, className }: { title: string, href: string, className?: string }) {
+  return (
+    <li className={cn('leading-7 p-2 rounded-lg active:bg-primary active:text-white', className)}>
+      <SheetClose asChild>
+        <Link href={href}>{title}</Link>
+      </SheetClose>
+    </li>
+  );
+}
