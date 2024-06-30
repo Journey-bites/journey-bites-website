@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import CreatorList from '@/components/CreatorList';
-import PopularAreas from '@/components/PopularAreas';
+import AllCategories from '@/components/AllCategories';
 import Content from './@content/page';
 import { Button } from '@/components/ui/button';
-import { getCreators } from '@/lib/nextApi';
+import { getCategories, getCreators } from '@/lib/nextApi';
 import ProtectedComponent from '@/components/common/ProtectedComponent';
 
 import BannerImg from '@/images/banner.webp';
@@ -12,6 +12,8 @@ import BannerSmImg from '@/images/banner-sm.webp';
 
 export default async function Home() {
   const creators = await getCreators({ page: 1, pageSize: 5, type: 'random' });
+  const categories = await getCategories();
+
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
       <section className='relative md:max-w-[94%] md:self-end 2xl:mx-auto 2xl:max-w-[1800px]'>
@@ -33,8 +35,8 @@ export default async function Home() {
         </div>
         <div className='col-span-12 xl:col-span-4'>
           <CreatorList creatorList={creators} />
-          <PopularAreas />
-          </div>
+          {categories && <AllCategories categories={categories} />}
+        </div>
       </div>
     </main>
   );

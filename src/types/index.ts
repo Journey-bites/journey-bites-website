@@ -35,7 +35,7 @@ export type RequestPageQuery = {
 }
 
 export type SearchRequestQuery = {
-  type?: 'hot';
+  type?: 'hot' | 'random';
 } & RequestPageQuery;
 
 export type GetArticlesQuery = {
