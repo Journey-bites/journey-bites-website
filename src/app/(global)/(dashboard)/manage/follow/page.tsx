@@ -1,7 +1,7 @@
 'use client';
 
 import { UserRoundPlusIcon, TentTreeIcon } from 'lucide-react';
-import TitleWithIcon from '@/components/dashboard/TitleWIthIcon';
+import TitleWithIcon from '@/components/dashboard/TitleWithIcon';
 import TabsWithContent from '@/components/dashboard/TabsWithContent';
 import CreatorCard from '@/components/creator/CreatorCard';
 import { useQuery } from '@tanstack/react-query';
@@ -60,7 +60,7 @@ export default function FollowPage() {
   }
 
   return (
-    <div>
+    <section>
       <TitleWithIcon title='我的追蹤與收藏' icon={UserRoundPlusIcon} />
       <TabsWithContent
         defaultValue='following'
@@ -82,6 +82,6 @@ export default function FollowPage() {
           }]
         }
       />
-    </div>
+    </section>
   );
 }

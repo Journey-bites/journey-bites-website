@@ -4,11 +4,7 @@ import { useState } from 'react';
 import InputField from './InputField';
 import type { Control, FieldValues } from 'react-hook-form';
 import { Eye, EyeOff } from 'lucide-react';
-
-enum InputType {
-  TEXT = 'text',
-  PASSWORD = 'password',
-}
+import { InputType } from '@/types/enum';
 
 type PasswordInputProps = {
   control: Control<FieldValues>,
