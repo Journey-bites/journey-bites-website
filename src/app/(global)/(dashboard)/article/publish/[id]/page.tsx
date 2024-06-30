@@ -13,15 +13,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
 import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { editArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
-import { getCategories } from '@/lib/nextApi';
+import { getArticleById, getCategories } from '@/lib/nextApi';
 import Link from 'next/link';
-import { handleApiError } from '@/lib/utils';
+import { handleApiError, verifyAuthor } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
 import { CreateArticleRequest } from '@/types/article';
+import { useUserStore } from '@/providers/userProvider';
+import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
+import { Lock } from 'lucide-react';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -46,8 +49,11 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
+  const [isAuthor, setIsAuthor] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(true);
   const router = useRouter();
   const { id } = params;
+  const { auth } = useUserStore((state) => state);
 
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
@@ -60,7 +66,6 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
   const formSchema = z.object({
     title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    // thumbnailUrl: z.string().optional().refine(val => !val || urlRegex.test(val), { message: '請至 imgur 或 unsplash 上傳圖片，造成不便敬請見諒' }),
     thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
@@ -71,13 +76,29 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
     mutationFn: editArticle
   });
 
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['getArticleById', id],
+    queryFn: () => getArticleById(id),
+  });
+
   useEffect(() => {
-    if(!editorProps) {
-      toast({ title: '系統不會儲存任何資料，請重新操作', variant: 'error' });
-      return router.replace(`/article/edit/${id}`);
+    if (data) {
+      const { creator } = data;
+
+      if (auth && auth.id) {
+        verifyAuthor(creator?.id, auth.id, router, () => setIsAuthor(true));
+        setIsVerifying(false);
+        return;
+
+      }
+
+      if (isError) {
+        console.log(error);
+      }
     }
+
     setInitialLoad(true);
-  }, [editorProps, id, router]);
+  }, [id, router, data, auth, isError, error, editorProps]);
 
   useEffect(() => {
     (async () => {
@@ -107,21 +128,6 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
     }
 
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-    // legacy
-    // let editArticleRequest;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const { thumbnailUrl, ...restEditorProps } = { ...editorProps };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const { thumbnailUrl: _, ...restValues } = { ...values };
-
-    // if (values.thumbnailUrl && values.thumbnailUrl.trim()) {
-    //   editArticleRequest = { ...restEditorProps, ...values, tags, isNeedPay };
-    // } else {
-    //   editArticleRequest = { ...restEditorProps, ...restValues, tags, isNeedPay };
-    // }
-
-    // editArticleMutate(editArticleRequest);
     const { title, abstract, category } = values;
     const { content, wordCount, id } = editorProps;
     const editArticleBody: CreateArticleRequest = {
@@ -184,6 +190,9 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
       <div className='mb-10 pt-10 text-center text-3xl text-primary-300'>
         發布設定
       </div>
+      {isPending || isVerifying ? (
+        <LoadingEditorSkeleton />
+      ) : isAuthor ? (
       <div className='mb-6 w-full space-y-4 rounded-lg border bg-card p-5 text-card-foreground shadow-sm'>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
@@ -257,7 +266,9 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
             </div>
           </form>
         </Form>
-      </div>
+      </div>) : (
+        <div className='mt-10 flex justify-center text-center text-red-500'><Lock /><p className='ml-2'>您沒有編輯此文章的權限</p></div>
+      )}
     </main>
   );
 }

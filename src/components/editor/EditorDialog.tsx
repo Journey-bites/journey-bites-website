@@ -65,15 +65,6 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
             })}>
               請填入正確的網址格式, ex: https://www.journeybites.com
             </p>
-            {/* <p className={cn('mt-1 text-sm text-secondary', {
-              ['text-danger']: !isValid
-            })}>
-              請至
-              <a className='underline' href='https://imgur.com/' target='_blank' rel='noreferrer'> imgur </a>
-              或
-              <a className='underline' href='https://unsplash.com/' target='_blank' rel='noreferrer'> unsplash </a>
-              上傳圖片，造成不便敬請見諒
-            </p> */}
           </div>
         <DialogFooter>
           <Button type='submit' onClick={handleSubmit} disabled={!isValid}>確定</Button>

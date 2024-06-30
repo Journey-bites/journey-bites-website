@@ -19,7 +19,6 @@ import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
 import Link from 'next/link';
-// import { urlRegex } from '@/constants/imgUrlValidate';
 import StatusCode from '@/types/StatusCode';
 import { handleApiError } from '@/lib/utils';
 
@@ -46,13 +45,9 @@ export default function PublishArticle() {
   const formSchema = z.object({
     title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
     abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    // thumbnailUrl: z.string().optional().refine(val => !val || urlRegex.test(val), { message: '請至 imgur 或 unsplash 上傳圖片，造成不便敬請見諒' }),
     thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
-    // category: z.string().refine(value => categoryOptions.some(option => option.id === value), {
-    //   message: '選項為必填',
-    // }),
     tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
 
@@ -85,20 +80,6 @@ export default function PublishArticle() {
     if (!editorProps) return;
     const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
     const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-    // legacy
-    // let createArticleRequest;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const { thumbnailUrl, ...restEditorProps } = { ...editorProps };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const { thumbnailUrl: _, ...restValues } = { ...values };
-
-    // if (values.thumbnailUrl && values.thumbnailUrl.trim()) {
-    //   createArticleRequest = { ...restEditorProps, ...values, tags, isNeedPay };
-    // } else {
-    //   createArticleRequest = { ...restEditorProps, ...restValues, tags, isNeedPay };
-    // };
-
     const { title, abstract, category } = values;
     const createArticleBody = {
       ...editorProps,
