@@ -57,12 +57,24 @@ export const startNewebPayment = (data: NewebpayRequestData) => {
   form.style.display = 'none';
 
   for (const pair of formData.entries()) {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = pair[0];
-      input.value = pair[1].toString();
-      form.appendChild(input);
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = pair[0];
+    input.value = pair[1].toString();
+    form.appendChild(input);
   }
   document.body.appendChild(form);
   form.submit();
+};
+
+export const debounce = (func: () => void, delay: number = 500) => {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  return (...args: []) => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
 };
