@@ -26,10 +26,15 @@ export default function GlobalLayout({
     }
   }, [setAuth]);
 
-  const articleIdMatch = pathname.match(/\/article\/edit\/(\d+)/);
-  const articleId = articleIdMatch ? articleIdMatch[1] : null;
+  const isEditPage = pathname.startsWith('/article/edit/') && pathname.split('/').length === 4;
+  const isPublishPage = pathname.startsWith('/article/publish/') || pathname === '/article/publish';
+  const isCreatePage = pathname === '/article/create';
 
-  const hideHeader = pathname === '/article/publish' || pathname === '/article/create' || pathname === `/article/edit/${articleId}`;
+  let hideHeader = false;
+
+  if (isEditPage || isPublishPage || isCreatePage) {
+    hideHeader = true;
+  };
 
   return (
     <>
