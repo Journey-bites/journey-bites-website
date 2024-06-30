@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { zhTW } from 'date-fns/locale/zh-TW';
 import { formatDistance } from 'date-fns';
 import { EllipsisVerticalIcon } from 'lucide-react';
@@ -26,6 +27,7 @@ type LargeArticleCardProps = {
 export default function LargeArticleCard({ article, showCreator, showReadTime, showCreatedAt, isUsersArticle, deleteArticleConfirm }: LargeArticleCardProps) {
   const { auth } = useUserStore((state) => state);
   const creatorInfo = article.creator?.profile || auth?.profile;
+  const router = useRouter();
 
   function handleShareArticle() {
     navigator.clipboard.writeText(`${window.location.origin}/article/${article.id}`)
@@ -35,6 +37,10 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
       .catch(() => {
         toast({ title: '複製網址失敗', description: '請聯繫客服，協助排查問題', variant: 'error' });
       });
+  }
+
+  function handleToArticlePage() {
+    router.push(`/article/${article.id}`);
   }
 
   return (
@@ -65,21 +71,23 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
           </DropdownMenuLinkItem>
         </DropdownMenu>
       )}
-      <Link href={`/article/${article.id}`} className='mb-4 flex flex-col-reverse justify-between gap-4 md:mb-6 md:flex-row md:gap-10'>
-        <div className='text-grey-500'>
-          <h3 className='text-xl font-black md:text-2xl'>{article.title}</h3>
-          <p className='md:text-lg'>{article.abstract}</p>
+      <div className='mb-4 flex flex-col-reverse justify-between gap-4 md:mb-6 md:flex-row md:gap-10'>
+        <div className='grow text-left text-grey-500'>
+          <button onClick={handleToArticlePage} className='w-full text-left'>
+            <h3 className='text-xl font-black md:text-2xl'>{article.title}</h3>
+            <p className='md:text-lg'>{article.abstract}</p>
+          </button>
           {showCreator && (
             <div className='mt-5 flex items-center gap-2 text-lg md:mt-11'>
               <UserAvatar userName={creatorInfo.displayName || ''} avatarImgUrl={creatorInfo.avatarImageUrl} imgClassName='w-10' />
-              <Link href='#' className='text-primary'>{creatorInfo.displayName}</Link>
+              <Link href={`/creator/${article.creator.id}`} className='text-primary'>{creatorInfo.displayName}</Link>
               <span className='text-grey-300'>發佈於</span>
-              <Link href='#' className='text-primary'>{article.category}</Link>
+              <span className='text-primary'>{article.category}</span>
             </div>
           )}
         </div>
         <Image className='max-h-40 w-full object-cover md:size-auto' src={article.thumbnailUrl || DefaultThumbnailImg} width={240} height={180} alt='' />
-      </Link>
+      </div>
       <div className='flex justify-between border-t border-grey-200 pb-[6px] pt-[13px]'>
         <span className='text-grey-300'>
           {showCreatedAt && new Date(article.createdAt).toLocaleDateString()}
