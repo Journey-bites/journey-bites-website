@@ -57,3 +57,10 @@ export interface Follow extends Profile {
   email: string;
   isMutualFollow: boolean;
 }
+
+export interface NewebpayRequestData {
+  MerchantID: string;
+  TradeInfo: string;
+  TradeSha: number;
+  Version: string;
+}
