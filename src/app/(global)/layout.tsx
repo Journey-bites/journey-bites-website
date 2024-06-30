@@ -26,16 +26,15 @@ export default function GlobalLayout({
     }
   }, [setAuth]);
 
-const isEditPage = pathname.startsWith('/article/edit/');
-const isPublishPage = pathname === '/article/publish';
-const isCreatePage = pathname === '/article/create';
+  const isEditPage = pathname.startsWith('/article/edit/') && pathname.split('/').length === 4;
+  const isPublishPage = pathname.startsWith('/article/publish/') || pathname === '/article/publish';
+  const isCreatePage = pathname === '/article/create';
 
-let articleId = null;
-if (isEditPage) {
-  articleId = pathname.split('/').pop();
-}
+  let hideHeader = false;
 
-const hideHeader = isPublishPage || isCreatePage || (isEditPage && articleId !== null);
+  if (isEditPage || isPublishPage || isCreatePage) {
+    hideHeader = true;
+  };
 
   return (
     <>
