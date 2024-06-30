@@ -1,19 +1,3 @@
-export enum InputType {
-  TEXT = 'text',
-  PASSWORD = 'password',
-}
-
-export enum OrderBy {
-  ASC = 'asc',
-  DESC = 'desc',
-}
-
-export enum SearchType {
-  Article = 'article',
-  // Category = 'category',
-  // Creator = 'creator'
-}
-
 export type Tab = {
   value: string;
   label: string;
