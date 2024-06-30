@@ -9,8 +9,12 @@ import { getArticles } from '@/lib/nextApi';
 import LargeArticleCard from '@/components/article/LargeArticleCard';
 import SearchInput from '@/components/custom/SearchInput';
 import Loader from '@/components/custom/Loader';
+import OrderBySelect from '@/components/article/OrderBySelect';
+import { OrderBy } from '@/types/enum';
+import { sortDataByCreatedAt } from '@/lib/utils';
 
 export default function SearchPage() {
+  const [orderBy, setOrderBy] = useState(OrderBy.DESC);
   const searchParams = useSearchParams();
   const router = useRouter();
   const [value, setValue] = useState(searchParams.get('q') || '');
@@ -19,6 +23,7 @@ export default function SearchPage() {
   const { data: articles, isFetched, isLoading } = useQuery({
     queryKey: ['search', keywords],
     queryFn: () => getArticles({ q: keywords }),
+    select: (data) => sortDataByCreatedAt(data, orderBy),
   });
 
   useLayoutEffect(() => {
@@ -57,9 +62,14 @@ export default function SearchPage() {
             <p className='text-grey-500'>目前沒有搜尋結果</p>
           </div>
         ) : (
-          articles?.map((article) => (
-            <LargeArticleCard key={article.id} article={article} />
-          ))
+            <>
+              <OrderBySelect orderBy={orderBy} setOrderBy={setOrderBy} />
+              {
+                articles?.map((article) => (
+                  <LargeArticleCard key={article.id} article={article} />
+                ))
+              }
+            </>
         )}
       </div>
     </div>

@@ -7,6 +7,7 @@ import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
 import { LOCAL_STORAGE_KEY } from '@/constants';
+import { OrderBy } from '@/types/enum';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,3 +35,12 @@ export function handleApiError(error: unknown, config: ErrorHandlingConfig, oper
 export const storeRedirectPath = (pathname: string) => {
   localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
 };
+
+export function sortDataByCreatedAt<T>(data: T & { createdAt: string }[] | undefined, orderBy: OrderBy) {
+  if (!data) return;
+  if (orderBy === OrderBy.DESC) {
+    return data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  } else {
+    return data.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }
+}
