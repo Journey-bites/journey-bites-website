@@ -35,7 +35,11 @@ export default function CreatorList({ creatorList }: { creatorList: Creator[] })
               </Avatar>
               <div className='pl-4'>
                 <h4 className='mb-1 text-xl font-bold'>{item.displayName}</h4>
-                {item.bio && <p className='line-clamp-2 text-grey-400'>{item.bio}</p>}
+                {item.bio ? (
+                  <p className='line-clamp-2 text-grey-400'>{item.bio}</p>
+                ) : (
+                  <p className='line-clamp-2 text-grey-400'>這位創作者還沒有分享任何訊息</p>
+                )}
               </div>
             </div>
           </Link>
