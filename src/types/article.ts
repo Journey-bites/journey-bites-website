@@ -22,6 +22,7 @@ export type Article = {
   category: string;
   createdAt: string;
   updatedAt: string;
+  commentCount: number;
   tags?: string[];
   thumbnailUrl?: string;
 };
