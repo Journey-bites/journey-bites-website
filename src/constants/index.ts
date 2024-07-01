@@ -32,3 +32,5 @@ export const EXPLORE_LIST: Omit<Category, 'articleCount'>[] = [
     path: '/articles?type=new',
   },
 ];
+
+export const NEWEB_PAY_DATA_NAMES = ['Version', 'MerchantID', 'TradeInfo', 'TradeSha'] as const;

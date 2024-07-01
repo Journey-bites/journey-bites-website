@@ -6,8 +6,9 @@ import { isAxiosError } from 'axios';
 import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
-import { LOCAL_STORAGE_KEY } from '@/constants';
 import { OrderBy } from '@/types/enum';
+import { LOCAL_STORAGE_KEY, NEWEB_PAY_DATA_NAMES } from '@/constants';
+import { NewebpayRequestData } from '@/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,3 +45,24 @@ export function sortDataByCreatedAt<T>(data: T & { createdAt: string }[] | undef
     return data.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 }
+
+export const startNewebPayment = (data: NewebpayRequestData) => {
+  const formData = new FormData();
+  NEWEB_PAY_DATA_NAMES.forEach((name) => {
+    formData.append(name, data[name]);
+  });
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://ccore.newebpay.com/MPG/mpg_gateway';
+  form.style.display = 'none';
+
+  for (const pair of formData.entries()) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = pair[0];
+      input.value = pair[1].toString();
+      form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+};
