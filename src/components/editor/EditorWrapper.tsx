@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation';
 import Tiptap from './Tiptap';
 import { useEditor } from '@/stores/useEditorStore';
 import { type Article } from '@/types/article';
+import LoadingEditorSkeleton from '../LoadingEditorSkeleton';
 
 interface EditorWrapperProps {
   isEditing: boolean;
-  editContent?: {
-    data: Article;
-  };
+  editContent?: Article;
 }
 
 const initialOptions: Partial<Article> = {};
@@ -66,35 +65,37 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
   }, [isSubmitting]);
 
   useEffect(() => {
-    if(editContent && editContent.data) {
-      setOptions(editContent?.data);
-      setContent(editContent?.data?.content);
+    if(editContent) {
+      setOptions(editContent);
+      setContent(editContent.content);
       setLoading(false);
     }
     setLoading(false);
   }, [editContent]);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='mx-auto mb-10 grid size-full max-w-screen-lg place-items-center px-4 pt-10'
-    >
-      {isLoading ? (
-        <p>Loading...</p> // 載入狀態顯示 Loading...
-        ) : (
-          isEditing ? (
-            content && <Tiptap
-            content={content}
-            onChange={(newContent) => handleContentChange(newContent)}
-          />
-        ) : (
+    <>
+      {isLoading && (
+        <LoadingEditorSkeleton />
+      )}
+      <form
+        onSubmit={handleSubmit}
+        className='mx-auto mb-10 grid size-full max-w-screen-lg place-items-center px-4 pt-10'
+      >
+        {isEditing && content && (
           <Tiptap
             content={content}
             onChange={(newContent) => handleContentChange(newContent)}
           />
-        )
-      )}
-    </form>
+        )}
+        {!isEditing && (
+          <Tiptap
+            content={content}
+            onChange={(newContent) => handleContentChange(newContent)}
+          />
+        )}
+      </form>
+    </>
   );
 };
 

@@ -8,6 +8,8 @@ import CommentSection from '@/components/article/CommentSection';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { getArticleById, getCreatorById } from '@/lib/nextApi';
+import { cookies } from 'next/headers';
+import { JOURNEY_BITES_COOKIE } from '@/constants';
 
 import DefaultUserImg from '@/images/default-user.webp';
 import FollowBtn from '@/components/article/FollowBtn';
@@ -24,7 +26,8 @@ function ArticleContainer({ children, className, ...props }: PropsWithChildren &
 }
 
 export default async function ArticlePage({ params }: { params: { id: string } }) {
-  const article = await getArticleById(params.id);
+  const token = cookies().get(JOURNEY_BITES_COOKIE)?.value;
+  const article = await getArticleById(params.id, token);
   // const content = article.isNeedPay ? article.abstract : article.content;
   const cleanContentHtml = DOMPurify.sanitize(article.content);
   const creatorInfo = await getCreatorById(article.creator.id);
