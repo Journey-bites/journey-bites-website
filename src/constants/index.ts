@@ -1,3 +1,4 @@
+import { Category } from '@/types';
 import { z } from 'zod';
 
 export const JOURNEY_BITES_COOKIE = 'JOURNEY_BITES_COOKIE';
@@ -15,4 +16,19 @@ export const QUERY_KEY = {
   followers: 'followers',
   comments: 'comments',
   article: 'article',
+  searchArticles: 'searchArticles',
+  searchCreators: 'searchCreators',
 };
+
+export const EXPLORE_LIST: Omit<Category, 'articleCount'>[] = [
+  {
+    id: '0',
+    name: '熱門文章',
+    path: '/articles?type=hot',
+  },
+  {
+    id: '1',
+    name: '最新文章',
+    path: '/articles?type=new',
+  },
+];
