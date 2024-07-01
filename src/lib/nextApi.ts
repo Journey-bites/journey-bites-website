@@ -85,8 +85,8 @@ export async function getArticleById(id: string, token?: string) {
       Authorization: `Bearer ${token}`,
     };
   }
-  console.log(options);
-  const res = await nextFetch<Article>(`/article/${id}`);
+
+  const res = await nextFetch<Article>(`/article/${id}`, options);
   return res;
 }
 
