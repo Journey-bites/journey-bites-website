@@ -76,7 +76,17 @@ export async function getCreatorFollowers(creatorId: string) {
   return res;
 }
 
-export async function getArticleById(id: string) {
+export async function getArticleById(id: string, token?: string) {
+
+  const options: RequestInit = {
+    method: 'GET',
+  };
+  if (token) {
+    options.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  console.log(options);
   const res = await nextFetch<Article>(`/article/${id}`);
   return res;
 }
