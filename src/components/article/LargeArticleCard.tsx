@@ -94,7 +94,7 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
           {showReadTime && `閱讀時間約為 ${article.readTime} 分鐘`}
           {isUsersArticle && `${formatDistance(new Date(article.updatedAt), new Date(), { addSuffix: true, locale: zhTW })}編輯`}
         </span>
-        <SocialLink views={article.status.views} likes={article.status.likes} articleId={article.id}></SocialLink>
+        <SocialLink views={article.status.views} likes={article.status.likes} comments={article.commentCount} />
       </div>
     </div>
   );
