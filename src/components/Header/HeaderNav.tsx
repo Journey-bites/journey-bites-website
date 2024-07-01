@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-
 import { cn } from '@/lib/utils';
 import {
   NavigationMenu,
@@ -13,22 +12,9 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Separator } from '@/components/ui/separator';
 import { Category } from '@/types';
+import { EXPLORE_LIST } from '@/constants';
 
-const components: Category[] = [
-  {
-    id: '0',
-    name: '熱門文章',
-    path: '/articles/hot',
-  },
-  {
-    id: '1',
-    name: '最新文章',
-    path: '/articles/new',
-  },
-];
-
-// TODO: after API is ready, set categories is required
-export default function HeaderNav({ categories }: { categories?: Category[] }) {
+export default function HeaderNav({ categories }: { categories: Category[] }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -37,25 +23,25 @@ export default function HeaderNav({ categories }: { categories?: Category[] }) {
             探索
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className='w-[180px] p-4 shadow-base'>
-              {components.map((component) => (
+            <ul className='w-[180px] p-4'>
+              {EXPLORE_LIST.map((list) => (
                 <ListItem
-                  key={component.id}
-                  title={component.name}
-                  href={component.path}
+                  key={list.id}
+                  title={list.name}
+                  href={list.path}
                   className='font-bold'
-                ></ListItem>
+                />
               ))}
             </ul>
             <Separator />
-            <ul className='w-[180px] p-4 shadow-base'>
+            <ul className='w-[180px] p-4'>
               <li className='mb-1 px-2 py-1 text-sm text-grey-300'>所有分類</li>
               {categories?.map((category) => (
                 <ListItem
                   key={category.id}
                   title={category.name}
-                  href={category.path}
-                ></ListItem>
+                  href={`/articles${category.path}`}
+                />
               ))}
             </ul>
           </NavigationMenuContent>

@@ -43,6 +43,7 @@ export default async function CreatorInfoPage({ params }: { params: { id: string
             <div className='flex flex-col gap-4'>
               {articles.map((article) => (
                 <LargeArticleCard
+                  showCreatedAt
                   key={article.id}
                   article={article}
                 />

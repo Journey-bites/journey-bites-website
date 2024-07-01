@@ -94,7 +94,7 @@ export default async function ArticlesContainer({
             </CardFooter>
             <div className='flex items-center justify-between'>
               <CardDescription>{new Date(item.createdAt).toLocaleDateString()}</CardDescription>
-              <SocialLink articleId={item.id} views={item.status.views} likes={item.status.likes} />
+              <SocialLink views={item.status.views} likes={item.status.likes} comments={item.commentCount} />
             </div>
           </Card>
         ))}
