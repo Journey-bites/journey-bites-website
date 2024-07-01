@@ -1,13 +1,5 @@
 import { Profile } from './index';
 
-// need to be removed
-export type Articles = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-};
-
 type ArticleStatus = {
   views: number;
   likes: number;
