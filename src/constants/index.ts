@@ -16,3 +16,5 @@ export const QUERY_KEY = {
   comments: 'comments',
   article: 'article',
 };
+
+export const NEWEB_PAY_DATA_NAMES = ['Version', 'MerchantID', 'TradeInfo', 'TradeSha'] as const;
