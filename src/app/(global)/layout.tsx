@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import ReactQueryProvider from '@/providers/ReactQuery';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { usePathname } from 'next/navigation';
+import { ARTICLE_PAGE_ROUTE_REGEX } from '@/constants/index';
 
 export default function GlobalLayout({
   children,
@@ -26,20 +27,12 @@ export default function GlobalLayout({
     }
   }, [setAuth]);
 
-  const isEditPage = pathname.startsWith('/article/edit/') && pathname.split('/').length === 4;
-  const isPublishPage = pathname.startsWith('/article/publish/') || pathname === '/article/publish';
-  const isCreatePage = pathname === '/article/create';
-
-  let hideHeader = false;
-
-  if (isEditPage || isPublishPage || isCreatePage) {
-    hideHeader = true;
-  };
+  const isHideHeader = ARTICLE_PAGE_ROUTE_REGEX.test(pathname);
 
   return (
     <>
       <ReactQueryProvider>
-        { !hideHeader && <Header /> }
+        { !isHideHeader && <Header /> }
         {children}
         {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       </ReactQueryProvider>

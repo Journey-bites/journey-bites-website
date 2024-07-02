@@ -6,6 +6,8 @@ export const PASSWORD_VALIDATION = z.string().regex(/^(?=.*[a-zA-Z])(?=.*\d)[a-z
 
 export const GOOGLE_LOGIN_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
 
+export const ARTICLE_PAGE_ROUTE_REGEX = /^\/article\/(edit\/[a-f0-9]+|publish(\/[a-f0-9]+)?|create)$/;
+
 export const LOCAL_STORAGE_KEY = {
   redirectUrl: 'redirect_url',
 };
