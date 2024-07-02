@@ -4,6 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { followCreator } from '@/lib/authApi';
 import ProtectedComponent from '../common/ProtectedComponent';
 import { toast } from '../ui/use-toast';
+import { handleApiError } from '@/lib/utils';
+import StatusCode from '@/types/StatusCode';
 
 export default function FollowBtn({ creatorId }: { creatorId: string }) {
   const { mutate: followCreatorMutate } = useMutation({ mutationFn: followCreator });
@@ -13,8 +15,15 @@ export default function FollowBtn({ creatorId }: { creatorId: string }) {
       onSuccess: () => {
         toast({ title: '追蹤成功', variant: 'success' });
       },
-      onError:  () => {
-        toast({ title: '已追蹤過囉！', variant: 'error' });
+      onError: (error) => {
+        handleApiError(error, {
+          [StatusCode.DUPLICATE_FOLLOW]: () => {
+            toast({ title: '已經追蹤過囉！', variant: 'warning' });
+          },
+          [StatusCode.ILLEGAL_PATH_PARAMETER]: () => {
+            toast({ title: '不能追蹤自己哦！', variant: 'warning' });
+          }
+        }, '追蹤');
       }
     });
   }
