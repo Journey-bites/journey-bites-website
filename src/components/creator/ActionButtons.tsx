@@ -2,15 +2,17 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import ProtectedComponent from '../common/ProtectedComponent';
 import { useUserStore } from '@/providers/userProvider';
 import { followCreator, subscribeCreator, unFollowCreator } from '@/lib/authApi';
 import { useMutation } from '@tanstack/react-query';
-import { startNewebPayment } from '@/lib/utils';
+import { handleApiError, startNewebPayment } from '@/lib/utils';
 import ConfirmDialog from '../custom/ConfirmDialog';
 import { NewebpayRequestData } from '@/types';
 import { toast } from '../ui/use-toast';
+import StatusCode from '@/types/StatusCode';
 
 export default function ActionButtons({ creatorId, userAlreadyFollowed }: { creatorId: string, userAlreadyFollowed?: boolean }) {
   const { auth } = useUserStore((state) => state);
@@ -21,6 +23,8 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
   const [newebPaymentData, setNewebPaymentData] = useState<NewebpayRequestData>();
 
   const { mutate: subscribeCreatorMutate, isPending: subscribePending } = useMutation({ mutationFn: subscribeCreator });
+
+  const router = useRouter();
 
   const handleFollow = () => {
     if (isFollowed) {
@@ -44,8 +48,21 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
         setSubscribeDialogOpen(true);
         setNewebPaymentData(data);
       },
-      onError: () => {
-        toast({ title: '建立訂單失敗', description: '請聯絡客服或稍後再試', variant: 'error' });
+      onError: (error) => {
+        handleApiError(error, {
+          [StatusCode.INVALID_ID]: () => {
+            toast({ title: '查無此創作者', description: '請聯絡客服', variant: 'error' });
+          },
+          [StatusCode.USER_NOT_FOUND]: () => {
+            toast({ title: '查無此創作者', description: '請聯絡客服', variant: 'error' });
+          },
+          [StatusCode.USER_NOT_AUTHORIZED]: () => {
+            toast({ title: '請重新登入', description: '將為您轉往登入頁面', variant: 'error' });
+            setTimeout(() => {
+              router.push('/login');
+            }, 2000);
+          },
+        }, '建立訂單失敗');
       }
     });
   };
@@ -75,7 +92,7 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
             </ProtectedComponent>
             <ProtectedComponent onClick={handleSubscribe}>
               <Button className='flex-1 md:flex-initial' isLoading={subscribePending} disabled={subscribePending}>
-                訂閱
+                訂閱支持
               </Button>
             </ProtectedComponent>
           </>
