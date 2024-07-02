@@ -1,3 +1,5 @@
+import { NEWEB_PAY_DATA_NAMES } from '@/constants';
+
 export type Tab = {
   value: string;
   label: string;
@@ -65,3 +67,7 @@ export interface FollowData extends Profile {
   email: string;
   isMutualFollow: boolean;
 }
+
+type NewebPayDataNames = typeof NEWEB_PAY_DATA_NAMES[number];
+
+export type NewebpayRequestData = Record<NewebPayDataNames, string>
