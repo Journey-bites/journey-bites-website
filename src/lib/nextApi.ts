@@ -1,5 +1,5 @@
 import { ApiSuccessResponse } from '@/types/apiResponse';
-import { Category, Creator, Follow, SearchRequestQuery } from '@/types';
+import { Category, Creator, FollowData, GetArticlesQuery, GetCreatorQuery } from '@/types';
 import { HttpException } from '@/lib/HttpExceptions';
 import { Article, Comment } from '@/types/article';
 
@@ -27,10 +27,11 @@ export async function getArticles({
   pageSize,
   q,
   type,
-}: SearchRequestQuery) {
+  category
+}: GetArticlesQuery) {
   const endpoint = '/articles';
   const params = new URLSearchParams();
-  const query = Object.entries({ page, pageSize, q, type });
+  const query = Object.entries({ page, pageSize, q, type, category });
 
   for(const [key, value] of query) {
     if (value) {
@@ -42,7 +43,7 @@ export async function getArticles({
   return res;
 }
 
-export async function getCreators({ page, pageSize, search, type }: SearchRequestQuery) {
+export async function getCreators({ page, pageSize, search, type }: GetCreatorQuery) {
   const endpoint = '/creator';
   const params = new URLSearchParams();
   const query = Object.entries({ page, pageSize, search, type });
@@ -71,7 +72,7 @@ export async function getCreatorById(id: string, token?: string) {
 }
 
 export async function getCreatorFollowers(creatorId: string) {
-  const res = await nextFetch<Follow[]>(`/creator/${creatorId}/followers`);
+  const res = await nextFetch<FollowData[]>(`/creator/${creatorId}/followers`);
   return res;
 }
 

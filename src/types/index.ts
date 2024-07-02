@@ -1,3 +1,5 @@
+import { NEWEB_PAY_DATA_NAMES } from '@/constants';
+
 export type Tab = {
   value: string;
   label: string;
@@ -8,6 +10,7 @@ export type Category = {
   id: string;
   name: string;
   path: string;
+  articleCount: number;
 };
 
 export type SocialLinks = {
@@ -34,10 +37,17 @@ export type RequestPageQuery = {
 }
 
 export type SearchRequestQuery = {
-  search?: string;
   type?: 'hot' | 'random';
-  q?: string;
 } & RequestPageQuery;
+
+export type GetArticlesQuery = {
+  q?: string;
+  category?: string;
+} & SearchRequestQuery;
+
+export type GetCreatorQuery = {
+  search?: string;
+} & SearchRequestQuery;
 
 export interface Creator extends Profile {
   userId: string;
@@ -52,8 +62,12 @@ export interface Creator extends Profile {
   }[];
 }
 
-export interface Follow extends Profile {
+export interface FollowData extends Profile {
   userId: string;
   email: string;
   isMutualFollow: boolean;
 }
+
+type NewebPayDataNames = typeof NEWEB_PAY_DATA_NAMES[number];
+
+export type NewebpayRequestData = Record<NewebPayDataNames, string>

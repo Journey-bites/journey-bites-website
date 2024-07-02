@@ -6,7 +6,6 @@ import { isAxiosError } from 'axios';
 import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
-import { useRouter } from 'next/navigation';
 import { LOCAL_STORAGE_KEY } from '@/constants';
 
 export function cn(...inputs: ClassValue[]) {

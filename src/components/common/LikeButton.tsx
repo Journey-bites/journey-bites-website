@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '../ui/button';
-import { cn, handleApiError, storeRedirectPath } from '@/lib/utils';
+import { cn, debounce, handleApiError, storeRedirectPath } from '@/lib/utils';
 import ProtectedComponent from './ProtectedComponent';
 import { likeArticle, unlikeArticle } from '@/lib/authApi';
 import StatusCode from '@/types/StatusCode';
@@ -35,6 +35,7 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
         [StatusCode.BAD_REQUEST]: () => {
           // Already liked, so unlike it
           unlikeArticleMutate({ articleId });
+          toast({ title: '已經按過讚囉！', description: '已幫您自動收回讚', variant: 'warning' });
         },
         [StatusCode.RESOURCE_NOT_FOUND]: () => {
           toast({ title: '文章已被刪除', description: '有緣再相見QQ', variant: 'error' });
@@ -48,6 +49,7 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
         }
       });
       setIsLiked(false);
+      setLikesCount((prev) => prev > 0 ? prev - 1 : 0);
     }
   });
 
@@ -75,11 +77,14 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
         }
       });
       setIsLiked(false);
+      setLikesCount((prev) => prev + 1);
     },
   });
 
+  const handleLike = debounce(() => likeArticleMutate({ articleId }));
+
   return (
-    <ProtectedComponent onClick={() => likeArticleMutate({ articleId })}>
+    <ProtectedComponent onClick={handleLike}>
       <Button
         variant={withBackground ? 'icon' : 'clean'}
         className={cn('group size-auto items-center justify-center gap-1', { ['bg-grey-100 p-2 hover:bg-grey-100']: withBackground })}
