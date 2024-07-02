@@ -86,7 +86,9 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
             </div>
           )}
         </div>
-        <Image className='max-h-40 w-full object-cover md:size-auto' src={article.thumbnailUrl || DefaultThumbnailImg} width={240} height={180} alt='' />
+        <div className='relative h-40 w-full shrink-0 md:h-[180px] md:w-[240px]'>
+          <Image className='object-cover' src={article.thumbnailUrl || DefaultThumbnailImg} fill alt={article.title} />
+        </div>
       </div>
       <div className='flex justify-between border-t border-grey-200 pb-[6px] pt-[13px]'>
         <span className='text-grey-300'>
