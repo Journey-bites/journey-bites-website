@@ -18,6 +18,7 @@ export const QUERY_KEY = {
   article: 'article',
   searchArticles: 'searchArticles',
   searchCreators: 'searchCreators',
+  newArticle: 'newArticle'
 };
 
 export const EXPLORE_LIST: Omit<Category, 'articleCount'>[] = [

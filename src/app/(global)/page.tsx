@@ -2,10 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import CreatorList from '@/components/CreatorList';
 import AllCategories from '@/components/AllCategories';
-import Content from './@content/page';
 import { Button } from '@/components/ui/button';
-import { getCategories, getCreators } from '@/lib/nextApi';
+import { getArticles, getCategories, getCreators } from '@/lib/nextApi';
 import ProtectedComponent from '@/components/common/ProtectedComponent';
+import ArticlesContainer from '@/components/ArticlesContainer';
+import ClientArticleContainer from '@/components/article/ClientArticleContainer';
 
 import BannerImg from '@/images/banner.webp';
 import BannerSmImg from '@/images/banner-sm.webp';
@@ -13,6 +14,8 @@ import BannerSmImg from '@/images/banner-sm.webp';
 export default async function Home() {
   const creators = await getCreators({ page: 1, pageSize: 5, type: 'random' });
   const categories = await getCategories();
+  const hotArticles = await getArticles({ type: 'hot', page: 1, pageSize: 4 });
+  const newArticles = await getArticles({ page: 1, pageSize: 4 });
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-between'>
@@ -31,7 +34,13 @@ export default async function Home() {
       </section>
       <div className='mx-auto mt-20 grid max-w-[90%] grid-cols-12 gap-6 2xl:max-w-[1296px]'>
         <div className='col-span-12 xl:col-span-8'>
-          <Content />
+          <div className='mb-9'>
+            <ArticlesContainer articles={hotArticles} showBtn color='secondary' type='hot' />
+          </div>
+          <div className='mb-9'>
+            <ArticlesContainer articles={newArticles} color='primary' type='new' />
+            <ClientArticleContainer />
+          </div>
         </div>
         <div className='col-span-12 xl:col-span-4'>
           <CreatorList creatorList={creators} />
