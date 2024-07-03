@@ -1,4 +1,4 @@
-import StatusCode from '../types/StatusCode';
+import StatusCode from '@/types/StatusCode';
 
 export interface HttpErrorArgs<T> {
   httpCode: number;

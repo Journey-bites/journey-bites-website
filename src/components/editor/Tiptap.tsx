@@ -8,7 +8,7 @@ import { Image as TiptapImage } from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import { Link as TiptapLink } from '@tiptap/extension-link';
 import CharacterCount from '@tiptap/extension-character-count';
-import { LIMIT as limit } from '../../constants/editorSettings';
+import { LIMIT as limit } from '@/constants/editorSettings';
 import Placeholder from '@tiptap/extension-placeholder';
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
 import Document from '@tiptap/extension-document';

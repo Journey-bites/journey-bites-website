@@ -2,8 +2,8 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { followCreator } from '@/lib/authApi';
-import ProtectedComponent from '../common/ProtectedComponent';
-import { toast } from '../ui/use-toast';
+import ProtectedComponent from '@/components/common/ProtectedComponent';
+import { toast } from '@/components/ui/use-toast';
 import { handleApiError } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
 

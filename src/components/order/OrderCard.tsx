@@ -3,8 +3,8 @@
 import type { ReactElement } from 'react';
 import { type LucideIcon, SmileIcon, AlertTriangleIcon, Undo2Icon, CircleHelpIcon } from 'lucide-react';
 import { Separator } from '@radix-ui/react-separator';
-import { Button } from '../ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { OrderStatus } from '@/types/enum';
 import { cn } from '@/lib/utils';
 

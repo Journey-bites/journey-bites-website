@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CameraIcon } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { uploadImgToFirebase } from '@/lib/firebase/storage';
 import { updateUserProfile } from '@/lib/authApi';
 import { useUserStore } from '@/providers/userProvider';
 import ImagePreviewDialog from './ImagePreviewDialog';
-import { toast } from '../ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 import DefaultUserImg from '@/images/default-user.webp';
 

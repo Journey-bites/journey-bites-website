@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import HeaderNav from './HeaderNav';
 import { getCategories } from '@/lib/nextApi';
-import SearchBar from '../custom/SearchBar';
+import SearchBar from '@/components/custom/SearchBar';
 import HeaderButtons from './HeaderButtons';
 
 import Logo from '@/images/logo-md.svg';

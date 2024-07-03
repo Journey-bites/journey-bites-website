@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import ProtectedComponent from '../common/ProtectedComponent';
+import ProtectedComponent from '@/components/common/ProtectedComponent';
 import { useUserStore } from '@/providers/userProvider';
 import { followCreator, unFollowCreator } from '@/lib/authApi';
 import { useMutation } from '@tanstack/react-query';
-import ConfirmDialog from '../custom/ConfirmDialog';
+import ConfirmDialog from '@/components/custom/ConfirmDialog';
 import useSubscribe from '@/hook/useSubscribe';
 
 export default function ActionButtons({ creatorId, userAlreadyFollowed }: { creatorId: string, userAlreadyFollowed?: boolean }) {
