@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import { zhTW } from 'date-fns/locale/zh-TW';
 import { formatDistance } from 'date-fns';
 import { EllipsisVerticalIcon } from 'lucide-react';
-import SocialLink from '../custom/SocialLink';
-import { DropdownMenuComponent as DropdownMenu, DropdownMenuLinkItem } from '../custom/DropdownMenu';
-import UserAvatar from '../common/UserAvatar';
+import SocialLink from '@/components/custom/SocialLink';
+import { DropdownMenuComponent as DropdownMenu, DropdownMenuLinkItem } from '@/components/custom/DropdownMenu';
+import UserAvatar from '@/components/common/UserAvatar';
 import { Article } from '@/types/article';
-import { toast } from '../ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { useUserStore } from '@/providers/userProvider';
 
 import DefaultThumbnailImg from '@/images/default-thumbnail.webp';
@@ -86,7 +86,9 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
             </div>
           )}
         </div>
-        <Image className='max-h-40 w-full object-cover md:size-auto' src={article.thumbnailUrl || DefaultThumbnailImg} width={240} height={180} alt='' />
+        <div className='relative h-40 w-full shrink-0 md:h-[180px] md:w-[240px]'>
+          <Image className='object-cover' src={article.thumbnailUrl || DefaultThumbnailImg} fill alt={article.title} />
+        </div>
       </div>
       <div className='flex justify-between border-t border-grey-200 pb-[6px] pt-[13px]'>
         <span className='text-grey-300'>

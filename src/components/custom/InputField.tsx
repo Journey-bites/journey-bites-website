@@ -1,6 +1,6 @@
 import type { HTMLInputTypeAttribute } from 'react';
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Input } from '../ui/input';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import type { LucideIcon } from 'lucide-react';
 

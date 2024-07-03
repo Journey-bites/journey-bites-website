@@ -20,7 +20,7 @@ export default async function CategoryArticles({ params }: { params: { category:
         </h2>
         <p className='mt-4 text-lg text-grey-300'>總共 {articles.length} 篇文章</p>
       </section>
-      <section className='mx-auto mt-14 px-6 lg:w-container'>
+      <section className='mx-auto mt-14 flex flex-col gap-6 px-6 lg:w-container'>
         {
           articles.length ? (
             articles.map((article) => (

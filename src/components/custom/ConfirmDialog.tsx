@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '../ui/button';
-import { Dialog, DialogClose, DialogTitle, DialogHeader, DialogFooter, DialogContent } from '../ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogClose, DialogTitle, DialogHeader, DialogFooter, DialogContent } from '@/components/ui/dialog';
 
 type ConfirmDialogProps = {
   title?: string;

@@ -6,17 +6,17 @@ import { formatDistance } from 'date-fns';
 import { zhTW } from 'date-fns/locale/zh-TW';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/providers/userProvider';
-import { Button } from '../ui/button';
-// import LikeButton from '../common/LikeButton';
-import UserAvatar from '../common/UserAvatar';
-import LoginLinkWithStorePathname from '../common/LoginLinkWithStorePathname';
+import { Button } from '@/components/ui/button';
+// import LikeButton from '@/components/common/LikeButton';
+import UserAvatar from '@/components/common/UserAvatar';
+import LoginLinkWithStorePathname from '@/components/common/LoginLinkWithStorePathname';
 import { FieldValues, useForm } from 'react-hook-form';
-import { Form } from '../ui/form';
-import InputField from '../custom/InputField';
+import { Form } from '@/components/ui/form';
+import InputField from '@/components/custom/InputField';
 import { addCommentToArticle } from '@/lib/authApi';
 import { getCommentsByArticleId } from '@/lib/nextApi';
 import { QUERY_KEY } from '@/constants';
-import { toast } from '../ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 export default function CommentSection({ articleId }: { articleId: string }) {
   const { isLogin, auth } = useUserStore((state) => state);

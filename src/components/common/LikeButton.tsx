@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { cn, debounce, handleApiError, storeRedirectPath } from '@/lib/utils';
 import ProtectedComponent from './ProtectedComponent';
 import { likeArticle, unlikeArticle } from '@/lib/authApi';
 import StatusCode from '@/types/StatusCode';
-import { toast } from '../ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 
 type LikeButtonProps = {
   articleId: string;

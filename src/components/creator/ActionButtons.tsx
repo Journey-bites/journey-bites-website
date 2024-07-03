@@ -2,17 +2,13 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import ProtectedComponent from '../common/ProtectedComponent';
+import ProtectedComponent from '@/components/common/ProtectedComponent';
 import { useUserStore } from '@/providers/userProvider';
-import { followCreator, subscribeCreator, unFollowCreator } from '@/lib/authApi';
+import { followCreator, unFollowCreator } from '@/lib/authApi';
 import { useMutation } from '@tanstack/react-query';
-import { handleApiError, startNewebPayment } from '@/lib/utils';
-import ConfirmDialog from '../custom/ConfirmDialog';
-import { NewebpayRequestData } from '@/types';
-import { toast } from '../ui/use-toast';
-import StatusCode from '@/types/StatusCode';
+import ConfirmDialog from '@/components/custom/ConfirmDialog';
+import useSubscribe from '@/hook/useSubscribe';
 
 export default function ActionButtons({ creatorId, userAlreadyFollowed }: { creatorId: string, userAlreadyFollowed?: boolean }) {
   const { auth } = useUserStore((state) => state);
@@ -20,11 +16,7 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
   const { mutate: unFollowCreatorMutate } = useMutation({ mutationFn: unFollowCreator, onMutate: () => setIsFollowed(false) });
   const [isFollowed, setIsFollowed] = useState(userAlreadyFollowed);
   const [subscribeDialogOpen, setSubscribeDialogOpen] = useState(false);
-  const [newebPaymentData, setNewebPaymentData] = useState<NewebpayRequestData>();
-
-  const { mutate: subscribeCreatorMutate, isPending: subscribePending } = useMutation({ mutationFn: subscribeCreator });
-
-  const router = useRouter();
+  const { handleSubscribe, subscribePending, navigateToNewebpay } = useSubscribe({ creatorId, onSuccessCallback: () => setSubscribeDialogOpen(true) });
 
   const handleFollow = () => {
     if (isFollowed) {
@@ -40,38 +32,6 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
         },
       });
     }
-  };
-
-  const handleSubscribe = () => {
-    subscribeCreatorMutate(creatorId, {
-      onSuccess: async (data) => {
-        setSubscribeDialogOpen(true);
-        setNewebPaymentData(data);
-      },
-      onError: (error) => {
-        handleApiError(error, {
-          [StatusCode.INVALID_ID]: () => {
-            toast({ title: '查無此創作者', description: '請聯絡客服', variant: 'error' });
-          },
-          [StatusCode.USER_NOT_FOUND]: () => {
-            toast({ title: '查無此創作者', description: '請聯絡客服', variant: 'error' });
-          },
-          [StatusCode.USER_NOT_AUTHORIZED]: () => {
-            toast({ title: '請重新登入', description: '將為您轉往登入頁面', variant: 'error' });
-            setTimeout(() => {
-              router.push('/login');
-            }, 2000);
-          },
-        }, '建立訂單失敗');
-      }
-    });
-  };
-
-  const navigateToNewebpay = () => {
-    if (!newebPaymentData) {
-      return toast({ title: '無訂單資料', description: '請聯絡客服', variant: 'error' });
-    }
-    startNewebPayment(newebPaymentData);
   };
 
   const isUsersPage = auth?.id === creatorId;

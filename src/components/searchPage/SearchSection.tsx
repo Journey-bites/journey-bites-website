@@ -5,7 +5,7 @@ import { Article } from '@/types/article';
 import { Category, Creator } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { SearchIcon } from 'lucide-react';
-import { Input } from '../ui/input';
+import { Input } from '@/components/ui/input';
 
 type SearchSectionProps = {
   value: string;

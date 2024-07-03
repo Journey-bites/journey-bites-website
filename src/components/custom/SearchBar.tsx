@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
-import SearchIcon from '../icons/SearchIcon';
+import SearchIcon from '@/components/icons/SearchIcon';
 import useSearch from '@/hook/useSearch';
 
 export default function SearchBar() {
