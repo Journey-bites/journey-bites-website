@@ -30,7 +30,7 @@ export default async function ArticlesContainer({
         <Button asChild variant='outline' className={cn('rounded-lg px-4 py-2 md:px-5 md:py-3', {
             ['md:hidden']: !showBtn,
         })}>
-          <Link href='/articles?type=hot'>查看更多</Link>
+          <Link href={`/articles?type=${type}`}>查看更多</Link>
         </Button>
       </div>
       <div className={cn('mt-7 grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2', {

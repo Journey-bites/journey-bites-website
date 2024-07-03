@@ -19,7 +19,7 @@ export default function ClientArticleContainer() {
   if (error || !data) return null;
 
   return (
-    <div className='grid grid-cols-1 gap-4 rounded-lg rounded-t-none bg-primary-100 px-3 pb-2 md:-mt-2 md:grid-cols-2 md:p-9 md:pt-2'>
+    <div className='hidden grid-cols-1 gap-4 rounded-lg rounded-t-none bg-primary-100 px-3 pb-2 md:-mt-2 md:grid-cols-2 md:p-9 md:pt-2 lg:grid'>
       {isLoading && <LoadingSkeleton cardNum={2} />}
       {data.pages.map((item, i) => (
         <Fragment key={i}>
