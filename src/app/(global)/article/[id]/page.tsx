@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { getArticleById, getCreatorById } from '@/lib/nextApi';
 import FollowBtn from '@/components/article/FollowBtn';
-import IsNeedPayLayer from '@/components/article/isNeedPayLayer';
+import SubscriptionLayer from '@/components/article/SubscriptionLayer';
 
 import DefaultUserImg from '@/images/default-user.webp';
 
@@ -53,7 +53,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
           {/* TODO: need to handle needsPay & user is already paid */}
           {
             article.isNeedPay && (
-              <IsNeedPayLayer creatorId={article.creator.id} />
+              <SubscriptionLayer creatorId={article.creator.id} />
             )
           }
           <div className='mt-5 flex flex-wrap gap-4 md:mt-9'>

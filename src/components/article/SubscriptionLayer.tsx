@@ -1,13 +1,13 @@
 'use client';
 
-import useSubscribe from '@/hook/useSubscribe';
-import ProtectedComponent from '../common/ProtectedComponent';
-import ConfirmDialog from '../custom/ConfirmDialog';
-import { Button } from '../ui/button';
 import { useState } from 'react';
 import { useUserStore } from '@/providers/userProvider';
+import useSubscribe from '@/hook/useSubscribe';
+import ProtectedComponent from '@/components/common/ProtectedComponent';
+import ConfirmDialog from '@/components/custom/ConfirmDialog';
+import { Button } from '@/components/ui/button';
 
-export default function IsNeedPayLayer({ creatorId }: { creatorId: string }) {
+export default function SubscriptionLayer({ creatorId }: { creatorId: string }) {
   const { auth } = useUserStore((state) => state);
   const [subscribeDialogOpen, setSubscribeDialogOpen] = useState(false);
   const { handleSubscribe, subscribePending, navigateToNewebpay } = useSubscribe({ creatorId, onSuccessCallback: () => setSubscribeDialogOpen(true) });
