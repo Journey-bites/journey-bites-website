@@ -26,10 +26,10 @@ import { useState, useRef, useEffect } from 'react';
 
 export default function CommentSection({ articleId }: { articleId: string }) {
   const [showAll, setShowAll] = useState(false);
-  const [initialVisibleCount, setInitialVisibleCount] = useState<number>(1);
+  const [initialVisibleCount, setInitialVisibleCount] = useState(1);
   const latestCommentRef = useRef<HTMLDivElement>(null);
   const toggleShowAll = () => {
-    setShowAll(!showAll);
+    setShowAll(prev => !prev);
   };
 
   const { isLogin, auth } = useUserStore((state) => state);
@@ -53,7 +53,7 @@ export default function CommentSection({ articleId }: { articleId: string }) {
       onSuccess: () => {
         form.reset();
         setShowAll(true);
-        setInitialVisibleCount(prev => prev + comments!.length);
+        if (comments) setInitialVisibleCount(prev => prev + comments.length);
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.comments] });
       },
       onError: () => {

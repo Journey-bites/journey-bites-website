@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Logo from '@/images/logo-md.svg';
 import LogoSm from '@/images/logo-sm.svg';
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
+export default function AuthLayout({ children }: { children: PropsWithChildren }) {
   return (
     <div className='flex h-screen'>
       <div className="hidden w-2/5 bg-[url('../images/auth-page-bg.webp')] bg-cover bg-center md:block" />
