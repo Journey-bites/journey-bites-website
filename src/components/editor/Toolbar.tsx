@@ -87,7 +87,7 @@ const Toolbar = ({ editor }: Props) => {
 
   return (
     <div
-      className='sticky top-0 z-10 flex w-full flex-wrap items-center justify-between gap-5 rounded-t-md bg-white/70 px-4 py-3 backdrop-blur-md'
+      className='sticky top-20 z-10 flex w-full flex-wrap items-center justify-between gap-5 rounded-t-md bg-white/70 px-4 py-3 backdrop-blur-md'
     >
       <div className='flex w-full flex-wrap items-center justify-start gap-5'>
         <Toggle

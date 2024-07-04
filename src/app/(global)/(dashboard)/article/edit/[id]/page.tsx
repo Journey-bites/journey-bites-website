@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUserStore } from '@/providers/userProvider';
 import { verifyAuthor } from '@/lib/utils';
-import { Lock } from 'lucide-react';
+import { Lock, PenLine } from 'lucide-react';
 import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
 import { type Article } from '@/types/article';
 
@@ -47,8 +47,8 @@ const EditArticle: React.FC<Props> = ({ params }) => {
 
   return (
     <main className='min-h-screen w-full pb-10'>
-    <div className='mt-10 text-center text-3xl text-primary-300'>
-      編輯文章
+    <div className='mt-10 flex items-center justify-center gap-2 text-center text-2xl font-semibold text-grey-300'>
+    <PenLine />編輯文章
     </div>
     {isPending || isVerifying ? (
       <LoadingEditorSkeleton />

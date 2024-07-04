@@ -200,7 +200,7 @@ export default function PublishArticle() {
               )}
             />
             <div className='text-center'>
-              <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild><Link href='/manage/content'>取消</Link></Button>
+              <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild><Link href='/manage/content' replace={true}>取消</Link></Button>
               <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateCreateArticle}>發布文章</Button>
             </div>
           </form>
