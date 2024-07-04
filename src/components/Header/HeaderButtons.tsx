@@ -22,8 +22,6 @@ export default function HeaderButtons({ categories }: { categories: Category[] }
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const [keywords, setKeywords] = useState('');
   const { handleSearch } = useSearch({ keywords });
-  const pathname = usePathname();
-  const isHideBtn = ARTICLE_PAGE_ROUTE_REGEX.test(pathname);
 
   function handleSideMenuClose() {
     setKeywords('');
@@ -46,9 +44,7 @@ export default function HeaderButtons({ categories }: { categories: Category[] }
           ) : (
             <>
               <Button asChild size='sm'>
-                { !isHideBtn &&
-                  (<Link href='/article/create'>開始創作</Link>)
-                }
+                <Link href='/article/create'>開始創作</Link>
               </Button>
               <DropdownMenu
                 triggerButton={
