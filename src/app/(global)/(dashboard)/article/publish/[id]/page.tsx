@@ -38,10 +38,6 @@ function convertTags(tagTexts: string[]): Tag[] {
   }));
 }
 
-// function extractTagTexts(tags: Tag[]): string[] {
-//   return tags.map(tag => tag.text);
-// }
-
 export default function PublishArticle({ params }: { params: { id: string } }) {
   const { editorProps } = useEditor();
   const defaultTags: string[] = editorProps?.tags || [];

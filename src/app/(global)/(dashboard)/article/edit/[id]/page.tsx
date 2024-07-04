@@ -51,7 +51,7 @@ const EditArticle: React.FC<Props> = ({ params }) => {
   return (
     <main className='min-h-screen w-full pb-10'>
     <div className='mt-10 flex items-center justify-center gap-2 text-center text-2xl font-semibold text-grey-300'>
-    <PenLine />編輯文章
+      <PenLine />編輯文章
     </div>
     {isPending || isVerifying ? (
       <LoadingEditorSkeleton />
