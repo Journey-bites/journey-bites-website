@@ -1,15 +1,15 @@
 'use client';
 
+import { Fragment, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { PartyPopperIcon, ThumbsUpIcon } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
 import LargeArticleCard from '@/components/article/LargeArticleCard';
 import { getArticles } from '@/lib/nextApi';
 import { QUERY_KEY } from '@/constants';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
-import { useInView } from 'react-intersection-observer';
 import useGetPosts from '@/hook/useGetPosts';
-import { Fragment, useEffect } from 'react';
 
 export default function ArticlesPage() {
   const searchParams = useSearchParams();
