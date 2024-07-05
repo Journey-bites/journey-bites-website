@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { LogOutIcon } from 'lucide-react';
 import { useUserStore } from '@/providers/userProvider';
-import { DropdownMenuLinkItem } from '../custom/DropdownMenu';
+import { DropdownMenuLinkItem } from '@/components/custom/DropdownMenu';
 import { logout } from '@/lib/authApi';
-import { SheetClose } from '../ui/sheet';
+import { SheetClose } from '@/components/ui/sheet';
 
 import DefaultUserImg from '@/images/default-user.webp';
 

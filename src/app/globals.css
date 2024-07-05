@@ -24,8 +24,10 @@
 
     --info: #1991FF;
     --success: #2CC585;
-    --warning: #FFB649;
+    --warning: #DB8C54;
+    --warning-100: #FDF6E6;
     --danger: #D65F5F;
+    --danger-100: #FFF3EF;
 
     --grey-100: #E5E7EB;
     --grey-200: #E2E8F0;

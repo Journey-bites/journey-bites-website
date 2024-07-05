@@ -6,15 +6,15 @@ import { UsersIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/constants';
-import { Button } from '../ui/button';
-import ProtectedComponent from '../common/ProtectedComponent';
-import { Follow } from '@/types';
+import { Button } from '@/components/ui/button';
+import ProtectedComponent from '@/components/common/ProtectedComponent';
+import { Creator, FollowData } from '@/types';
 import { getCreatorFollowers } from '@/lib/nextApi';
 import { followCreator, unFollowCreator } from '@/lib/authApi';
 
 import DefaultUserImg from '@/images/default-user.webp';
 
-export default function CreatorCard({ creator, hasFollowed }: { creator: Follow, hasFollowed: boolean }) {
+export default function CreatorCard({ creator, hasFollowed }: { creator: Creator | FollowData, hasFollowed: boolean }) {
   const [followed, setFollowed] = useState(hasFollowed);
   const queryClient = useQueryClient();
   const { data: creatorFollowers, error } = useQuery({

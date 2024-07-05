@@ -1,19 +1,21 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-// import HeaderNav from './HeaderNav';
-// import { getCategories } from '@/lib/nextApi';
-import SearchBar from '../custom/SearchBar';
+import { useQuery } from '@tanstack/react-query';
+import HeaderNav from './HeaderNav';
+import { getCategories } from '@/lib/nextApi';
+import SearchBar from '@/components/custom/SearchBar';
 import HeaderButtons from './HeaderButtons';
 
 import Logo from '@/images/logo-md.svg';
 import LogoSm from '@/images/logo-sm.svg';
 
 export default function Header() {
-  // const categories = await getCategories();
-
-  // if (!categories?.length) {
-  //   throw new Error('No categories found');
-  // }
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories
+  });
 
   return (
     <header className='sticky top-0 z-40 bg-white md:border md:border-b-gray-200'>
@@ -23,13 +25,12 @@ export default function Header() {
             <Image className='hidden md:block' src={Logo} alt='Journey Bites' priority />
             <Image className='md:hidden' src={LogoSm} alt='Journey Bites' priority />
           </Link>
-          {/* TODO: add it back when search page is ready */}
           <div className='hidden gap-8 md:flex'>
-            {/* <HeaderNav /> */}
+            {categories && <HeaderNav categories={categories} />}
             <SearchBar />
           </div>
         </div>
-        <HeaderButtons />
+        {categories && <HeaderButtons categories={categories} />}
       </div>
     </header>
   );

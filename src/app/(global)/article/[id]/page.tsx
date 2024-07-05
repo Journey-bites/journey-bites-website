@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react';
 import Image from 'next/image';
 import DOMPurify from 'isomorphic-dompurify';
@@ -8,9 +9,10 @@ import CommentSection from '@/components/article/CommentSection';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { getArticleById, getCreatorById } from '@/lib/nextApi';
+import FollowBtn from '@/components/article/FollowBtn';
+import SubscriptionLayer from '@/components/article/SubscriptionLayer';
 
 import DefaultUserImg from '@/images/default-user.webp';
-import FollowBtn from '@/components/article/FollowBtn';
 
 function ArticleContainer({ children, className, ...props }: PropsWithChildren & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
   return (
@@ -25,7 +27,6 @@ function ArticleContainer({ children, className, ...props }: PropsWithChildren &
 
 export default async function ArticlePage({ params }: { params: { id: string } }) {
   const article = await getArticleById(params.id);
-  // const content = article.isNeedPay ? article.abstract : article.content;
   const cleanContentHtml = DOMPurify.sanitize(article.content);
   const creatorInfo = await getCreatorById(article.creator.id);
   return (
@@ -40,7 +41,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
                 <Image fill sizes='5vw' src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} />
               </div>
               <div className='flex flex-col items-start gap-1'>
-                <span className='text-xl font-medium'>{creatorInfo.displayName}</span>
+                <Link href={`/creator/${creatorInfo.userId}`} className='text-xl font-medium'>{creatorInfo.displayName}</Link>
                 <FollowBtn creatorId={creatorInfo.userId} />
               </div>
             </div>
@@ -51,13 +52,11 @@ export default async function ArticlePage({ params }: { params: { id: string } }
           </div>
           {parse(cleanContentHtml)}
           {/* TODO: need to handle needsPay & user is already paid */}
-          {/* {
+          {
             article.isNeedPay && (
-              <div className='flex justify-center bg-gradient-to-t from-primary-100 to-white py-9'>
-                <Button size='sm'>付費即可解鎖閱讀</Button>
-              </div>
+              <SubscriptionLayer creatorId={article.creator.id} />
             )
-          } */}
+          }
           <div className='mt-5 flex flex-wrap gap-4 md:mt-9'>
             {
               article.tags?.map((tag) => (

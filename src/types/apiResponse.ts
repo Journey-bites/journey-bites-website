@@ -1,5 +1,5 @@
 import { Comment, Article } from './article';
-import { Follow, UserInfo } from './index';
+import { FollowData, NewebpayRequestData, UserInfo } from './index';
 import StatusCode from './StatusCode';
 
 export interface ApiResponse {
@@ -21,10 +21,12 @@ export type LoginResponse = ApiSuccessResponse<{ token: string }>;
 
 export type UserResponse = ApiSuccessResponse<UserInfo>;
 
-export type UserFollowResponse = ApiSuccessResponse<Follow[]>;
+export type UserFollowResponse = ApiSuccessResponse<FollowData[]>;
 
 export type PostCommentResponse = ApiSuccessResponse<{ commentId: string }>;
 
 export type CommentResponse = ApiSuccessResponse<Comment[]>;
 
 export type ArticlesResponse = ApiSuccessResponse<Article[]>;
+
+export type SubscribeResponse = ApiSuccessResponse<NewebpayRequestData>;

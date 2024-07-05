@@ -22,7 +22,7 @@ import {
 import { DialogComponent } from './EditorDialog';
 import { useDialog } from '@/stores/useDialogStore';
 import { useEditor } from '@/stores/useEditorStore';
-import { LIMIT } from '../../constants/editorSettings';
+import { LIMIT } from '@/constants/editorSettings';
 import { Button } from '@/components/ui/button';
 import { Toggle } from '@/components/ui/toggle';
 
