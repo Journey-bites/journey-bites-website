@@ -16,9 +16,22 @@ import InputField from '@/components/custom/InputField';
 import { addCommentToArticle } from '@/lib/authApi';
 import { getCommentsByArticleId } from '@/lib/nextApi';
 import { QUERY_KEY } from '@/constants';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '../ui/use-toast';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import { useState, useRef, useEffect } from 'react';
 
 export default function CommentSection({ articleId }: { articleId: string }) {
+  const [showAll, setShowAll] = useState(false);
+  const [initialVisibleCount, setInitialVisibleCount] = useState(1);
+  const latestCommentRef = useRef<HTMLDivElement>(null);
+  const toggleShowAll = () => {
+    setShowAll(prev => !prev);
+  };
+
   const { isLogin, auth } = useUserStore((state) => state);
   const queryClient = useQueryClient();
   const { data: comments } = useQuery({
@@ -39,6 +52,8 @@ export default function CommentSection({ articleId }: { articleId: string }) {
     addCommentMutate({ articleId, content: data.commentText }, {
       onSuccess: () => {
         form.reset();
+        setShowAll(true);
+        if (comments) setInitialVisibleCount(prev => prev + comments.length);
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.comments] });
       },
       onError: () => {
@@ -46,6 +61,12 @@ export default function CommentSection({ articleId }: { articleId: string }) {
       }
     });
   }
+
+  useEffect(() => {
+    if (latestCommentRef.current) {
+      latestCommentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [comments]);
 
   if (!comments) return null;
 
@@ -65,32 +86,71 @@ export default function CommentSection({ articleId }: { articleId: string }) {
             </div>
           )
         }
-        {
-          comments.length > 0 && (
-            comments.map((comment) => (
-              <div key={comment.id} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6'>
-                <div className='flex gap-4'>
-                  <UserAvatar userName={comment.user.profile.displayName || ''} avatarImgUrl={comment.user.profile.avatarImageUrl} />
-                  <div>
-                    <div className='mb-2 flex flex-col text-xl font-bold md:flex-row'>
-                      {comment.user.profile.displayName}
-                      <span className='text-base font-normal text-grey-300 md:pl-4'>{formatDistance(new Date(comment.updatedAt), new Date(), { addSuffix: true, locale: zhTW })}</span>
-                    </div>
-                    <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
-                    {/* TODO: Currently not support comment like feature */}
-                    {/* <div className='hidden md:block'>
-                      <LikeButton count={comment.likes} />
-                    </div> */}
-                  </div>
+
+        {comments.slice(0, initialVisibleCount).map((comment, index) => (
+          <div key={comment.id} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6' ref={index === comments.length - 1 ? latestCommentRef : null}>
+            <div className='flex gap-4'>
+              <UserAvatar userName={comment.user.profile.displayName || ''} avatarImgUrl={comment.user.profile.avatarImageUrl} />
+              <div>
+                <div className='mb-2 flex flex-col text-xl font-bold md:flex-row'>
+                  {comment.user.profile.displayName}
+                  <span className='text-base font-normal text-grey-300 md:pl-4'>
+                    {formatDistance(new Date(comment.updatedAt), new Date(), { addSuffix: true, locale: zhTW })}
+                  </span>
                 </div>
-                <div className='md:hidden'>
-                  <p className='mb-4 text-base'>{comment.content}</p>
-                  {/* <LikeButton count={comment.likes} /> */}
-                </div>
+                <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
+                {/* TODO: Currently not support comment like feature */}
+                {/* <div className='hidden md:block'>
+                  <LikeButton count={comment.likes} />
+                </div> */}
               </div>
-            ))
-          )
-        }
+            </div>
+            {/* <div className='md:hidden'>
+              <p className='mb-4 text-base'>{comment.content}</p>
+              <LikeButton count={comment.likes} />
+            </div> */}
+          </div>
+        ))}
+
+        {comments.length > initialVisibleCount && (
+          <Collapsible>
+            <CollapsibleContent>
+              {comments.slice(initialVisibleCount).map((comment) => (
+                <div key={comment.id} className='mb-4 rounded-lg bg-white p-4 shadow-outlineCard md:mb-6 md:p-6'>
+                  <div className='flex gap-4'>
+                    <UserAvatar userName={comment.user.profile.displayName || ''} avatarImgUrl={comment.user.profile.avatarImageUrl} />
+                    <div>
+                      <div className='mb-2 flex flex-col text-xl font-bold md:flex-row'>
+                        {comment.user.profile.displayName}
+                        <span className='text-base font-normal text-grey-300 md:pl-4'>
+                          {formatDistance(new Date(comment.updatedAt), new Date(), { addSuffix: true, locale: zhTW })}
+                        </span>
+                      </div>
+                      <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
+                      {/* TODO: Currently not support comment like feature */}
+                      {/* <div className='hidden md:block'>
+                        <LikeButton count={comment.likes} />
+                      </div> */}
+                    </div>
+                  </div>
+                  {/* <div className='md:hidden'>
+                    <p className='mb-4 text-base'>{comment.content}</p>
+                    <LikeButton count={comment.likes} />
+                  </div> */}
+                </div>
+              ))}
+            </CollapsibleContent>
+            {!showAll && comments.length > initialVisibleCount && (
+              <CollapsibleTrigger onClick={toggleShowAll} asChild>
+                {/* {showAll ? `隱藏 (${comments.length - initialVisibleCount} 更多)` : `顯示全部 (${comments.length - initialVisibleCount})`} */}
+                <div className='cursor-pointer text-center font-bold text-primary'>
+                  {showAll ? `(${comments.length - initialVisibleCount})` : `顯示全部 (${comments.length - initialVisibleCount})`}
+                </div>
+              </CollapsibleTrigger>
+            )}
+          </Collapsible>
+        )}
+
       </div>
       <div className='flex items-center gap-2 border-t-2 border-grey-200 px-[18px] py-5'>
         {
