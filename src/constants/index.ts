@@ -18,7 +18,8 @@ export const QUERY_KEY = {
   article: 'article',
   searchArticles: 'searchArticles',
   searchCreators: 'searchCreators',
-  newArticle: 'newArticle'
+  newArticle: 'newArticle',
+  typeArticles: 'typeArticles',
 };
 
 export const EXPLORE_LIST: Omit<Category, 'articleCount'>[] = [
