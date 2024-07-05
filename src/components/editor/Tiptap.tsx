@@ -23,7 +23,7 @@ interface TiptapProps {
 }
 
 const forceTitleDocument = Document.extend({
-  content: 'heading block*',
+  content: 'paragraph block*',
 });
 
 const Tiptap = ({ onChange, content }: TiptapProps) => {

@@ -83,10 +83,10 @@ export default function CommentSection({ articleId }: { articleId: string }) {
                     </div> */}
                   </div>
                 </div>
-                {/* <div className='md:hidden'>
+                <div className='md:hidden'>
                   <p className='mb-4 text-base'>{comment.content}</p>
-                  <LikeButton count={comment.likes} />
-                </div> */}
+                  {/* <LikeButton count={comment.likes} /> */}
+                </div>
               </div>
             ))
           )
