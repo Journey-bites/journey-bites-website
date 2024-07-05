@@ -11,10 +11,10 @@ export default function ClientArticleContainer() {
   const { inView, ref } = useInView();
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage]);
+  }, [inView, fetchNextPage, isFetchingNextPage]);
 
   if (error || !data) return null;
 
