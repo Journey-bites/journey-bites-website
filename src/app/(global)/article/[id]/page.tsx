@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react';
 import Image from 'next/image';
 import DOMPurify from 'isomorphic-dompurify';
@@ -40,7 +41,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
                 <Image fill sizes='5vw' src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} />
               </div>
               <div className='flex flex-col items-start gap-1'>
-                <span className='text-xl font-medium'>{creatorInfo.displayName}</span>
+                <Link href={`/creator/${creatorInfo.userId}`} className='text-xl font-medium'>{creatorInfo.displayName}</Link>
                 <FollowBtn creatorId={creatorInfo.userId} />
               </div>
             </div>
