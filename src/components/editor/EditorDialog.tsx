@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { z } from 'zod';
 
 import {
   Dialog,
@@ -14,13 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useDialog } from '@/stores/useDialogStore';
+import { imgUrlValidate } from '@/constants/imgUrlValidate';
 
 interface DialogComponentProps {
   handleDialog: (url: string) => void;
 }
-
-const urlRegex = /^https:\/\/(images\.unsplash\.com|i\.imgur\.com)\/.+$/;
-const schema = z.string().regex(urlRegex);
 
 export function DialogComponent({ handleDialog }: DialogComponentProps ) {
   const { isOpen, onClose, onOpen, data, setData } = useDialog();
@@ -30,23 +27,18 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
     onOpen();
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const url = e.target.value;
+    const url = e.target.value;;
+    const validationErrors = imgUrlValidate(url);
 
-    try {
-      schema.parse(url);
+    if (validationErrors) {
+      setIsValid(false);
+      console.error('Validation errors:', validationErrors);
+    } else {
       setIsValid(true);
       setData({ url });
-    } catch (e) {
-      if (e instanceof z.ZodError) {
-          const errors = e.errors.map(error => error.message);
-          setData({ url: '' });
-          setIsValid(false);
-          return errors;
-      } else {
-        throw new Error('Unexpected error occurred');
-      }
     }
   };
+
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     if(data && data.url) handleDialog(data.url);
@@ -71,11 +63,7 @@ export function DialogComponent({ handleDialog }: DialogComponentProps ) {
             <p className={cn('mt-1 text-sm text-secondary', {
               ['text-danger']: !isValid
             })}>
-              請至
-              <a className='underline' href='https://imgur.com/' target='_blank' rel='noreferrer'> imgur </a>
-              或
-              <a className='underline' href='https://unsplash.com/' target='_blank' rel='noreferrer'> unsplash </a>
-              上傳圖片，造成不便敬請見諒
+              請填入正確的網址格式, ex: https://www.journeybites.com
             </p>
           </div>
         <DialogFooter>

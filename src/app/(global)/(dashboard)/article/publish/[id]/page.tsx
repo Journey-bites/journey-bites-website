@@ -13,14 +13,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
 import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { editArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
-import { getCategories } from '@/lib/nextApi';
-import { handleApiError } from '@/lib/utils';
+import { getArticleById, getCategories } from '@/lib/nextApi';
+import Link from 'next/link';
+import { handleApiError, verifyAuthor } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
 import { CreateArticleRequest } from '@/types/article';
+import { useUserStore } from '@/providers/userProvider';
+import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
+import { Lock } from 'lucide-react';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -38,14 +42,18 @@ function convertTags(tagTexts: string[]): Tag[] {
 //   return tags.map(tag => tag.text);
 // }
 
-export default function PublishArticle() {
+export default function PublishArticle({ params }: { params: { id: string } }) {
   const { editorProps } = useEditor();
   const defaultTags: string[] = editorProps?.tags || [];
   const [tags, setTags] = useState <Tag[]> (convertTags(defaultTags) || []);
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
+  const [isAuthor, setIsAuthor] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(true);
   const router = useRouter();
+  const { id } = params;
+  const { auth } = useUserStore((state) => state);
 
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
@@ -68,10 +76,29 @@ export default function PublishArticle() {
     mutationFn: editArticle
   });
 
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['getArticleById', id],
+    queryFn: () => getArticleById(id),
+  });
+
   useEffect(() => {
-    if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
+    if (data) {
+      const { creator } = data;
+
+      if (auth && auth.id) {
+        verifyAuthor(creator?.id, auth.id, router, () => setIsAuthor(true));
+        setIsVerifying(false);
+        return;
+
+      }
+
+      if (isError) {
+        console.log(error);
+      }
+    }
+
     setInitialLoad(true);
-  }, [editorProps]);
+  }, [id, router, data, auth, isError, error, editorProps]);
 
   useEffect(() => {
     (async () => {
@@ -163,6 +190,9 @@ export default function PublishArticle() {
       <div className='mb-10 pt-10 text-center text-3xl text-primary-300'>
         發布設定
       </div>
+      {isPending || isVerifying ? (
+        <LoadingEditorSkeleton />
+      ) : isAuthor ? (
       <div className='mb-6 w-full space-y-4 rounded-lg border bg-card p-5 text-card-foreground shadow-sm'>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
@@ -231,12 +261,14 @@ export default function PublishArticle() {
               )}
             />
             <div className='text-center'>
-              <Button className='mr-4 bg-grey text-black hover:bg-grey-400 hover:text-white'>取消</Button>
+              <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild><Link href='/manage/content' replace={true}>取消</Link></Button>
               <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateEditArticle}>發布文章</Button>
             </div>
           </form>
         </Form>
-      </div>
+      </div>) : (
+        <div className='mt-10 flex justify-center text-center text-red-500'><Lock /><p className='ml-2'>您沒有編輯此文章的權限</p></div>
+      )}
     </main>
   );
 }

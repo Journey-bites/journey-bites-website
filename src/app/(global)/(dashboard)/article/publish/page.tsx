@@ -18,8 +18,9 @@ import { createArticle } from '@/lib/authApi';
 import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getCategories } from '@/lib/nextApi';
-import { handleApiError } from '@/lib/utils';
+import Link from 'next/link';
 import StatusCode from '@/types/StatusCode';
+import { handleApiError } from '@/lib/utils';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
   { id: '免費', name: '免費' },
@@ -47,17 +48,17 @@ export default function PublishArticle() {
     thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
     category: categoryValidation,
     isNeedPay: isNeedPayValidation,
-    // category: z.string().refine(value => categoryOptions.some(option => option.id === value), {
-    //   message: '選項為必填',
-    // }),
     tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
 
   const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
 
   useEffect(() => {
-    if(!editorProps) toast({ title: '無文章內容，無法進行發布', variant: 'error' });
-  }, [editorProps]);
+    if(!editorProps) {
+      toast({ title: '您必須先建立文章，才能進行發布內容', variant: 'error' });
+      return router.replace('/article/create');
+    }
+  }, [editorProps, router]);
 
   useEffect(() => {
     (async () => {
@@ -199,7 +200,7 @@ export default function PublishArticle() {
               )}
             />
             <div className='text-center'>
-              <Button className='mr-4 bg-grey text-black hover:bg-grey-400 hover:text-white'>取消</Button>
+              <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild><Link href='/manage/content' replace={true}>取消</Link></Button>
               <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateCreateArticle}>發布文章</Button>
             </div>
           </form>
