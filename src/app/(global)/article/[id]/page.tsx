@@ -30,7 +30,6 @@ function ArticleContainer({ children, className, ...props }: PropsWithChildren &
 export default async function ArticlePage({ params }: { params: { id: string } }) {
   const token = cookies().get(JOURNEY_BITES_COOKIE)?.value;
   const article = await getArticleById(params.id, token);
-  // const content = article.isNeedPay ? article.abstract : article.content;
   const cleanContentHtml = DOMPurify.sanitize(article.content);
   const creatorInfo = await getCreatorById(article.creator.id);
   return (
@@ -55,7 +54,6 @@ export default async function ArticlePage({ params }: { params: { id: string } }
             </div>
           </div>
           {parse(cleanContentHtml)}
-          {/* TODO: need to handle needsPay & user is already paid */}
           {
             article.isNeedPay && (
               <SubscriptionLayer creatorId={article.creator.id} />

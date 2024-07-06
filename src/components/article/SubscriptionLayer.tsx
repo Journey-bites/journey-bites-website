@@ -12,6 +12,10 @@ export default function SubscriptionLayer({ creatorId }: { creatorId: string }) 
   const [subscribeDialogOpen, setSubscribeDialogOpen] = useState(false);
   const { handleSubscribe, subscribePending, navigateToNewebpay } = useSubscribe({ creatorId, onSuccessCallback: () => setSubscribeDialogOpen(true) });
 
+  const hasSubscribed = !!auth?.subscriptions.includes(creatorId);
+
+  if (hasSubscribed || auth?.id === creatorId) return null;
+
   return (
     <>
       <div className='flex justify-center bg-gradient-to-t from-primary-100 to-white py-9'>

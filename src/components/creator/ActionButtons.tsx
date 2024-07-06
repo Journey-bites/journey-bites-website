@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SmileIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ProtectedComponent from '@/components/common/ProtectedComponent';
@@ -35,6 +36,7 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
   };
 
   const isUsersPage = auth?.id === creatorId;
+  const hasSubscribed = !!auth?.subscriptions.includes(creatorId);
 
   return (
     <>
@@ -49,13 +51,20 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
               <Button variant='outline' className='flex-1 bg-transparent md:flex-initial'>
                 {isFollowed ? '追蹤中' : '追蹤'}
               </Button>
-            </ProtectedComponent>
-            <ProtectedComponent onClick={handleSubscribe}>
-              <Button className='flex-1 md:flex-initial' isLoading={subscribePending} disabled={subscribePending}>
-                訂閱支持
-              </Button>
-            </ProtectedComponent>
-          </>
+              </ProtectedComponent>
+              {hasSubscribed ? (
+                <div className='flex items-center gap-1 text-secondary'>
+                  已訂閱
+                  <SmileIcon />
+                </div>
+                ) : (
+                  <ProtectedComponent onClick={handleSubscribe}>
+                    <Button className='flex-1 md:flex-initial' isLoading={subscribePending} disabled={subscribePending}>
+                      訂閱支持
+                    </Button>
+                  </ProtectedComponent>
+                )}
+            </>
         )}
       </div>
       <ConfirmDialog
