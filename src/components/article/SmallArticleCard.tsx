@@ -4,13 +4,15 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import SocialLink from '@/components/custom/SocialLink';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 import { Article } from '@/types/article';
+import LockIconComponent from '@/components/article/LockIconComponent';
 
 import DefaultUserImg from '@/images/default-user.webp';
 import DefaultThumbnailImg from '@/images/default-thumbnail.webp';
 
 export default function SmallArticleCard({ article }: { article: Article }) {
   return (
-    <Card>
+    <Card className='relative'>
+      {article.isNeedPay && <LockIconComponent />}
       <Link href={`/article/${article.id}`} className='flex flex-col-reverse justify-between gap-3 lg:flex-row'>
         <div className='max-w-[60%]'>
           <CardHeader>

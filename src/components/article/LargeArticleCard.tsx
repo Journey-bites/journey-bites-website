@@ -9,6 +9,7 @@ import { EllipsisVerticalIcon } from 'lucide-react';
 import SocialLink from '@/components/custom/SocialLink';
 import { DropdownMenuComponent as DropdownMenu, DropdownMenuLinkItem } from '@/components/custom/DropdownMenu';
 import UserAvatar from '@/components/common/UserAvatar';
+import LockIconComponent from './LockIconComponent';
 import { Article } from '@/types/article';
 import { toast } from '@/components/ui/use-toast';
 import { useUserStore } from '@/providers/userProvider';
@@ -71,6 +72,7 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
           </DropdownMenuLinkItem>
         </DropdownMenu>
       )}
+      {article.isNeedPay && <LockIconComponent className='-top-4' />}
       <div className='mb-4 flex flex-col-reverse justify-between gap-4 md:mb-6 md:flex-row md:gap-10'>
         <div className='grow text-left text-grey-500'>
           <button onClick={handleToArticlePage} className='w-full text-left'>
