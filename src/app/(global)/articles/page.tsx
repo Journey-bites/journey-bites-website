@@ -13,16 +13,16 @@ import useGetPosts from '@/hook/useGetPosts';
 
 export default function ArticlesPage() {
   const searchParams = useSearchParams();
-  const type = ['hot', 'new'].some((type) => type === searchParams.get('type')) ? searchParams.get('type') : '';
+  const type = searchParams.get('type') === 'hot' ? 'hot' : undefined;
   const { data: articles, isPending, error } = useQuery({
     queryKey: [QUERY_KEY.typeArticles, type],
-    queryFn: () => getArticles({ pageSize: 2, type: type || '' }),
+    queryFn: () => getArticles({ pageSize: 2, type }),
   });
   const isHotType = type === 'hot';
 
   const { inView, ref } = useInView();
 
-  const { data: moreArticles, fetchNextPage, isFetchingNextPage, hasNextPage, isPending: fetchNextPagePending } = useGetPosts(QUERY_KEY.typeArticles, 'hot');
+  const { data: moreArticles, fetchNextPage, isFetchingNextPage, hasNextPage, isPending: fetchNextPagePending } = useGetPosts(QUERY_KEY.typeArticles, type);
 
   useEffect(() => {
     if (inView && !isFetchingNextPage) {
