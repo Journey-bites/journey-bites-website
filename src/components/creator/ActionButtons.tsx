@@ -36,7 +36,7 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
   };
 
   const isUsersPage = auth?.id === creatorId;
-  const hasSubscribed = auth?.subscriptions.includes(creatorId) || false;
+  const hasSubscribed = !!auth?.subscriptions.includes(creatorId);
 
   return (
     <>

@@ -12,7 +12,7 @@ export default function SubscriptionLayer({ creatorId }: { creatorId: string }) 
   const [subscribeDialogOpen, setSubscribeDialogOpen] = useState(false);
   const { handleSubscribe, subscribePending, navigateToNewebpay } = useSubscribe({ creatorId, onSuccessCallback: () => setSubscribeDialogOpen(true) });
 
-  const hasSubscribed = auth?.subscriptions.includes(creatorId) || false;
+  const hasSubscribed = !!auth?.subscriptions.includes(creatorId);
 
   if (hasSubscribed || auth?.id === creatorId) return null;
 
