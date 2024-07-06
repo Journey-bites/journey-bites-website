@@ -45,11 +45,11 @@ export default function HeaderButtons({ categories }: { categories: Category[] }
             </>
           ) : (
             <>
-              <Button asChild size='sm'>
-                { !isHideBtn &&
-                  (<Link href='/article/create'>開始創作</Link>)
-                }
-              </Button>
+              { !isHideBtn &&
+                <Button asChild size='sm'>
+                  <Link href='/article/create'>開始創作</Link>
+                </Button>
+              }
               <DropdownMenu
                 triggerButton={
                   <button>
