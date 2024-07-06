@@ -54,10 +54,11 @@ export default function Sidebar() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const FILE_MAX_SIZE = 5 * 1024 * 1024; //5MB
-    if (e.target.files) {
+    if (e.target.files && e.target.files.length > 0) {
       if(e.target.files[0].size > FILE_MAX_SIZE) {
         return toast({ description: '請選擇小於 5MB 的圖片', variant: 'error' });
       }
+      if (previewAvatarImgSrc) URL.revokeObjectURL(previewAvatarImgSrc);
       setAvatarImgFile(e.target.files[0]);
     }
   }
@@ -90,7 +91,11 @@ export default function Sidebar() {
       isFirstRender.current = false;
       setPreviewAvatarImgSrc(auth?.profile.avatarImageUrl);
     }
-  }, [auth?.profile.avatarImageUrl]);
+
+    return () => {
+      if (previewAvatarImgSrc) URL.revokeObjectURL(previewAvatarImgSrc);
+    };
+  }, [auth?.profile.avatarImageUrl, previewAvatarImgSrc]);
 
   return (
     <>
