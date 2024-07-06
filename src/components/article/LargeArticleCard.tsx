@@ -79,7 +79,7 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
           </button>
           {showCreator && (
             <div className='mt-5 flex items-center gap-2 text-lg md:mt-11'>
-              <UserAvatar userName={creatorInfo.displayName || ''} avatarImgUrl={creatorInfo.avatarImageUrl} imgClassName='w-10' />
+              <UserAvatar userName={creatorInfo.displayName || ''} avatarImgUrl={creatorInfo.avatarImageUrl} />
               <Link href={`/creator/${article.creator.id}`} className='text-primary'>{creatorInfo.displayName}</Link>
               <span className='text-grey-300'>發佈於</span>
               <span className='text-primary'>{article.category}</span>
