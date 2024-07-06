@@ -12,7 +12,7 @@ export default function SmallArticleCard({ article }: { article: Article }) {
   return (
     <Card>
       <Link href={`/article/${article.id}`} className='flex flex-col-reverse justify-between gap-3 lg:flex-row'>
-        <div className='max-w-[232px]'>
+        <div className='max-w-[60%]'>
           <CardHeader>
             <CardTitle className='truncate text-xl font-bold'>
               {article.title}
