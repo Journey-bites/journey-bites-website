@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -10,6 +10,7 @@ import ProtectedComponent from './ProtectedComponent';
 import { likeArticle, unlikeArticle } from '@/lib/authApi';
 import StatusCode from '@/types/StatusCode';
 import { toast } from '@/components/ui/use-toast';
+import { useUserStore } from '@/providers/userProvider';
 
 type LikeButtonProps = {
   articleId: string;
@@ -20,10 +21,10 @@ type LikeButtonProps = {
 export default function LikeButton({ articleId, count, withBackground }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(count);
+  const { auth } = useUserStore((state) => state);
   const router = useRouter();
   const pathname = usePathname();
 
-  // Not the best way to do it, but currently don't know is Already liked or not, optimize in the future
   const { mutate: likeArticleMutate } = useMutation({
     mutationFn: likeArticle,
     onMutate: () => {
@@ -83,8 +84,16 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
 
   const handleLike = debounce(() => likeArticleMutate({ articleId }));
 
+  const handleUnlike = debounce(() => unlikeArticleMutate({ articleId }));
+
+  useEffect(() => {
+    if (!auth) return;
+    const alreadyLikedByUser = auth?.likedArticles.includes(articleId) || false;
+    setIsLiked(alreadyLikedByUser);
+  }, [auth, articleId]);
+
   return (
-    <ProtectedComponent onClick={handleLike}>
+    <ProtectedComponent onClick={isLiked ? handleUnlike : handleLike}>
       <Button
         variant={withBackground ? 'icon' : 'clean'}
         className={cn('group size-auto items-center justify-center gap-1', { ['bg-grey-100 p-2 hover:bg-grey-100']: withBackground })}
