@@ -27,8 +27,12 @@ export interface Profile {
 export interface UserInfo {
   id: string;
   email: string;
-  emailVerified: boolean;
+  isEmailVerified: boolean;
   profile: Profile;
+  follows: string[];
+  likedArticles: string[];
+  subscriptions: string[];
+  subscribers: string[];
 };
 
 export type RequestPageQuery = {
