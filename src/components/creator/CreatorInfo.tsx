@@ -18,7 +18,7 @@ export default function CreatorInfo({ creatorInfo, articleCount, bioClassName }:
       <div className='flex flex-col justify-between gap-5 md:flex-row md:gap-0'>
         <div className='flex items-center gap-6'>
           <div className='relative size-20 overflow-hidden rounded-full md:size-30'>
-            <Image src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} fill priority />
+            <Image className='object-cover' src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} fill priority />
           </div>
           <div>
           <h2 className='mb-2 text-3xl font-black'>{creatorInfo.displayName}</h2>
