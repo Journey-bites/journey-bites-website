@@ -10,16 +10,16 @@ import DefaultUserImg from '@/images/default-user.webp';
 type UserAvatarProps = {
   userName: string;
   avatarImgUrl?: string | null;
-  imgClassName?: string;
+  className?: string;
 }
 
-export default function UserAvatar({ userName, avatarImgUrl, imgClassName }: UserAvatarProps) {
+export default function UserAvatar({ userName, avatarImgUrl, className }: UserAvatarProps) {
   return (
-    <Avatar>
+    <Avatar className={className}>
       <AvatarImage asChild src={avatarImgUrl || DefaultUserImg.src}>
-        <Image className={imgClassName} width={40} height={40} src={avatarImgUrl || DefaultUserImg} alt={userName} />
+        <Image fill src={avatarImgUrl || DefaultUserImg} alt={userName} priority />
       </AvatarImage>
-      <AvatarFallback>
+      <AvatarFallback className={className}>
         <Image src={DefaultUserImg} alt={userName} />
       </AvatarFallback>
     </Avatar>

@@ -1,8 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useRef, useEffect } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { SendIcon, FrownIcon } from 'lucide-react';
 import { formatDistance } from 'date-fns';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { zhTW } from 'date-fns/locale/zh-TW';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/providers/userProvider';
@@ -10,19 +19,17 @@ import { Button } from '@/components/ui/button';
 // import LikeButton from '@/components/common/LikeButton';
 import UserAvatar from '@/components/common/UserAvatar';
 import LoginLinkWithStorePathname from '@/components/common/LoginLinkWithStorePathname';
-import { FieldValues, useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import InputField from '@/components/custom/InputField';
 import { addCommentToArticle } from '@/lib/authApi';
 import { getCommentsByArticleId } from '@/lib/nextApi';
 import { QUERY_KEY } from '@/constants';
-import { toast } from '../ui/use-toast';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { useState, useRef, useEffect } from 'react';
+import { toast } from '@/components/ui/use-toast';
+import { debounce } from '@/lib/utils';
+
+const formSchema = z.object({
+  commentText: z.string().min(1, { message: '請輸入內容' }).max(100, { message: '最多只能輸入 100 個字' }),
+});
 
 export default function CommentSection({ articleId }: { articleId: string }) {
   const [showAll, setShowAll] = useState(false);
@@ -42,16 +49,18 @@ export default function CommentSection({ articleId }: { articleId: string }) {
     mutationFn: addCommentToArticle,
   });
   const form = useForm<FieldValues>({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
     defaultValues: {
       commentText: ''
     }
   });
-  const { control, handleSubmit, formState: { isValid } } = form;
+  const { control, handleSubmit, formState: { isValid }, reset } = form;
 
   function onSubmit(data: FieldValues) {
     addCommentMutate({ articleId, content: data.commentText }, {
       onSuccess: () => {
-        form.reset();
+        reset();
         setShowAll(true);
         if (comments) setInitialVisibleCount(prev => prev + comments.length);
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.comments] });
@@ -61,6 +70,8 @@ export default function CommentSection({ articleId }: { articleId: string }) {
       }
     });
   }
+
+  const debounceSubmit = debounce(handleSubmit(onSubmit), 500);
 
   useEffect(() => {
     if (latestCommentRef.current) {
@@ -105,10 +116,10 @@ export default function CommentSection({ articleId }: { articleId: string }) {
                 </div> */}
               </div>
             </div>
-            {/* <div className='md:hidden'>
+            <div className='md:hidden'>
               <p className='mb-4 text-base'>{comment.content}</p>
-              <LikeButton count={comment.likes} />
-            </div> */}
+              {/* <LikeButton count={comment.likes} /> */}
+            </div>
           </div>
         ))}
 
@@ -142,7 +153,6 @@ export default function CommentSection({ articleId }: { articleId: string }) {
             </CollapsibleContent>
             {!showAll && comments.length > initialVisibleCount && (
               <CollapsibleTrigger onClick={toggleShowAll} asChild>
-                {/* {showAll ? `隱藏 (${comments.length - initialVisibleCount} 更多)` : `顯示全部 (${comments.length - initialVisibleCount})`} */}
                 <div className='cursor-pointer text-center font-bold text-primary'>
                   {showAll ? `(${comments.length - initialVisibleCount})` : `顯示全部 (${comments.length - initialVisibleCount})`}
                 </div>
@@ -152,13 +162,18 @@ export default function CommentSection({ articleId }: { articleId: string }) {
         )}
 
       </div>
-      <div className='flex items-center gap-2 border-t-2 border-grey-200 px-[18px] py-5'>
+      <div className='flex gap-2 border-t-2 border-grey-200 px-[18px] py-5'>
         {
           isLogin ? (
             <>
               <UserAvatar userName={auth?.profile.displayName || ''} avatarImgUrl={auth?.profile.avatarImageUrl} />
               <Form {...form}>
-                <form onSubmit={handleSubmit(onSubmit)} className='flex w-full gap-2'>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    debounceSubmit();
+                  }}
+                  className='flex w-full gap-2'>
                   <div className='grow'>
                     <InputField
                       control={control}

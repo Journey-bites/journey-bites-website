@@ -31,8 +31,8 @@ export default function FollowPage() {
       followings?.length ? (
         <div className='grid grid-cols-1 gap-9 md:grid-cols-2 md:gap-6'>
           {
-            followings?.map((item) => (
-              <CreatorCard key={item.userId} creator={item} hasFollowed />
+            followings?.map((creator) => (
+              <CreatorCard key={creator.userId} creator={creator} />
             ))
           }
         </div>
@@ -47,10 +47,7 @@ export default function FollowPage() {
       follower?.length ? (
         <div className='grid grid-cols-1 gap-9 md:grid-cols-2 md:gap-6'>
           {
-            follower?.map((item) => {
-              const hasFollowed = followings?.some((follow) => follow.userId === item.userId);
-              return <CreatorCard key={item.userId} creator={item} hasFollowed={Boolean(hasFollowed)} />;
-            })
+            follower?.map((creator) => <CreatorCard key={creator.userId} creator={creator} />)
           }
         </div>
       ): (

@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react';
-import Image from 'next/image';
 import DOMPurify from 'isomorphic-dompurify';
 import parse from 'html-react-parser';
 import LikeButton from '@/components/common/LikeButton';
@@ -11,10 +10,9 @@ import { cn } from '@/lib/utils';
 import { getArticleById, getCreatorById } from '@/lib/nextApi';
 import FollowBtn from '@/components/article/FollowBtn';
 import SubscriptionLayer from '@/components/article/SubscriptionLayer';
+import UserAvatar from '@/components/common/UserAvatar';
 import { cookies } from 'next/headers';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
-
-import DefaultUserImg from '@/images/default-user.webp';
 
 function ArticleContainer({ children, className, ...props }: PropsWithChildren & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
   return (
@@ -40,9 +38,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
           <h1 className='mb-5 text-xl font-bold md:mb-9 md:text-3xl md:font-black'>{article.title}</h1>
           <div className='mb-9 flex items-center justify-between'>
             <div className='flex items-center gap-2 p-0 xs:p-1'>
-              <div className='relative size-10 overflow-hidden rounded-full md:size-15'>
-                <Image fill sizes='5vw' src={creatorInfo.avatarImageUrl || DefaultUserImg} alt={creatorInfo.displayName || 'creator'} />
-              </div>
+              <UserAvatar userName={creatorInfo.displayName || ''} avatarImgUrl={creatorInfo.avatarImageUrl} className='size-15' />
               <div className='flex flex-col items-start gap-1'>
                 <Link href={`/creator/${creatorInfo.userId}`} className='text-xl font-medium'>{creatorInfo.displayName}</Link>
                 <FollowBtn creatorId={creatorInfo.userId} />
