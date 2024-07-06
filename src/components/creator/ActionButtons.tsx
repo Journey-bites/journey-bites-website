@@ -5,34 +5,15 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ProtectedComponent from '@/components/common/ProtectedComponent';
 import { useUserStore } from '@/providers/userProvider';
-import { followCreator, unFollowCreator } from '@/lib/authApi';
-import { useMutation } from '@tanstack/react-query';
 import ConfirmDialog from '@/components/custom/ConfirmDialog';
 import useSubscribe from '@/hook/useSubscribe';
+import useFollowCreator from '@/hook/useFollowCreator';
 
-export default function ActionButtons({ creatorId, userAlreadyFollowed }: { creatorId: string, userAlreadyFollowed?: boolean }) {
+export default function ActionButtons({ creatorId }: { creatorId: string }) {
   const { auth } = useUserStore((state) => state);
-  const { mutate: followCreatorMutate } = useMutation({ mutationFn: followCreator, onMutate: () => setIsFollowed(true) });
-  const { mutate: unFollowCreatorMutate } = useMutation({ mutationFn: unFollowCreator, onMutate: () => setIsFollowed(false) });
-  const [isFollowed, setIsFollowed] = useState(userAlreadyFollowed);
+  const { isFollowed, followAction } = useFollowCreator({ creatorId });
   const [subscribeDialogOpen, setSubscribeDialogOpen] = useState(false);
   const { handleSubscribe, subscribePending, navigateToNewebpay } = useSubscribe({ creatorId, onSuccessCallback: () => setSubscribeDialogOpen(true) });
-
-  const handleFollow = () => {
-    if (isFollowed) {
-      unFollowCreatorMutate(creatorId, {
-        onError: () => {
-          setIsFollowed(false);
-        },
-      });
-    } else {
-      followCreatorMutate(creatorId, {
-        onError: () => {
-          setIsFollowed(true);
-        },
-      });
-    }
-  };
 
   const isUsersPage = auth?.id === creatorId;
 
@@ -45,7 +26,7 @@ export default function ActionButtons({ creatorId, userAlreadyFollowed }: { crea
             </Button>
         ) : (
           <>
-            <ProtectedComponent onClick={handleFollow}>
+            <ProtectedComponent onClick={followAction}>
               <Button variant='outline' className='flex-1 bg-transparent md:flex-initial'>
                 {isFollowed ? '追蹤中' : '追蹤'}
               </Button>

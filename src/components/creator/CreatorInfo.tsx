@@ -43,7 +43,7 @@ export default function CreatorInfo({ creatorInfo, articleCount, bioClassName }:
           </div>
         </div>
       </div>
-      {creatorInfo.userId && <ActionButtons creatorId={creatorInfo.userId} userAlreadyFollowed={creatorInfo.userAlreadyFollowed} />}
+      {creatorInfo.userId && <ActionButtons creatorId={creatorInfo.userId} />}
       </div>
       {creatorInfo.bio && <p className={cn('mt-6 text-base font-medium text-grey-500 md:mt-9 md:text-xl', bioClassName)}>{creatorInfo.bio}</p>}
     </>
