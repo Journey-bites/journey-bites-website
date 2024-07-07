@@ -14,10 +14,14 @@ import UserAvatar from '@/components/common/UserAvatar';
 import { cookies } from 'next/headers';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 
+DOMPurify.setConfig({
+  ADD_ATTR: ['target', 'rel'],
+});
+
 function ArticleContainer({ children, className, ...props }: PropsWithChildren & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
   return (
     <div
-      className={cn('md:mx-auto text-grey-500 md:mt-[124px] md:max-w-[56%] 2xl:max-w-[854px]', className)}
+      className={cn('lg:mx-auto text-grey-500 lg:mt-[124px] lg:max-w-[56%] 2xl:max-w-[854px]', className)}
       {...props}
     >
       {children}
