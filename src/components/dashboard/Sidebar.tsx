@@ -112,7 +112,7 @@ export default function Sidebar() {
               <CameraIcon size ={20} className='stroke-primary group-hover:stroke-primary-100'/>
             </label>
           </Button>
-          <input type='file' accept='image/*' name='avatar' id='avatar-upload' className='hidden' onChange={handleFileChange}/>
+          <input type='file' accept='image/*' name='avatar' id='avatar-upload' className='hidden' onClick={(e) => e.currentTarget.value = '' } onChange={handleFileChange}/>
         </div>
       {
         menuLinks.map((link) => (
