@@ -1,8 +1,8 @@
+import { notFound } from 'next/navigation';
 import { TentTreeIcon, MapPinnedIcon } from 'lucide-react';
 import LargeArticleCard from '@/components/article/LargeArticleCard';
 import NoResults from '@/components/dashboard/NoResults';
 import { getArticles, getCategories } from '@/lib/nextApi';
-import { notFound } from 'next/navigation';
 
 export default async function CategoryArticles({ params }: { params: { category: string } }) {
   const categories = await getCategories();

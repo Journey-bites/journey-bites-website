@@ -9,6 +9,7 @@ import { EllipsisVerticalIcon } from 'lucide-react';
 import SocialLink from '@/components/custom/SocialLink';
 import { DropdownMenuComponent as DropdownMenu, DropdownMenuLinkItem } from '@/components/custom/DropdownMenu';
 import UserAvatar from '@/components/common/UserAvatar';
+import LockIconComponent from './LockIconComponent';
 import { Article } from '@/types/article';
 import { toast } from '@/components/ui/use-toast';
 import { useUserStore } from '@/providers/userProvider';
@@ -45,10 +46,10 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
 
   return (
     <div className='relative border-t-[6px] border-t-primary-100 bg-grey p-4 md:border-l-4 md:border-t-0 md:border-l-primary-100 md:p-10'>
-      {isUsersArticle && (
+      {isUsersArticle ? (
          <DropdownMenu
             triggerButton={
-              <button className='group absolute right-4 top-4'>
+              <button className='group absolute right-1 top-1 z-10 rounded-full bg-secondary p-2 text-white md:right-4 md:top-4 md:bg-transparent md:p-0 md:text-black'>
                 <EllipsisVerticalIcon className='size-4' />
               </button>
               }
@@ -70,7 +71,10 @@ export default function LargeArticleCard({ article, showCreator, showReadTime, s
             </button>
           </DropdownMenuLinkItem>
         </DropdownMenu>
-      )}
+      ) : article.isNeedPay ? (
+        <LockIconComponent className='-top-4' />
+      ) : null
+    }
       <div className='mb-4 flex flex-col-reverse justify-between gap-4 md:mb-6 md:flex-row md:gap-10'>
         <div className='grow text-left text-grey-500'>
           <button onClick={handleToArticlePage} className='w-full text-left'>
