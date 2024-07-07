@@ -96,3 +96,8 @@ export async function subscribeCreator(creatorId: string) {
   const res = await fetchWithToken<SubscribeResponse>('post', `/user/${creatorId}/subscribe`);
   return res.data;
 }
+
+export async function getArticlesLikedByUser() {
+  const res = await fetchWithToken<ArticlesResponse>('get', '/user/liked-articles');
+  return res.data;
+}

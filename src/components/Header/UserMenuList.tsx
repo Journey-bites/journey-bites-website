@@ -18,17 +18,17 @@ const MENU_LINKS: { title: string, href: string }[] = [
     href: '/manage/content',
   },
   {
-    title: '我的追蹤與收藏',
+    title: '我的追蹤與粉絲',
     href: '/manage/follow',
+  },
+  {
+    title: '我最愛的文章',
+    href: '/manage/favorite',
   },
   {
     title: '訂單記錄',
     href: '/manage/orders',
   },
-  {
-    title: '我的收入',
-    href: '/manage/income',
-  }
 ];
 
 export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: boolean }) {

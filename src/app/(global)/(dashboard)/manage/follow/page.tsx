@@ -58,7 +58,7 @@ export default function FollowPage() {
 
   return (
     <section>
-      <TitleWithIcon title='我的追蹤與收藏' icon={UserRoundPlusIcon} />
+      <TitleWithIcon title='我的追蹤與粉絲' icon={UserRoundPlusIcon} />
       <TabsWithContent
         defaultValue='following'
         tabs={[
@@ -69,13 +69,8 @@ export default function FollowPage() {
           },
           {
             value: 'follower',
-            label: '我的追蹤者',
+            label: '我的粉絲',
             content: <FollowersContent />
-          },
-          {
-            value: 'collection',
-            label: '我收藏的文章',
-            content: <NoResults title='此功能尚未開放，敬請期待' icon={TentTreeIcon} />
           }]
         }
       />
