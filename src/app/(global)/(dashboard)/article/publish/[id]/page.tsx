@@ -1,7 +1,7 @@
 'use client';
 
+import jsCookie from 'js-cookie';
 import { notFound } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 import {
   Form,
 } from '@/components/ui/form';
@@ -25,7 +25,6 @@ import StatusCode from '@/types/StatusCode';
 import { CreateArticleRequest } from '@/types/article';
 import { useUserStore } from '@/providers/userProvider';
 import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
-import jsCookie from 'js-cookie';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { Lock } from 'lucide-react';
 
@@ -42,6 +41,9 @@ function convertTags(tagTexts: string[]): Tag[] {
 }
 
 export default function PublishArticle({ params }: { params: { id: string } }) {
+  const token = jsCookie.get(JOURNEY_BITES_COOKIE);
+  const { id } = params;
+  const { auth } = useUserStore((state) => state);
   const { editorProps } = useEditor();
   const defaultTags: string[] = editorProps?.tags || [];
   const [tags, setTags] = useState <Tag[]> (convertTags(defaultTags) || []);
@@ -49,9 +51,15 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
   const [isAuthor, setIsAuthor] = useState(false);
-  const router = useRouter();
-  const { id } = params;
-  const { auth } = useUserStore((state) => state);
+
+  const { mutate: editArticleMutate, isPending: isUpdateEditArticle } = useMutation({
+    mutationFn: editArticle
+  });
+
+  const { isPending, data, isError } = useQuery({
+    queryKey: ['getArticleById', id],
+    queryFn: () => getArticleById(id, token),
+  });
 
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
@@ -70,15 +78,6 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
     tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
 
-  const { mutate: editArticleMutate, isPending: isUpdateEditArticle } = useMutation({
-    mutationFn: editArticle
-  });
-  const token = jsCookie.get(JOURNEY_BITES_COOKIE);
-  const { isLoading, data, isError } = useQuery({
-    queryKey: ['getArticleById', id],
-    queryFn: () => getArticleById(id, token),
-  });
-
   useEffect(() => {
     if (data) {
       const { creator } = data;
@@ -93,7 +92,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
       }
 
     }
-  }, [id, token, router, data, auth]);
+  }, [id, token, data, auth]);
 
   useEffect(() => {
     (async () => {
@@ -141,7 +140,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
     editArticleMutate(editArticleBody, {
       onSuccess: () => {
         toast({ title: '文章發布成功', description: '即將為您跳轉至文章頁', variant: 'success' });
-        router.push(`/article/${id}`);
+        window.location.href = `/article/${id}`;
       },
       onError: (error) => {
         handleApiError(error, {
@@ -180,7 +179,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
     }
   }, [trigger, categoryOptions]);
 
-  if (isLoading) {
+  if (isPending) {
     return <LoadingEditorSkeleton />;
   }
 
@@ -210,8 +209,9 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
               className='w-full'
               control={control}
               name='title'
-              label='*標題'
+              label='標題'
               placeholder='文章標題'
+              isRequired={true}
             />
             <TextAreaField
               className='w-full resize-none'
@@ -232,17 +232,19 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
               className='w-full'
               control={control}
               name='category'
-              label='*文章分類'
+              label='文章分類'
               placeholder='設定文章分類'
               options={categoryOptions}
+              isRequired={true}
             />
             <SelectField
               className='w-full'
               control={control}
               name='isNeedPay'
-              label='*內容收費'
+              label='內容收費'
               placeholder='設定文章是否收費'
               options={isNeedPayOptions}
+              isRequired={true}
             />
             <Controller
               name='tags'

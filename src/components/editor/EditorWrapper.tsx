@@ -46,8 +46,6 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({ isEditing, editContent })
       return router.push(`/article/publish/${options?.id}`);
     }
     router.push('/article/publish');
-    // setContent('');
-    // console.log(editorProps)
   };
 
   useEffect(() => {

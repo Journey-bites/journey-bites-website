@@ -48,7 +48,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
         paragraph: {
           HTMLAttributes:
           {
-            class: 'mb-6',
+            class: 'mb-6 break-all',
           }
         },
         bulletList: ({
@@ -89,7 +89,6 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
         validate: (href: string) => /^https?:\/\//.test(href),
         HTMLAttributes: {
           class: 'text-primary',
-          target: '_blank',
         },
       }),
       CharacterCount.configure({
@@ -120,7 +119,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
   });
 
   return (
-    <div className='relative min-h-[500px] w-full border-muted shadow-lg'>
+    <div className='relative min-h-[500px] w-full max-w-[992px] border-muted shadow-lg'>
       <Toolbar editor={editor} content={content}/>
       <EditorContent style={{ whiteSpace: 'pre-line' }} editor={editor} />
     </div>

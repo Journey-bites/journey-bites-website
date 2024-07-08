@@ -34,6 +34,8 @@ export default function PublishArticle() {
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const router = useRouter();
 
+  const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
+
   const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
     message: '選項為必填',
   });
@@ -50,8 +52,6 @@ export default function PublishArticle() {
     isNeedPay: isNeedPayValidation,
     tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
   });
-
-  const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
 
   useEffect(() => {
     if(!editorProps) {
@@ -134,8 +134,9 @@ export default function PublishArticle() {
               className='w-full'
               control={control}
               name='title'
-              label='*標題'
+              label='標題'
               placeholder='文章標題'
+              isRequired={true}
             />
             <TextAreaField
               className='w-full resize-none'
@@ -156,17 +157,19 @@ export default function PublishArticle() {
               className='w-full'
               control={control}
               name='category'
-              label='*文章分類'
+              label='文章分類'
               placeholder='設定文章分類'
               options={categoryOptions}
+              isRequired={true}
             />
             <SelectField
               className='w-full'
               control={control}
               name='isNeedPay'
-              label='*內容收費'
+              label='內容收費'
               placeholder='設定文章是否收費'
               options={isNeedPayOptions}
+              isRequired={true}
             />
             <Controller
               name='tags'
