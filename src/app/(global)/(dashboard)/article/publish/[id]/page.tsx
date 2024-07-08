@@ -1,5 +1,6 @@
 'use client';
 
+import { notFound } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import {
   Form,
@@ -19,11 +20,13 @@ import { toast } from '@/components/ui/use-toast';
 import { Tag, TagInput } from 'emblor';
 import { getArticleById, getCategories } from '@/lib/nextApi';
 import Link from 'next/link';
-import { handleApiError, verifyAuthor } from '@/lib/utils';
+import { handleApiError } from '@/lib/utils';
 import StatusCode from '@/types/StatusCode';
 import { CreateArticleRequest } from '@/types/article';
 import { useUserStore } from '@/providers/userProvider';
 import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
+import jsCookie from 'js-cookie';
+import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { Lock } from 'lucide-react';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
@@ -46,7 +49,6 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
   const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const [initialLoad, setInitialLoad] = useState(false);
   const [isAuthor, setIsAuthor] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(true);
   const router = useRouter();
   const { id } = params;
   const { auth } = useUserStore((state) => state);
@@ -71,10 +73,10 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
   const { mutate: editArticleMutate, isPending: isUpdateEditArticle } = useMutation({
     mutationFn: editArticle
   });
-
-  const { isPending, isError, data, error } = useQuery({
+  const token = jsCookie.get(JOURNEY_BITES_COOKIE);
+  const { isLoading, data, isError } = useQuery({
     queryKey: ['getArticleById', id],
-    queryFn: () => getArticleById(id),
+    queryFn: () => getArticleById(id, token),
   });
 
   useEffect(() => {
@@ -82,19 +84,16 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
       const { creator } = data;
 
       if (auth && auth.id) {
-        verifyAuthor(creator?.id, auth.id, router, () => setIsAuthor(true));
-        setIsVerifying(false);
-        return;
-
+        if(creator.id === auth.id) {
+          setIsAuthor(true);
+          setInitialLoad(true);
+        } else {
+          setIsAuthor(false);
+        }
       }
 
-      if (isError) {
-        console.log(error);
-      }
     }
-
-    setInitialLoad(true);
-  }, [id, router, data, auth, isError, error, editorProps]);
+  }, [id, token, router, data, auth]);
 
   useEffect(() => {
     (async () => {
@@ -181,14 +180,29 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
     }
   }, [trigger, categoryOptions]);
 
+  if (isLoading) {
+    return <LoadingEditorSkeleton />;
+  }
+
+  if (isError) {
+    return notFound();
+  }
+
+  if (!isAuthor) {
+    return (
+      <main className='min-h-screen w-full pb-10'>
+        <div className='mt-10 flex justify-center text-center text-red-500'>
+          <Lock /><p className='ml-2'>您沒有編輯此文章的權限</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>
       <div className='mb-10 pt-10 text-center text-3xl text-primary-300'>
         發布設定
       </div>
-      {isPending || isVerifying ? (
-        <LoadingEditorSkeleton />
-      ) : isAuthor ? (
       <div className='mb-6 w-full space-y-4 rounded-lg border bg-card p-5 text-card-foreground shadow-sm'>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
@@ -196,7 +210,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
               className='w-full'
               control={control}
               name='title'
-              label='標題'
+              label='*標題'
               placeholder='文章標題'
             />
             <TextAreaField
@@ -218,7 +232,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
               className='w-full'
               control={control}
               name='category'
-              label='文章分類'
+              label='*文章分類'
               placeholder='設定文章分類'
               options={categoryOptions}
             />
@@ -226,7 +240,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
               className='w-full'
               control={control}
               name='isNeedPay'
-              label='內容收費'
+              label='*內容收費'
               placeholder='設定文章是否收費'
               options={isNeedPayOptions}
             />
@@ -262,9 +276,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
             </div>
           </form>
         </Form>
-      </div>) : (
-        <div className='mt-10 flex justify-center text-center text-red-500'><Lock /><p className='ml-2'>您沒有編輯此文章的權限</p></div>
-      )}
+      </div>
     </main>
   );
 }

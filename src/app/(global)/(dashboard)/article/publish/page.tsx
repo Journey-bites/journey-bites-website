@@ -122,11 +122,6 @@ export default function PublishArticle() {
   });
   const { control, handleSubmit, formState: { isValid } } = form;
 
-  function setValue(arg0: string, arg1: [Tag, ...Tag[]]) {
-    console.log(arg0, arg1);
-    console.log(arg1);
-  }
-
   return (
     <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>
       <div className='mb-10 pt-10 text-center text-3xl text-primary-300'>
@@ -139,7 +134,7 @@ export default function PublishArticle() {
               className='w-full'
               control={control}
               name='title'
-              label='標題'
+              label='*標題'
               placeholder='文章標題'
             />
             <TextAreaField
@@ -161,7 +156,7 @@ export default function PublishArticle() {
               className='w-full'
               control={control}
               name='category'
-              label='文章分類'
+              label='*文章分類'
               placeholder='設定文章分類'
               options={categoryOptions}
             />
@@ -169,7 +164,7 @@ export default function PublishArticle() {
               className='w-full'
               control={control}
               name='isNeedPay'
-              label='內容收費'
+              label='*內容收費'
               placeholder='設定文章是否收費'
               options={isNeedPayOptions}
             />
@@ -183,7 +178,6 @@ export default function PublishArticle() {
                     tags={tags}
                     setTags={(newTags) => {
                       setTags(newTags);
-                      setValue('tags', newTags as [Tag, ...Tag[]]);
                       field.onChange(newTags);
                     }}
                     placeholder='為文章加上標籤'
