@@ -89,6 +89,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
         validate: (href: string) => /^https?:\/\//.test(href),
         HTMLAttributes: {
           class: 'text-primary',
+          target: '_blank',
         },
       }),
       CharacterCount.configure({
