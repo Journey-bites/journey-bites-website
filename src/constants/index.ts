@@ -23,6 +23,8 @@ export const QUERY_KEY = {
   newArticle: 'newArticle',
   typeArticles: 'typeArticles',
   userLikedArticles: 'userLikedArticles',
+  orders: 'orders',
+  order: 'order'
 };
 
 export const EXPLORE_LIST: Omit<Category, 'articleCount'>[] = [

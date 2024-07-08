@@ -74,4 +74,26 @@ export interface FollowData extends Profile {
 
 type NewebPayDataNames = typeof NEWEB_PAY_DATA_NAMES[number];
 
-export type NewebpayRequestData = Record<NewebPayDataNames, string>
+export type NewebpayRequestData = Record<NewebPayDataNames, string>;
+
+type Payment = {
+  amount: number,
+  transactionId: string,
+  paymentIP: string,
+  escrowBank: string,
+  paymentType: string,
+  account5Code: string,
+  payBankCode: string,
+  orderId: string,
+  createdAt: string
+}
+
+export interface Order {
+  orderNo: string,
+  payment: Payment | null,
+  isSuccess: boolean,
+  seller?: {
+    id: string,
+    profile: Profile
+  },
+}
