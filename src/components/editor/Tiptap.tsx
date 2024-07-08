@@ -50,7 +50,23 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
           {
             class: 'mb-6',
           }
-        }
+        },
+        bulletList: ({
+          HTMLAttributes: {
+              class: 'list-decimal px-4'
+          }
+        }),
+        orderedList: ({
+          HTMLAttributes: {
+              class: 'list-disc px-4'
+          }
+        }),
+        listItem: {
+          HTMLAttributes:
+          {
+            class: '[&>p]:mb-0',
+          }
+        },
       }),
       GlobalDragHandle.configure({
         dragHandleWidth: 20, // default
