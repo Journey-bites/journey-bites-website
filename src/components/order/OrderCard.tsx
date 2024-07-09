@@ -7,12 +7,16 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import UserAvatar from '../common/UserAvatar';
 import { cn } from '@/lib/utils';
 import { Order } from '@/types';
+import { toast } from '../ui/use-toast';
 
 export default function OrderCard({ order }: { order: Order }) {
   const router = useRouter();
 
   function navigateToCreatorPage() {
-    router.push(`/creator/${order.seller?.id}`);
+    if (!order.seller) {
+      return toast({ title: '查無此創作者', variant: 'error' });
+    };
+    router.push(`/creator/${order.seller.id}`);
   }
 
   return (
@@ -30,10 +34,10 @@ export default function OrderCard({ order }: { order: Order }) {
           order.seller ? (
             <button className='w-full' onClick={navigateToCreatorPage}>
               <div className='flex items-center gap-2'>
-                <UserAvatar avatarImgUrl={order.seller?.profile.avatarImageUrl} userName={order.seller?.profile.displayName || ''} />
-                <h2 className='mb-1 text-lg font-bold lg:text-xl'>{order.seller?.profile.displayName}</h2>
+                <UserAvatar avatarImgUrl={order.seller.profile.avatarImageUrl} userName={order.seller.profile.displayName || ''} />
+                <h2 className='mb-1 text-lg font-bold lg:text-xl'>{order.seller.profile.displayName}</h2>
               </div>
-              <p className='mt-2 break-words text-start text-sm text-grey-400 lg:text-base'>{order.seller?.profile.bio}</p>
+              <p className='mt-2 break-words text-start text-sm text-grey-400 lg:text-base'>{order.seller.profile.bio}</p>
             </button>
           ): (
             <p>此筆訂單付款失敗，如需更多資訊，請洽客服</p>
