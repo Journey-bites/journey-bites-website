@@ -2,8 +2,8 @@ import jsCookie from 'js-cookie';
 import type { AxiosRequestConfig, Method } from 'axios';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
-import { ApiResponse, ArticlesResponse, CommentResponse, SubscribeResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
-import { Profile } from '@/types';
+import { ApiResponse, ApiSuccessResponse, ArticlesResponse, CommentResponse, OrdersResponse, SubscribeResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
+import { Order, Profile } from '@/types';
 import { CreateArticleRequest } from '@/types/article';
 
 const apiService = new ApiService();
@@ -99,5 +99,15 @@ export async function subscribeCreator(creatorId: string) {
 
 export async function getArticlesLikedByUser() {
   const res = await fetchWithToken<ArticlesResponse>('get', '/user/liked-articles');
+  return res.data;
+}
+
+export async function getOrders() {
+  const res = await fetchWithToken<OrdersResponse>('get', '/user/orders');
+  return res.data;
+}
+
+export async function getOrderByOrderNo(orderNo: string) {
+  const res = await fetchWithToken<ApiSuccessResponse<Order>>('get', `/order/ticket/${orderNo}`);
   return res.data;
 }
