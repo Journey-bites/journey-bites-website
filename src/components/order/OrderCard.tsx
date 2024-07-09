@@ -58,10 +58,10 @@ export default function OrderCard({ order }: { order: Order }) {
             {order.payment && (
               <>
                 <div className='flex items-center'>
-                  銀行後五碼
-                  <span className='px-2 text-sm text-grey-500 lg:text-lg lg:font-bold'>{order.payment.account5Code}</span>
-                  銀行代號
-                  <span className='px-2 text-sm text-grey-500 lg:text-lg lg:font-bold'>{order.payment.payBankCode}</span>
+                  付款資訊
+                  <span className='px-2 text-sm text-grey-500 lg:text-lg lg:font-bold'>
+                    {`(${order.payment.payBankCode}) - ***** - ${order.payment.account5Code}`}
+                  </span>
                 </div>
                 <Separator orientation='vertical' className='hidden h-11 w-[1px] bg-grey-200 lg:block' />
               </>
