@@ -9,7 +9,7 @@ import { useUserStore } from '@/providers/userProvider';
 import { Lock, PenLine } from 'lucide-react';
 import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
 import jsCookie from 'js-cookie';
-import { JOURNEY_BITES_COOKIE } from '@/constants';
+import { JOURNEY_BITES_COOKIE, QUERY_KEY } from '@/constants';
 
 type Props = {
   params: { id: string }
@@ -23,7 +23,7 @@ const EditArticle: React.FC<Props> = ({ params }) => {
 
   const token = jsCookie.get(JOURNEY_BITES_COOKIE);
   const { isLoading, data: editingContent, isError } = useQuery({
-    queryKey: ['getArticleById', id],
+    queryKey: [QUERY_KEY.article, id],
     queryFn: () => getArticleById(id, token),
   });
 

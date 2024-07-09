@@ -24,7 +24,7 @@ export default function SelectField<T extends FieldValues>({ className, control,
       <FormItem className={className}>
         {label && (
           <FormLabel>
-            {isRequired && <span style={{ color: 'red' }}> * </span>}
+            {isRequired && <span className='text-danger'> * </span>}
             {label}
           </FormLabel>
         )}

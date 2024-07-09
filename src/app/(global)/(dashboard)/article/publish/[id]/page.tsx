@@ -25,7 +25,7 @@ import StatusCode from '@/types/StatusCode';
 import { CreateArticleRequest } from '@/types/article';
 import { useUserStore } from '@/providers/userProvider';
 import LoadingEditorSkeleton from '@/components/LoadingEditorSkeleton';
-import { JOURNEY_BITES_COOKIE } from '@/constants';
+import { JOURNEY_BITES_COOKIE, QUERY_KEY } from '@/constants';
 import { Lock } from 'lucide-react';
 
 const isNeedPayOptions: { id: string; name: string; }[]= [
@@ -57,7 +57,7 @@ export default function PublishArticle({ params }: { params: { id: string } }) {
   });
 
   const { isPending, data, isError } = useQuery({
-    queryKey: ['getArticleById', id],
+    queryKey: [QUERY_KEY.article, id],
     queryFn: () => getArticleById(id, token),
   });
 

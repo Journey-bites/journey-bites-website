@@ -28,7 +28,7 @@ export default function InputField<T extends FieldValues>({ className, control, 
         <FormItem>
           {label && (
             <FormLabel>
-              {isRequired && <span style={{ color: 'red' }}> * </span>}
+              {isRequired && <span className='text-danger'> * </span>}
               {label}
             </FormLabel>
           )}
