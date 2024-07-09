@@ -17,7 +17,7 @@ import NoResults from '@/components/dashboard/NoResults';
 export default function OrdersPage() {
   const searchParams = useSearchParams();
   const orderNo = searchParams.get('orderNo') || '';
-  const isSuccess = searchParams.get('success');
+  const isSuccess = searchParams.get('success') === 'true' ? true : false;
   // ass string for TabWithContent props type check
   const [orderStatus, setOrderStatus] = useState(OrderStatus.SUCCESS as string);
 
@@ -26,7 +26,7 @@ export default function OrdersPage() {
     queryFn: getOrders,
     select: (order) => {
       if (!order) return order;
-      if (orderNo && isSuccess === 'true') {
+      if (orderNo && isSuccess) {
         return order.filter((order) => order.orderNo === orderNo && order.isSuccess);
       }
       const successOrders = order.filter((order) => order.isSuccess);
