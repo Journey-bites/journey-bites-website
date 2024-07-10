@@ -20,7 +20,7 @@ const PublishArticle = () => {
   const router = useRouter();
   const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
 
-  const { form, onSubmit, categoryOptions, tags, setTags, isUpdateArticle } = usePublishForm({
+  const { form, onSubmit, categoryOptions, tags, setTags: setFormTags, isUpdateArticle } = usePublishForm({
     title: '',
     abstract: '',
     thumbnailUrl: '',
@@ -94,7 +94,7 @@ const PublishArticle = () => {
                     {...field}
                     tags={tags}
                     setTags={(newTags) => {
-                      setTags(newTags);
+                      setFormTags(newTags);
                       field.onChange(newTags);
                     }}
                     placeholder='為文章加上標籤'
