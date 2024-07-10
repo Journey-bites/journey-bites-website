@@ -10,30 +10,28 @@ import TitleWithIcon from '@/components/dashboard/TitleWithIcon';
 import OrderCard from '@/components/order/OrderCard';
 import { getOrderByOrderNo, getOrders } from '@/lib/authApi';
 import { QUERY_KEY } from '@/constants';
+import { OrderStatus } from '@/types/enum';
 import Loader from '@/components/custom/Loader';
 import NoResults from '@/components/dashboard/NoResults';
 
 export default function OrdersPage() {
   const searchParams = useSearchParams();
   const orderNo = searchParams.get('orderNo') || '';
-  const isSuccess = searchParams.get('success');
-  const [orderStatus, setOrderStatus] = useState('completed');
+  const isSuccess = searchParams.get('success') === 'true' ? true : false;
+  // ass string for TabWithContent props type check
+  const [orderStatus, setOrderStatus] = useState(OrderStatus.SUCCESS as string);
 
   const { data: orders, isPending, error } = useQuery({
     queryKey: [QUERY_KEY.orders],
     queryFn: getOrders,
     select: (order) => {
       if (!order) return order;
-      if (orderNo && isSuccess === 'true') {
+      if (orderNo && isSuccess) {
         return order.filter((order) => order.orderNo === orderNo && order.isSuccess);
       }
       const successOrders = order.filter((order) => order.isSuccess);
       const failedOrders = order.filter((order) => !order.isSuccess);
-      if (orderStatus === 'completed') {
-        return successOrders;
-      } else {
-        return failedOrders;
-      }
+      return orderStatus === OrderStatus.SUCCESS ? successOrders : failedOrders;
     }
   });
 
@@ -86,12 +84,12 @@ export default function OrdersPage() {
         defaultValue={orderStatus}
         tabs={[
           {
-            value: 'completed',
+            value: OrderStatus.SUCCESS,
             label: '已付款',
             content: <Orders />
           },
           {
-            value: 'invalid',
+            value: OrderStatus.FAILED,
             label: '付款失敗',
             content: <Orders />
           }]

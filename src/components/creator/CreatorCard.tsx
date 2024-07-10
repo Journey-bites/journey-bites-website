@@ -1,17 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { UsersIcon } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/constants';
 import { Button } from '@/components/ui/button';
 import ProtectedComponent from '@/components/common/ProtectedComponent';
+import UserAvatar from '@/components/common/UserAvatar';
 import { Creator, FollowData } from '@/types';
 import { getCreatorFollowers } from '@/lib/nextApi';
 import useFollowCreator from '@/hook/useFollowCreator';
-
-import DefaultUserImg from '@/images/default-user.webp';
 import { useUserStore } from '@/providers/userProvider';
 
 export default function CreatorCard({ creator }: { creator: Creator | FollowData }) {
@@ -31,7 +29,7 @@ export default function CreatorCard({ creator }: { creator: Creator | FollowData
   return (
     <div className='flex flex-col justify-between rounded-lg border border-primary-100 bg-white p-5 text-grey-500 shadow-outlineCard'>
       <Link href={`/creator/${creator.userId}`} className='mb-5 flex gap-5'>
-        <Image src={creator.avatarImageUrl || DefaultUserImg} width={100} height={100} className='rounded-lg' alt={creator.displayName || 'creator'} />
+        <UserAvatar avatarImgUrl={creator.avatarImageUrl} userName={creator.displayName || ''} className='size-10 md:size-[100px]' />
         <div>
           <h3 className='mb-3 text-xl font-bold'>{creator.displayName}</h3>
           <div className='flex items-center gap-2'>
