@@ -1,126 +1,40 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import {
-  Form,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import InputField from '@/components/custom/InputField';
 import TextAreaField from '@/components/custom/TextAreaField';
-import { useEditor } from '@/stores/useEditorStore';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
 import SelectField from '@/components/custom/SelectField';
-import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { createArticle } from '@/lib/authApi';
-import { toast } from '@/components/ui/use-toast';
-import { Tag, TagInput } from 'emblor';
-import { getCategories } from '@/lib/nextApi';
+import { TagInput } from 'emblor';
+import { useEditor } from '@/stores/useEditorStore';
 import Link from 'next/link';
-import StatusCode from '@/types/StatusCode';
-import { handleApiError } from '@/lib/utils';
+import { usePublishForm } from '@/hook/usePublishForm';
+import { toast } from '@/components/ui/use-toast';
+import { IS_NEED_PAY_OPTIONS } from '@/constants';
 
-const isNeedPayOptions: { id: string; name: string; }[]= [
-  { id: '免費', name: '免費' },
-  { id: '付費', name: '付費' }
-];
-
-export default function PublishArticle() {
+const PublishArticle = () => {
   const { editorProps } = useEditor();
-  const [tags, setTags] = useState <Tag[]> ([]);
-  const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
-  const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string; }[]>([]);
   const router = useRouter();
+  const [activeTagIndex, setActiveTagIndex] = useState < number | null > (null);
 
-  const { mutate: createArticleMutate, isPending: isUpdateCreateArticle } = useMutation({ mutationFn: createArticle });
+  const { form, onSubmit, categoryOptions, tags, setTags, isUpdateArticle } = usePublishForm({
+    title: '',
+    abstract: '',
+    thumbnailUrl: '',
+    category: '',
+    isNeedPay: '免費',
+  }, false);
 
-  const categoryValidation = z.string().refine(value => categoryOptions.some(option => option.name === value), {
-    message: '選項為必填',
-  });
-
-  const isNeedPayValidation = z.string().refine(value => isNeedPayOptions.some(option => option.name === value), {
-    message: '選項為必填',
-  });
-
-  const formSchema = z.object({
-    title: z.string().min(1, { message: '標題是必填欄位' }).max(30, { message: '標題不能超過60個字' }),
-    abstract: z.string().max(150, { message: '摘要不能超過150個字' }),
-    thumbnailUrl: z.string().optional().refine(val => !val || val.startsWith('https://'), { message: '請輸入有效的網址，並以 https:// 開頭' }),
-    category: categoryValidation,
-    isNeedPay: isNeedPayValidation,
-    tags: z.array(z.object({ id: z.string(), text: z.string() })).optional(),
-  });
-
-  useEffect(() => {
-    if(!editorProps) {
-      toast({ title: '您必須先建立文章，才能進行發布內容', variant: 'error' });
-      return router.replace('/article/create');
-    }
-  }, [editorProps, router]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await getCategories();
-        const categoryOptions = res.map(({ id, name }) => ({
-          id,
-          name
-        }));
-
-        setCategoryOptions(categoryOptions);
-      } catch (error) {
-        toast({ title: 'Error fetching categories: ' + error + '', variant: 'error' });
-      }
-    })();
-  }, []);
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!editorProps) return;
-    const tags = Array.isArray(values.tags) ? values.tags.map(tag => tag.text) : [];
-    const isNeedPay = (values.isNeedPay === '免費') ? false : true;
-    const { title, abstract, category } = values;
-    const createArticleBody = {
-      ...editorProps,
-      isNeedPay,
-      title,
-      abstract,
-      category,
-      tags
-    };
-    if (values.thumbnailUrl) {
-      createArticleBody.thumbnailUrl = values.thumbnailUrl;
-    }
-    createArticleMutate(createArticleBody, {
-      onSuccess: () => {
-        toast({ title: '文章發布成功', description: '即將為您跳轉至文章管理頁', variant: 'success' });
-        router.push('/manage/content');
-      },
-      onError: (error) => {
-        handleApiError(error, {
-          [StatusCode.ILLEGAL_PAYLOAD]: () => {
-            toast({ title: '請檢查輸入資料', variant: 'error' });
-          },
-          [StatusCode.PERMISSION_DENIED]: () => {
-            toast({ title: '請重新登入', variant: 'error' });
-          },
-        }, '發布文章');
-      },
-    });
-  }
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    mode: 'onBlur',
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: '',
-      abstract: '',
-      category: '',
-      isNeedPay: '免費',
-    },
-  });
   const { control, handleSubmit, formState: { isValid } } = form;
+
+  if (!editorProps) {
+    toast({ title: '您必須先建立文章，才能進行發布內容', variant: 'error' });
+    router.replace('/article/create');
+    return null;
+  }
 
   return (
     <main className='mx-auto mb-10 grid size-full max-w-[800px] place-items-center'>
@@ -168,7 +82,7 @@ export default function PublishArticle() {
               name='isNeedPay'
               label='內容收費'
               placeholder='設定文章是否收費'
-              options={isNeedPayOptions}
+              options={IS_NEED_PAY_OPTIONS}
               isRequired={true}
             />
             <Controller
@@ -197,12 +111,18 @@ export default function PublishArticle() {
               )}
             />
             <div className='text-center'>
-              <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild><Link href='/manage/content' replace={true}>取消</Link></Button>
-              <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateCreateArticle}>發布文章</Button>
+              <Button className='mr-4 bg-grey text-black hover:bg-grey-300 hover:text-white' asChild>
+                <Link href='/manage/content' replace={true}>取消</Link>
+              </Button>
+              <Button type='submit' disabled={!isValid || !editorProps} isLoading={isUpdateArticle}>
+                發布文章
+              </Button>
             </div>
           </form>
         </Form>
       </div>
     </main>
   );
-}
+};
+
+export default PublishArticle;
