@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -62,8 +62,15 @@ export default function CommentSection({ articleId }: { articleId: string }) {
       onSuccess: () => {
         reset();
         setShowAll(true);
+
         if (comments) setInitialVisibleCount(prev => prev + comments.length);
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.comments] });
+
+        setTimeout(() => {
+          if (latestCommentRef.current) {
+            latestCommentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 500);
       },
       onError: () => {
         toast({ title: '新增留言失敗', description: '請聯繫客服，或稍後再試', variant: 'error' });
@@ -72,12 +79,6 @@ export default function CommentSection({ articleId }: { articleId: string }) {
   }
 
   const debounceSubmit = debounce(handleSubmit(onSubmit), 500);
-
-  useEffect(() => {
-    if (latestCommentRef.current) {
-      latestCommentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [comments]);
 
   if (!comments) return null;
 

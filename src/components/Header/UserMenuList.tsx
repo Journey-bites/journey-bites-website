@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { LogOutIcon } from 'lucide-react';
 import { useUserStore } from '@/providers/userProvider';
 import { DropdownMenuLinkItem } from '@/components/custom/DropdownMenu';
@@ -33,13 +34,16 @@ const MENU_LINKS: { title: string, href: string }[] = [
 
 export default function UserMenuList({ isDropdownMenu }: { isDropdownMenu?: boolean }) {
   const { auth, removeAuth } = useUserStore((state) => state);
+  const router = useRouter();
 
   async function handleLogout() {
     try {
       await logout();
       removeAuth();
+      router.refresh();
     } catch (error) {
       removeAuth();
+      router.refresh();
     }
   }
 

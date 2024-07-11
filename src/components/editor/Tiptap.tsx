@@ -11,7 +11,7 @@ import CharacterCount from '@tiptap/extension-character-count';
 import { LIMIT as limit } from '@/constants/editorSettings';
 import Placeholder from '@tiptap/extension-placeholder';
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
-import Document from '@tiptap/extension-document';
+// import Document from '@tiptap/extension-document';
 import { ResizableImage } from 'tiptap-extension-resizable-image';
 import '@/components/editor/style.css';
 import 'tiptap-extension-resizable-image/styles.css';
@@ -22,9 +22,9 @@ interface TiptapProps {
   content: string;
 }
 
-const forceTitleDocument = Document.extend({
-  content: 'paragraph block*',
-});
+// const forceTitleDocument = Document.extend({
+//   content: 'paragraph block*',
+// });
 
 const Tiptap = ({ onChange, content }: TiptapProps) => {
   const handleChange = useCallback((newContent: string) => {
@@ -35,10 +35,10 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
     content,
     editable: true,
     extensions: useMemo(() => [
-      forceTitleDocument,
+      // forceTitleDocument,
       ResizableImage,
       StarterKit.configure({
-        document: false,
+        // document: false,
         heading: {
           HTMLAttributes:
           {
@@ -48,7 +48,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
         paragraph: {
           HTMLAttributes:
           {
-            class: 'mb-6',
+            class: 'mb-6 break-all',
           }
         },
         bulletList: ({
@@ -97,14 +97,14 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
       Placeholder.configure({
         // considerAnyAsEmpty: true,
         // showOnlyCurrent: false,
-        // placeholder: '開始屬於你的精彩創作...',
-        placeholder: ({ node }) => {
-          if (node.type.name === 'heading') {
-            return '請輸入標題';
-          }
+        placeholder: '開始屬於你的精彩創作...',
+        // placeholder: ({ node }) => {
+        //   if (node.type.name === 'heading') {
+        //     return '請輸入標題';
+        //   }
 
-          return '開始屬於你的精彩創作...';
-        },
+        //   return '開始屬於你的精彩創作...';
+        // },
       }),
     ], []),
     editorProps: {
@@ -119,7 +119,7 @@ const Tiptap = ({ onChange, content }: TiptapProps) => {
   });
 
   return (
-    <div className='relative min-h-[500px] w-full border-muted shadow-lg'>
+    <div className='relative min-h-[500px] w-full max-w-[992px] border-muted shadow-lg'>
       <Toolbar editor={editor} content={content}/>
       <EditorContent style={{ whiteSpace: 'pre-line' }} editor={editor} />
     </div>

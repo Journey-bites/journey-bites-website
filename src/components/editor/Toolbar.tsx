@@ -69,7 +69,7 @@ const Toolbar = ({ editor }: Props) => {
         src: url,
         alt: '',
         title: '',
-        className: 'rounded-lg border border-muted',
+        className: 'rounded-lg border border-muted w-full',
         'data-keep-ratio': true,
       });
       editor.chain().focus();

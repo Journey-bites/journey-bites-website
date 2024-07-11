@@ -45,6 +45,7 @@ export default function Login() {
     const redirectUrl = localStorage.getItem(LOCAL_STORAGE_KEY.redirectUrl);
     if (redirectUrl) {
       router.replace(redirectUrl);
+      router.refresh();
     } else {
       router.replace('/manage/user');
     }

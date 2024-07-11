@@ -6,7 +6,6 @@ import { isAxiosError } from 'axios';
 import { toast } from '@/components/ui/use-toast';
 import StatusCode from '@/types/StatusCode';
 import { ApiResponse } from '@/types/apiResponse';
-import { useRouter } from 'next/navigation';
 import { OrderBy } from '@/types/enum';
 import { LOCAL_STORAGE_KEY, NEWEB_PAY_DATA_NAMES } from '@/constants';
 import { NewebpayRequestData } from '@/types';
@@ -34,19 +33,6 @@ export function handleApiError(error: unknown, config: ErrorHandlingConfig, oper
   }
 }
 
-export function verifyAuthor (
-  creatorId: string,
-  currentUserId: string,
-  router: ReturnType<typeof useRouter>,
-  onSuccess: () => void
-) {
-  if (creatorId === currentUserId) {
-    onSuccess();
-  } else {
-    toast({ title: '您沒有編輯此文章的權限', variant: 'error' });
-    // router.replace('/');
-  }
-};
 export const storeRedirectPath = (pathname: string) => {
   localStorage.setItem(LOCAL_STORAGE_KEY.redirectUrl, pathname);
 };

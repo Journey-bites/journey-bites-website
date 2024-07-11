@@ -11,6 +11,7 @@ type InputFieldProps<T extends FieldValues> = {
   label?: string;
   inputType?: HTMLInputTypeAttribute;
   placeholder?: string;
+  isRequired?: boolean;
   formDescription?: string;
   startIcon?: LucideIcon;
   endIcon?: LucideIcon;
@@ -18,14 +19,19 @@ type InputFieldProps<T extends FieldValues> = {
   onBlur?: () => void;
 }
 
-export default function InputField<T extends FieldValues>({ className, control, name, label, inputType, placeholder, formDescription, startIcon, endIcon, iconAction, onBlur }: InputFieldProps<T>) {
+export default function InputField<T extends FieldValues>({ className, control, name, label, inputType, placeholder, isRequired, formDescription, startIcon, endIcon, iconAction, onBlur }: InputFieldProps<T>) {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
         <FormItem>
-          {label && <FormLabel>{label}</FormLabel>}
+          {label && (
+            <FormLabel>
+              {isRequired && <span className='text-danger'> * </span>}
+              {label}
+            </FormLabel>
+          )}
           <FormControl>
             <Input
               className={className}

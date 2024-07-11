@@ -10,18 +10,24 @@ type SelectFieldProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   placeholder?: string;
+  isRequired?: boolean;
   formDescription?: string;
   options: { id: string, name: string }[];
 };
 
-export default function SelectField<T extends FieldValues>({ className, control, name, label, placeholder, formDescription, options }: SelectFieldProps<T>) {
+export default function SelectField<T extends FieldValues>({ className, control, name, label, placeholder, isRequired, formDescription, options }: SelectFieldProps<T>) {
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
       <FormItem className={className}>
-        <FormLabel>{label}</FormLabel>
+        {label && (
+          <FormLabel>
+            {isRequired && <span className='text-danger'> * </span>}
+            {label}
+          </FormLabel>
+        )}
         <Select onValueChange={field.onChange} defaultValue={field.value}>
           <FormControl>
             <SelectTrigger>

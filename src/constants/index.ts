@@ -41,3 +41,8 @@ export const EXPLORE_LIST: Omit<Category, 'articleCount'>[] = [
 ];
 
 export const NEWEB_PAY_DATA_NAMES = ['Version', 'MerchantID', 'TradeInfo', 'TradeSha'] as const;
+
+export const IS_NEED_PAY_OPTIONS = [
+  { id: '免費', name: '免費' },
+  { id: '付費', name: '付費' }
+];
