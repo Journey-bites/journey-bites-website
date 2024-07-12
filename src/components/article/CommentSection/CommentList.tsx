@@ -15,6 +15,8 @@ type Props = {
   data: CommentType[];
 };
 
+const DISPLAY_LIMIT = 3;
+
 const CommentList = ({ data }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,9 +44,14 @@ const CommentList = ({ data }: Props) => {
       open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <Comment data={data[0]} />
+      {data.slice(0, DISPLAY_LIMIT).map((comment) => (
+        <Comment
+          key={comment.id}
+          data={comment}
+        />
+      ))}
       <CollapsibleContent>
-        {data.slice(1).map((comment) => (
+        {data.slice(DISPLAY_LIMIT).map((comment) => (
           <Comment
             key={comment.id}
             data={comment}
@@ -54,10 +61,10 @@ const CommentList = ({ data }: Props) => {
       <CollapsibleTrigger asChild>
         <div
           className={cn('cursor-pointer select-none text-center font-bold text-primary', {
-            hidden: isOpen,
+            hidden: isOpen || data.length <= DISPLAY_LIMIT,
           })}
         >
-          {`顯示全部 (${data.length})`}
+          {`顯示全部 (${data.length - DISPLAY_LIMIT})`}
         </div>
       </CollapsibleTrigger>
     </Collapsible>
