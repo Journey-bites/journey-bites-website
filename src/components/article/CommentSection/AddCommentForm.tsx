@@ -32,7 +32,7 @@ const AddCommentForm = ({ articleId }: Props) => {
   const { auth } = useUserStore((state) => state);
   const queryClient = useQueryClient();
 
-  const { mutate: addCommentMutate } = useMutation({
+  const { mutate: addCommentMutate, isPending } = useMutation({
     mutationFn: addCommentToArticle,
     onSuccess: () => {
       reset();
@@ -71,7 +71,7 @@ const AddCommentForm = ({ articleId }: Props) => {
 
   if (!auth) {
     return (
-      <p className='flex-1 text-center [&>a]:text-secondary'>
+      <p className='flex-1 py-2 text-center [&>a]:text-secondary'>
         如果需要留言，請先 <LoginLinkWithStorePathname /> 或{' '}
         <Link href='/register'>註冊會員</Link>
       </p>
@@ -100,7 +100,7 @@ const AddCommentForm = ({ articleId }: Props) => {
             />
           </div>
           <Button
-            disabled={!isValid}
+            disabled={!isValid || isPending}
             type='submit'
             variant='icon'
             className='group shrink-0'
