@@ -12,7 +12,7 @@ type Props = {
 };
 
 const CommentSection = ({ articleId }: Props) => {
-  const { data: comments, isLoading } = useQuery({
+  const { data: comments, isPending } = useQuery({
     queryKey: [QUERY_KEY.comments, articleId],
     queryFn: () => getCommentsByArticleId(articleId),
   });
@@ -26,7 +26,7 @@ const CommentSection = ({ articleId }: Props) => {
             <small className='pl-2 text-lg text-grey-300'>({comments.length})</small>
           )}
         </h3>
-        {isLoading && (
+        {isPending && (
           <div className='pb-6'>
             <CommentSkeleton />
             <CommentSkeleton />
