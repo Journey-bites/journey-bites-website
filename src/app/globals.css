@@ -13,27 +13,27 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: #444FAE;
-    --primary-foreground: #EBEFFA;
-    --primary-200: #444FAE;
-    --primary-300: #3A428E;
-    --primary-400: #2E3572;
+    --primary: #444fae;
+    --primary-foreground: #ebeffa;
+    --primary-200: #444fae;
+    --primary-300: #3a428e;
+    --primary-400: #2e3572;
 
-    --secondary: #59ABBD;
-    --secondary-foreground: #EEF8FA;
+    --secondary: #59abbd;
+    --secondary-foreground: #eef8fa;
 
-    --info: #1991FF;
-    --success: #2CC585;
-    --warning: #DB8C54;
-    --warning-100: #FDF6E6;
-    --danger: #D65F5F;
-    --danger-100: #FFF3EF;
+    --info: #1991ff;
+    --success: #2cc585;
+    --warning: #db8c54;
+    --warning-100: #fdf6e6;
+    --danger: #d65f5f;
+    --danger-100: #fff3ef;
 
-    --grey-100: #E5E7EB;
-    --grey-200: #E2E8F0;
-    --grey-300: #94A3B8;
+    --grey-100: #e5e7eb;
+    --grey-200: #e2e8f0;
+    --grey-300: #94a3b8;
     --grey-400: #475569;
-    --grey-500: #0F172A;
+    --grey-500: #0f172a;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -150,4 +150,8 @@ h4 {
 
 .tagInput input.focus-visible\:ring-ring:focus-visible {
   --tw-ring-color: inherit;
+}
+
+img {
+  width: 100%;
 }
