@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,7 +16,6 @@ import { zhTW } from 'date-fns/locale/zh-TW';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/providers/userProvider';
 import { Button } from '@/components/ui/button';
-// import LikeButton from '@/components/common/LikeButton';
 import UserAvatar from '@/components/common/UserAvatar';
 import LoginLinkWithStorePathname from '@/components/common/LoginLinkWithStorePathname';
 import { Form } from '@/components/ui/form';
@@ -47,6 +46,10 @@ export default function CommentSection({ articleId }: { articleId: string }) {
   });
   const { mutate: addCommentMutate } = useMutation({
     mutationFn: addCommentToArticle,
+    onMutate: () => {
+      setShowAll(true);
+      if (comments) setInitialVisibleCount(prev => prev + comments.length);
+    }
   });
   const form = useForm<FieldValues>({
     resolver: zodResolver(formSchema),
@@ -61,9 +64,8 @@ export default function CommentSection({ articleId }: { articleId: string }) {
     addCommentMutate({ articleId, content: data.commentText }, {
       onSuccess: () => {
         reset();
-        setShowAll(true);
-        if (comments) setInitialVisibleCount(prev => prev + comments.length);
         queryClient.invalidateQueries({ queryKey: [QUERY_KEY.comments] });
+        latestCommentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       },
       onError: () => {
         toast({ title: '新增留言失敗', description: '請聯繫客服，或稍後再試', variant: 'error' });
@@ -72,12 +74,6 @@ export default function CommentSection({ articleId }: { articleId: string }) {
   }
 
   const debounceSubmit = debounce(handleSubmit(onSubmit), 500);
-
-  useEffect(() => {
-    if (latestCommentRef.current) {
-      latestCommentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [comments]);
 
   if (!comments) return null;
 
@@ -110,15 +106,10 @@ export default function CommentSection({ articleId }: { articleId: string }) {
                   </span>
                 </div>
                 <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
-                {/* TODO: Currently not support comment like feature */}
-                {/* <div className='hidden md:block'>
-                  <LikeButton count={comment.likes} />
-                </div> */}
               </div>
             </div>
             <div className='md:hidden'>
               <p className='mb-4 text-base'>{comment.content}</p>
-              {/* <LikeButton count={comment.likes} /> */}
             </div>
           </div>
         ))}
@@ -138,16 +129,11 @@ export default function CommentSection({ articleId }: { articleId: string }) {
                         </span>
                       </div>
                       <p className='mb-4 hidden text-lg md:block'>{comment.content}</p>
-                      {/* TODO: Currently not support comment like feature */}
-                      {/* <div className='hidden md:block'>
-                        <LikeButton count={comment.likes} />
-                      </div> */}
                     </div>
                   </div>
-                  {/* <div className='md:hidden'>
+                  <div className='md:hidden'>
                     <p className='mb-4 text-base'>{comment.content}</p>
-                    <LikeButton count={comment.likes} />
-                  </div> */}
+                  </div>
                 </div>
               ))}
             </CollapsibleContent>
