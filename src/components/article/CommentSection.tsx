@@ -41,7 +41,7 @@ export default function CommentSection({ articleId }: { articleId: string }) {
   const { isLogin, auth } = useUserStore((state) => state);
   const queryClient = useQueryClient();
   const { data: comments } = useQuery({
-    queryKey: [QUERY_KEY.comments],
+    queryKey: [QUERY_KEY.comments, articleId],
     queryFn: () => getCommentsByArticleId(articleId),
   });
   const { mutate: addCommentMutate } = useMutation({
