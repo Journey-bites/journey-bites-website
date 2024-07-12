@@ -19,7 +19,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='zh-Hant-TW'>
       <body className={inter.className}>
         <UserStoreProvider>
           <Toaster />
