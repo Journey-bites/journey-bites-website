@@ -1,5 +1,5 @@
 import jsCookie from 'js-cookie';
-import type { AxiosRequestConfig, Method } from 'axios';
+import type { AxiosRequestConfig, GenericAbortSignal, Method } from 'axios';
 import { JOURNEY_BITES_COOKIE } from '@/constants';
 import { ApiService } from './ApiService';
 import { ApiResponse, ApiSuccessResponse, ArticlesResponse, CommentResponse, OrdersResponse, SubscribeResponse, UserFollowResponse, UserResponse } from '@/types/apiResponse';
@@ -72,13 +72,17 @@ export async function addCommentToArticle({ articleId, content }: { articleId: s
   return res.data;
 }
 
-export async function likeArticle({ articleId }: { articleId: string }) {
-  const res = await fetchWithToken<ApiResponse>('post', `/article/${articleId}/like`);
+export async function likeArticle({ articleId, signal }: { articleId: string, signal: GenericAbortSignal }) {
+  const res = await fetchWithToken<ApiResponse>('post', `/article/${articleId}/like`, {
+    signal
+  });
   return res;
 }
 
-export async function unlikeArticle({ articleId }: { articleId: string }) {
-  const res = await fetchWithToken<ApiResponse>('delete', `/article/${articleId}/like`);
+export async function unlikeArticle({ articleId, signal }: { articleId: string, signal: GenericAbortSignal }) {
+  const res = await fetchWithToken<ApiResponse>('delete', `/article/${articleId}/like`, {
+    signal
+  });
   return res;
 }
 
