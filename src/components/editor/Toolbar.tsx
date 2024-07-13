@@ -70,8 +70,6 @@ const Toolbar = ({ editor }: Props) => {
   };
 
   const handleSubmit = () => {
-    // const wordCount = editor.getText().replace(/\s+/g, ' ').trim().length;
-    console.log(editor.getHTML());
     setEditorProps({
       content: editor.getHTML(),
       wordCount: characterCount,
