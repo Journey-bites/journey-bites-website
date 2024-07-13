@@ -18,9 +18,6 @@ type LikeButtonProps = {
   withBackground?: boolean;
 }
 
-const unlikeArticleAbortController = new AbortController();
-const likeArticleAbortController = new AbortController();
-
 export default function LikeButton({ articleId, count, withBackground }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(count);
@@ -28,7 +25,7 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
   const router = useRouter();
   const pathname = usePathname();
 
-  const { mutate: likeArticleMutate, isPending: likePending } = useMutation({
+  const { mutate: likeArticleMutate } = useMutation({
     mutationFn: likeArticle,
     onMutate: () => {
       setIsLiked(true);
@@ -38,7 +35,7 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
       handleApiError(error, {
         [StatusCode.BAD_REQUEST]: () => {
           // Already liked, so unlike it
-          unlikeArticleMutate({ articleId, signal: unlikeArticleAbortController.signal });
+          unlikeArticleMutate({ articleId });
           toast({ title: '已經按過讚囉！', description: '已幫您自動收回讚', variant: 'warning' });
         },
         [StatusCode.RESOURCE_NOT_FOUND]: () => {
@@ -56,7 +53,8 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
       setLikesCount((prev) => prev > 0 ? prev - 1 : 0);
     }
   });
-  const { mutate: unlikeArticleMutate, isPending: unlikePending } = useMutation({
+
+  const { mutate: unlikeArticleMutate } = useMutation({
     mutationFn: unlikeArticle,
     onMutate: () => {
       setIsLiked(false);
@@ -66,7 +64,7 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
       handleApiError(error, {
         [StatusCode.BAD_REQUEST]: () => {
           // Not liked yet, so like it
-          likeArticleMutate({ articleId, signal: likeArticleAbortController.signal });
+          likeArticleMutate({ articleId });
         },
         [StatusCode.RESOURCE_NOT_FOUND]: () => {
           toast({ title: '文章已被刪除', description: '有緣再相見QQ', variant: 'error' });
@@ -84,9 +82,9 @@ export default function LikeButton({ articleId, count, withBackground }: LikeBut
     },
   });
 
-  const handleLike = likePending ? () => likeArticleAbortController.abort() : debounce(() => likeArticleMutate({ articleId, signal: likeArticleAbortController.signal }));
+  const handleLike = debounce(() => likeArticleMutate({ articleId }));
 
-  const handleUnlike = unlikePending ? () => unlikeArticleAbortController.abort() : debounce(() => unlikeArticleMutate({ articleId, signal: unlikeArticleAbortController.signal }));
+  const handleUnlike = debounce(() => unlikeArticleMutate({ articleId }));
 
   useEffect(() => {
     if (!auth) return;
