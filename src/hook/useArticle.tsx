@@ -23,7 +23,7 @@ const useArticle = (articleId: string) => {
 
   const queryKey = [QUERY_KEY.article, articleId];
 
-  const errorHandlers = () => ({
+  const errorHandlers = {
     [StatusCode.PERMISSION_DENIED]: () => {
       toast({
         title: '請重新登入',
@@ -35,7 +35,7 @@ const useArticle = (articleId: string) => {
         router.push('/login');
       }, 3000);
     },
-  });
+  };
 
   const optimisticUpdateLikeStatus = (isLiked: boolean) => {
     if (!article) return;
@@ -72,7 +72,7 @@ const useArticle = (articleId: string) => {
       if (context?.previousData) {
         queryClient.setQueryData(queryKey, context.previousData);
       }
-      handleApiError(error, { ...errorHandlers });
+      handleApiError(error, errorHandlers);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -94,7 +94,7 @@ const useArticle = (articleId: string) => {
       if (context?.previousData) {
         queryClient.setQueryData(queryKey, context.previousData);
       }
-      handleApiError(error, { ...errorHandlers });
+      handleApiError(error, errorHandlers);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
