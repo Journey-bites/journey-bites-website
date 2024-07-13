@@ -47,8 +47,9 @@ export default function LikeButton({
         })}
       >
         <HeartIcon
-          className={cn('size-6 stroke-danger group-hover:fill-danger', {
-            ['fill-danger']: isLiked,
+          className={cn('size-6 stroke-danger', {
+            ['fill-danger group-hover:fill-white']: isLiked,
+            ['group-hover:fill-danger']: !isLiked,
           })}
         />
         <span className='text-danger'>{article?.status.likes ?? count}</span>
