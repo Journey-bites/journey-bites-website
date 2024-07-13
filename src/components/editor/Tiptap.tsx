@@ -13,7 +13,6 @@ import Placeholder from '@tiptap/extension-placeholder';
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
 import Document from '@tiptap/extension-document';
 import '@/components/editor/style.css';
-import 'tiptap-extension-resizable-image/styles.css';
 import { useCallback, useMemo } from 'react';
 
 interface TiptapProps {
