@@ -152,9 +152,6 @@ importers:
       tiptap-extension-global-drag-handle:
         specifier: ^0.1.8
         version: 0.1.8
-      tiptap-extension-resizable-image:
-        specifier: ^1.0.3
-        version: 1.0.3(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       toggle-group:
         specifier: ^1.0.5
         version: 1.0.5
@@ -4418,14 +4415,6 @@ packages:
 
   tiptap-extension-global-drag-handle@0.1.8:
     resolution: {integrity: sha512-alLZm385Ot9USqmO5s4HAPHgQnIScuuMxAXgxqVEBhKPkN/Zl8ICEW5caPx+b7kFUOGVDcgbRFDR+My4A91iXw==}
-
-  tiptap-extension-resizable-image@1.0.3:
-    resolution: {integrity: sha512-fjSKfEOvV20X9SMRrgXgoc40LMvJl0x3M2Q4PcuEKdLiuiJyB50Wo2uWMqGMuHwvqOhxxT7U+EM2YqDQRfyQng==}
-    peerDependencies:
-      '@tiptap/core': '>=2'
-      '@tiptap/pm': '>=2'
-      '@tiptap/react': '>=2'
-      react: '>=18'
 
   to-fast-properties@2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
@@ -9530,13 +9519,6 @@ snapshots:
       '@popperjs/core': 2.11.8
 
   tiptap-extension-global-drag-handle@0.1.8: {}
-
-  tiptap-extension-resizable-image@1.0.3(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
-    dependencies:
-      '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
-      '@tiptap/pm': 2.4.0
-      '@tiptap/react': 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react: 18.3.1
 
   to-fast-properties@2.0.0: {}
 

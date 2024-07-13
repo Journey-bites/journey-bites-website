@@ -59,7 +59,6 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "tiptap-extension-global-drag-handle": "^0.1.8",
-    "tiptap-extension-resizable-image": "^1.0.3",
     "toggle-group": "^1.0.5",
     "zod": "^3.23.6",
     "zustand": "^4.5.2"
