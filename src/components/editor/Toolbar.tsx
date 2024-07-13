@@ -63,22 +63,15 @@ const Toolbar = ({ editor }: Props) => {
 
   const handleDialog = (url?: string) => {
     onOpen();
-    // if(url) editor.chain().focus().setImage({ src: url }).run();
-    if(url) {
-      editor.commands.setResizableImage({
-        src: url,
-        alt: '',
-        title: '',
-        className: 'rounded-lg border border-muted',
-        'data-keep-ratio': true,
-      });
-      editor.chain().focus();
-    }
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    };
     setData({ url: '' });
   };
 
   const handleSubmit = () => {
     // const wordCount = editor.getText().replace(/\s+/g, ' ').trim().length;
+    console.log(editor.getHTML());
     setEditorProps({
       content: editor.getHTML(),
       wordCount: characterCount,
