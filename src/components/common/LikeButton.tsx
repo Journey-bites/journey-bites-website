@@ -48,7 +48,7 @@ export default function LikeButton({
       >
         <HeartIcon
           className={cn('size-6 stroke-danger', {
-            ['fill-danger group-hover:fill-white']: isLiked,
+            ['fill-danger group-hover:fill-transparent']: isLiked,
             ['group-hover:fill-danger']: !isLiked,
           })}
         />
